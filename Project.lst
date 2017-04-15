@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:27:09
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:30:39
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Page 1 - 1
 
 
@@ -161,18 +161,28 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:27:09
  00000060  2B 05 00000004 R		sub		eax, secondNum
  00000066  E8 00000000 E		call	WriteDec
  0000006B  E8 00000000 E		call	CrLf
+
+				;calculate and display the product
+ 00000070  BA 00000134 R		mov		edx, OFFSET prodMess
+ 00000075  E8 00000000 E		call	WriteString
+ 0000007A  A1 00000000 R		mov		eax, firstNum
+ 0000007F  8B 1D 00000004 R		mov		ebx, secondNum
+ 00000085  F7 E3			mul		ebx
+ 00000087  E8 00000000 E		call	WriteDec
+ 0000008C  E8 00000000 E		call	CrLf
+					
 					
 					
 
 					exit	; exit to operating system
- 00000070  6A 00	   *	    push   +000000000h
- 00000072  E8 00000000 E   *	    call   ExitProcess
- 00000077			main ENDP
+ 00000091  6A 00	   *	    push   +000000000h
+ 00000093  E8 00000000 E   *	    call   ExitProcess
+ 00000098			main ENDP
 
 				; (insert additional procedures here)
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:27:09
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:30:39
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Symbols 2 - 1
 
 
@@ -267,7 +277,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 000001A0 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000077 Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000098 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -374,7 +384,7 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000077 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000098 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C

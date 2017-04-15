@@ -62,6 +62,16 @@ main PROC
 	sub		eax, secondNum
 	call	WriteDec
 	call	CrLf
+
+;calculate and display the product
+	mov		edx, OFFSET prodMess
+	call	WriteString
+	mov		eax, firstNum
+	mov		ebx, secondNum
+	mul		ebx
+	call	WriteDec
+	call	CrLf
+	
 	
 	
 

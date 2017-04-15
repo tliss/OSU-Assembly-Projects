@@ -27,6 +27,7 @@ diffMess	BYTE	"The difference of the two numbers is ", 0
 prodMess	BYTE	"The product of the two numbers is ", 0
 quotMess	BYTE	"The quotient of the two numbers is ", 0
 remMess		BYTE	"The remainder of the two numbers is ", 0
+goodbye		BYTE	"Goodbye!", 0dh, 0ah, 0
 
 .code
 main PROC
@@ -89,7 +90,9 @@ main PROC
 	call	WriteDec
 	call	CrLf	
 
-
+;display the goodbye message
+	mov		edx, OFFSET goodbye
+	call	WriteString
 
 	exit	; exit to operating system
 main ENDP

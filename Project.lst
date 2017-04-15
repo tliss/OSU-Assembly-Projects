@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:37:35
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:43:56
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Page 1 - 1
 
 
@@ -126,6 +126,9 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:37:35
 	   6E 75 6D 62 65
 	   72 73 20 69 73
 	   20 00
+ 000001A0 47 6F 6F 64 62	goodbye		BYTE	"Goodbye!", 0dh, 0ah, 0
+	   79 65 21 0D 0A
+	   00
 
  00000000			.code
  00000000			main PROC
@@ -188,17 +191,19 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:37:35
  000000BF  E8 00000000 E		call	WriteDec
  000000C4  E8 00000000 E		call	CrLf	
 
-
+				;display the goodbye message
+ 000000C9  BA 000001A0 R		mov		edx, OFFSET goodbye
+ 000000CE  E8 00000000 E		call	WriteString
 
 					exit	; exit to operating system
- 000000C9  6A 00	   *	    push   +000000000h
- 000000CB  E8 00000000 E   *	    call   ExitProcess
- 000000D0			main ENDP
+ 000000D3  6A 00	   *	    push   +000000000h
+ 000000D5  E8 00000000 E   *	    call   ExitProcess
+ 000000DA			main ENDP
 
 				; (insert additional procedures here)
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:37:35
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:43:56
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Symbols 2 - 1
 
 
@@ -292,8 +297,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 000001A0 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000D0 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 000001AB Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000DA Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -400,7 +405,7 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000D0 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000DA Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -626,6 +631,7 @@ cyan . . . . . . . . . . . . . .	Number	 00000003h
 diffMess . . . . . . . . . . . .	Byte	 0000010E _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 firstNum . . . . . . . . . . . .	DWord	 00000000 _DATA	
+goodbye  . . . . . . . . . . . .	Byte	 000001A0 _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
 lightBlue  . . . . . . . . . . .	Number	 00000009h   

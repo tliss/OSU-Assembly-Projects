@@ -55,6 +55,14 @@ main PROC
 	call	WriteDec
 	call	CrLf
 
+;calculate and display difference
+	mov		edx, OFFSET diffMess
+	call	WriteString
+	mov		eax, firstNum
+	sub		eax, secondNum
+	call	WriteDec
+	call	CrLf
+	
 	
 
 	exit	; exit to operating system

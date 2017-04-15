@@ -19,25 +19,25 @@ INCLUDE Irvine32.inc
 .data
 firstNum	DWORD	?	;first number to be entered by user
 secondNum	DWORD	?	;second number to be entered by user
-message01	BYTE	"		Prog01 - Elementary Arithmetic		by Taylor Liss",0dh,0ah,0ah,0
-message02	BYTE	"This program performs elementary arithmetic on two numbers. Please enter a positive integer and then press enter.",0dh,0ah,0
-message03	BYTE	"Please enter a second positive integer and then press enter.",0dh,0ah,0
+titleMess	BYTE	"		Prog01 - Elementary Arithmetic		by Taylor Liss",0dh,0ah,0ah,0
+prompt01	BYTE	"This program performs elementary arithmetic on two numbers. Please enter a positive integer and then press enter.",0dh,0ah,0
+prompt02	BYTE	"Please enter a second positive integer and then press enter.",0dh,0ah,0
 
 .code
 main PROC
 	
 ;Display program title
-	mov		edx, OFFSET message01
+	mov		edx, OFFSET titleMess
 	call	WriteString
 
 ;Get first number
-	mov		edx, OFFSET message02
+	mov		edx, OFFSET prompt01
 	call	WriteString
 	call	ReadInt
 	mov		firstNum, eax
 
 ;Get second number
-	mov		edx, OFFSET message03
+	mov		edx, OFFSET prompt02
 	call	WriteString
 	call	ReadInt
 	mov		secondNum, eax

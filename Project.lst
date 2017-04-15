@@ -1,13 +1,20 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 14:19:09
-#Program Template     (template.asm			     Page 1 - 1
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 14:53:54
+/Prog01 - Elementary Arithmetic     (Prog01.asm		     Page 1 - 1
 
 
 
-				TITLE Program Template     (template.asm)
+				TITLE Prog01 - Elementary Arithmetic     (Prog01.asm)
 
-				; Author:
-				; Course / Project ID                 Date:
-				; Description:
+				; Author: Taylor Liss
+				; Email: lisst@oregonstate.edu
+				; Course / Project ID  CS271_400_S2017 / Prog01
+				; Date: 4/15/2017
+				; Description: This program dsplays my name and the program
+				;	title on the output screen and instructs the user to
+				;	enter in two numbers. It then calculates the sum,
+				;	difference, product, (integer) quotent, and remainder
+				;	of the two numbers. It then displays a terminating
+				;	message.
 
 				INCLUDE Irvine32.inc
 			      C ; Include file for Irvine32.lib             (Irvine32.inc)
@@ -32,23 +39,34 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 14:19:09
 
  00000000			.data
 
-				; (insert variable definitions here)
+ 00000000 09 09 50 72 6F	message01	BYTE "		Prog01 - Elementary Arithmetic		by Taylor Liss",0dh,0ah,0
+	   67 30 31 20 2D
+	   20 45 6C 65 6D
+	   65 6E 74 61 72
+	   79 20 41 72 69
+	   74 68 6D 65 74
+	   69 63 09 09 62
+	   79 20 54 61 79
+	   6C 6F 72 20 4C
+	   69 73 73 0D 0A
+	   00
 
  00000000			.code
  00000000			main PROC
-
-				; (insert executable instructions here)
+					
+ 00000000  BA 00000000 R		mov edx, OFFSET message01
+ 00000005  E8 00000000 E		call WriteString
 
 					exit	; exit to operating system
- 00000000  6A 00	   *	    push   +000000000h
- 00000002  E8 00000000 E   *	    call   ExitProcess
- 00000007			main ENDP
+ 0000000A  6A 00	   *	    push   +000000000h
+ 0000000C  E8 00000000 E   *	    call   ExitProcess
+ 00000011			main ENDP
 
 				; (insert additional procedures here)
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 14:19:09
-#Program Template     (template.asm			     Symbols 2 - 1
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 14:53:54
+/Prog01 - Elementary Arithmetic     (Prog01.asm		     Symbols 2 - 1
 
 
 
@@ -141,8 +159,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000000 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000007 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000033 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000011 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -249,7 +267,7 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000007 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000011 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -482,6 +500,7 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
+message01  . . . . . . . . . . .	Byte	 00000000 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA

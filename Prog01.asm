@@ -18,12 +18,13 @@ INCLUDE Irvine32.inc
 
 .data
 
-; (insert variable definitions here)
+message01	BYTE "		Prog01 - Elementary Arithmetic		by Taylor Liss",0dh,0ah,0
 
 .code
 main PROC
-
-; (insert executable instructions here)
+	
+	mov edx, OFFSET message01
+	call WriteString
 
 	exit	; exit to operating system
 main ENDP

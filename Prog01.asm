@@ -22,6 +22,11 @@ secondNum	DWORD	?	;second number to be entered by user
 titleMess	BYTE	"		Prog01 - Elementary Arithmetic		by Taylor Liss",0dh,0ah,0ah,0
 prompt01	BYTE	"This program performs elementary arithmetic on two numbers. Please enter a positive integer and then press enter.",0dh,0ah,0
 prompt02	BYTE	"Please enter a second positive integer and then press enter.",0dh,0ah,0
+sumMess		BYTE	"The sum of the two numbers is ", 0
+diffMess	BYTE	"The difference of the two numbers is ", 0
+prodMess	BYTE	"The product of the two numbers is ", 0
+quotMess	BYTE	"The quotient of the two numbers is ", 0
+remMess		BYTE	"The remainder of the two numbers is ", 0
 
 .code
 main PROC
@@ -41,6 +46,16 @@ main PROC
 	call	WriteString
 	call	ReadInt
 	mov		secondNum, eax
+
+;calculate and display sum
+	mov		edx, OFFSET sumMess
+	call	WriteString
+	mov		eax, firstNum
+	add		eax, secondNum
+	call	WriteDec
+	call	CrLf
+
+	
 
 	exit	; exit to operating system
 main ENDP

@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:10:00
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:20:43
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Page 1 - 1
 
 
@@ -88,6 +88,49 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:10:00
 	   65 73 73 20 65
 	   6E 74 65 72 2E
 	   0D 0A 00
+ 000000EF 54 68 65 20 73	sumMess		BYTE	"The sum of the two numbers is ", 0
+	   75 6D 20 6F 66
+	   20 74 68 65 20
+	   74 77 6F 20 6E
+	   75 6D 62 65 72
+	   73 20 69 73 20
+	   00
+ 0000010E 54 68 65 20 64	diffMess	BYTE	"The difference of the two numbers is ", 0
+	   69 66 66 65 72
+	   65 6E 63 65 20
+	   6F 66 20 74 68
+	   65 20 74 77 6F
+	   20 6E 75 6D 62
+	   65 72 73 20 69
+	   73 20 00
+ 00000134 54 68 65 20 70	prodMess	BYTE	"The product of the two numbers is ", 0
+	   72 6F 64 75 63
+	   74 20 6F 66 20
+	   74 68 65 20 74
+	   77 6F 20 6E 75
+	   6D 62 65 72 73
+	   20 69 73 20 00
+ 00000157 54 68 65 20 71	quotMess	BYTE	"The quotient of the two numbers is ", 0
+	   75 6F 74 69 65
+	   6E 74 20 6F 66
+	   20 74 68 65 20
+	   74 77 6F 20 6E
+	   75 6D 62 65 72
+	   73 20 69 73 20
+	   00
+ 0000017B 54 68 65 20 72	remMess		BYTE	"The remainder of the two numbers is ", 0
+	   65 6D 61 69 6E
+	   64 65 72 20 6F
+	   66 20 74 68 65
+	   20 74 77 6F 20
+	   6E 75 6D 62 65
+	   72 73 20 69 73
+	   20 00
+ 000001A0 00000000		sumRes		DWORD	?	;sum result
+ 000001A4 00000000		diffRes		DWORD	?	;difference result
+ 000001A8 00000000		prodRes		DWORD	?	;product result
+ 000001AC 00000000		quotRes		DWORD	?	;quotient result
+ 000001B0 00000000		remRes		DWORD	?	;quotient result
 
  00000000			.code
  00000000			main PROC
@@ -108,15 +151,25 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:10:00
  00000028  E8 00000000 E		call	ReadInt
  0000002D  A3 00000004 R		mov		secondNum, eax
 
+				;calculate and display sum
+ 00000032  BA 000000EF R		mov		edx, OFFSET sumMess
+ 00000037  E8 00000000 E		call	WriteString
+ 0000003C  A1 00000000 R		mov		eax, firstNum
+ 00000041  03 05 00000004 R		add		eax, secondNum
+ 00000047  E8 00000000 E		call	WriteDec
+ 0000004C  E8 00000000 E		call	CrLf
+
+					
+
 					exit	; exit to operating system
- 00000032  6A 00	   *	    push   +000000000h
- 00000034  E8 00000000 E   *	    call   ExitProcess
- 00000039			main ENDP
+ 00000051  6A 00	   *	    push   +000000000h
+ 00000053  E8 00000000 E   *	    call   ExitProcess
+ 00000058			main ENDP
 
 				; (insert additional procedures here)
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:10:00
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:20:43
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Symbols 2 - 1
 
 
@@ -210,8 +263,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 000000EF Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000039 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 000001B4 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000058 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -318,7 +371,7 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000039 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000058 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -541,6 +594,8 @@ black  . . . . . . . . . . . . .	Number	 00000000h
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
+diffMess . . . . . . . . . . . .	Byte	 0000010E _DATA	
+diffRes  . . . . . . . . . . . .	DWord	 000001A4 _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 firstNum . . . . . . . . . . . .	DWord	 00000000 _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
@@ -552,10 +607,18 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
+prodMess . . . . . . . . . . . .	Byte	 00000134 _DATA	
+prodRes  . . . . . . . . . . . .	DWord	 000001A8 _DATA	
 prompt01 . . . . . . . . . . . .	Byte	 0000003C _DATA	
 prompt02 . . . . . . . . . . . .	Byte	 000000B0 _DATA	
+quotMess . . . . . . . . . . . .	Byte	 00000157 _DATA	
+quotRes  . . . . . . . . . . . .	DWord	 000001AC _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
+remMess  . . . . . . . . . . . .	Byte	 0000017B _DATA	
+remRes . . . . . . . . . . . . .	DWord	 000001B0 _DATA	
 secondNum  . . . . . . . . . . .	DWord	 00000004 _DATA	
+sumMess  . . . . . . . . . . . .	Byte	 000000EF _DATA	
+sumRes . . . . . . . . . . . . .	DWord	 000001A0 _DATA	
 titleMess  . . . . . . . . . . .	Byte	 00000008 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA

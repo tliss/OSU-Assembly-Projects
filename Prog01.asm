@@ -17,14 +17,30 @@ INCLUDE Irvine32.inc
 ; (insert constant definitions here)
 
 .data
-
-message01	BYTE "		Prog01 - Elementary Arithmetic		by Taylor Liss",0dh,0ah,0
+firstNum	DWORD	?	;first number to be entered by user
+secondNum	DWORD	?	;second number to be entered by user
+message01	BYTE	"		Prog01 - Elementary Arithmetic		by Taylor Liss",0dh,0ah,0ah,0
+message02	BYTE	"This program performs elementary arithmetic on two numbers. Please enter a positive integer and then press enter.",0dh,0ah,0
+message03	BYTE	"Please enter a second positive integer and then press enter.",0dh,0ah,0
 
 .code
 main PROC
 	
-	mov edx, OFFSET message01
-	call WriteString
+;Display program title
+	mov		edx, OFFSET message01
+	call	WriteString
+
+;Get first number
+	mov		edx, OFFSET message02
+	call	WriteString
+	call	ReadInt
+	mov		firstNum, eax
+
+;Get second number
+	mov		edx, OFFSET message03
+	call	WriteString
+	call	ReadInt
+	mov		secondNum, eax
 
 	exit	; exit to operating system
 main ENDP

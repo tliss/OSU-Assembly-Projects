@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 14:53:54
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:06:42
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Page 1 - 1
 
 
@@ -38,8 +38,9 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 14:53:54
 				; (insert constant definitions here)
 
  00000000			.data
-
- 00000000 09 09 50 72 6F	message01	BYTE "		Prog01 - Elementary Arithmetic		by Taylor Liss",0dh,0ah,0
+ 00000000 00000000		firstNum	DWORD	?	;first number to be entered by user
+ 00000004 00000000		secondNum	DWORD	?	;second number to be entered by user
+ 00000008 09 09 50 72 6F	message01	BYTE	"		Prog01 - Elementary Arithmetic		by Taylor Liss",0dh,0ah,0ah,0
 	   67 30 31 20 2D
 	   20 45 6C 65 6D
 	   65 6E 74 61 72
@@ -49,23 +50,73 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 14:53:54
 	   79 20 54 61 79
 	   6C 6F 72 20 4C
 	   69 73 73 0D 0A
+	   0A 00
+ 0000003C 54 68 69 73 20	message02	BYTE	"This program performs elementary arithmetic on two numbers. Please enter a positive integer and then press enter.",0dh,0ah,0
+	   70 72 6F 67 72
+	   61 6D 20 70 65
+	   72 66 6F 72 6D
+	   73 20 65 6C 65
+	   6D 65 6E 74 61
+	   72 79 20 61 72
+	   69 74 68 6D 65
+	   74 69 63 20 6F
+	   6E 20 74 77 6F
+	   20 6E 75 6D 62
+	   65 72 73 2E 20
+	   50 6C 65 61 73
+	   65 20 65 6E 74
+	   65 72 20 61 20
+	   70 6F 73 69 74
+	   69 76 65 20 69
+	   6E 74 65 67 65
+	   72 20 61 6E 64
+	   20 74 68 65 6E
+	   20 70 72 65 73
+	   73 20 65 6E 74
+	   65 72 2E 0D 0A
 	   00
+ 000000B0 50 6C 65 61 73	message03	BYTE	"Please enter a second positive integer and then press enter.",0dh,0ah,0
+	   65 20 65 6E 74
+	   65 72 20 61 20
+	   73 65 63 6F 6E
+	   64 20 70 6F 73
+	   69 74 69 76 65
+	   20 69 6E 74 65
+	   67 65 72 20 61
+	   6E 64 20 74 68
+	   65 6E 20 70 72
+	   65 73 73 20 65
+	   6E 74 65 72 2E
+	   0D 0A 00
 
  00000000			.code
  00000000			main PROC
 					
- 00000000  BA 00000000 R		mov edx, OFFSET message01
- 00000005  E8 00000000 E		call WriteString
+				;Display program title
+ 00000000  BA 00000008 R		mov		edx, OFFSET message01
+ 00000005  E8 00000000 E		call	WriteString
+
+				;Get first number
+ 0000000A  BA 0000003C R		mov		edx, OFFSET message02
+ 0000000F  E8 00000000 E		call	WriteString
+ 00000014  E8 00000000 E		call	ReadInt
+ 00000019  A3 00000000 R		mov		firstNum, eax
+
+				;Get second number
+ 0000001E  BA 000000B0 R		mov		edx, OFFSET message03
+ 00000023  E8 00000000 E		call	WriteString
+ 00000028  E8 00000000 E		call	ReadInt
+ 0000002D  A3 00000004 R		mov		secondNum, eax
 
 					exit	; exit to operating system
- 0000000A  6A 00	   *	    push   +000000000h
- 0000000C  E8 00000000 E   *	    call   ExitProcess
- 00000011			main ENDP
+ 00000032  6A 00	   *	    push   +000000000h
+ 00000034  E8 00000000 E   *	    call   ExitProcess
+ 00000039			main ENDP
 
 				; (insert additional procedures here)
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 14:53:54
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:06:42
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Symbols 2 - 1
 
 
@@ -159,8 +210,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000033 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000011 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 000000EF Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000039 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -267,7 +318,7 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000011 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000039 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -491,6 +542,7 @@ blue . . . . . . . . . . . . . .	Number	 00000001h
 brown  . . . . . . . . . . . . .	Number	 00000006h   
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
+firstNum . . . . . . . . . . . .	DWord	 00000000 _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
@@ -500,8 +552,11 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-message01  . . . . . . . . . . .	Byte	 00000000 _DATA	
+message01  . . . . . . . . . . .	Byte	 00000008 _DATA	
+message02  . . . . . . . . . . .	Byte	 0000003C _DATA	
+message03  . . . . . . . . . . .	Byte	 000000B0 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
+secondNum  . . . . . . . . . . .	DWord	 00000004 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   

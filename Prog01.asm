@@ -20,21 +20,26 @@ INCLUDE Irvine32.inc
 firstNum	DWORD	?	;first number to be entered by user
 secondNum	DWORD	?	;second number to be entered by user
 titleMess	BYTE	"		Prog01 - Elementary Arithmetic		by Taylor Liss",0dh,0ah,0ah,0
-prompt01	BYTE	"This program performs elementary arithmetic on two numbers. Please enter a positive integer and then press enter.",0dh,0ah,0
-prompt02	BYTE	"Please enter a second positive integer and then press enter.",0dh,0ah,0
-sumMess		BYTE	"The sum of the two numbers is ", 0
-diffMess	BYTE	"The difference of the two numbers is ", 0
-prodMess	BYTE	"The product of the two numbers is ", 0
-quotMess	BYTE	"The quotient of the two numbers is ", 0
-remMess		BYTE	"The remainder of the two numbers is ", 0
-goodbye		BYTE	"Goodbye!", 0dh, 0ah, 0
+intro		BYTE	"Enter 2 numbers, and I'll show you the sum, difference, product, quotient, and remainder.",0dh,0ah,0
+prompt01	BYTE	"First number: ", 0
+prompt02	BYTE	"Second number: ", 0
+sumMess		BYTE	" + ", 0
+diffMess	BYTE	" - ", 0
+prodMess	BYTE	" x ", 0
+quotMess	BYTE	" / ", 0
+equMess		BYTE	" = ", 0
+remMess		BYTE	" remainder ", 0
+goodbye		BYTE	"Not bad, huh? Goodbye!", 0dh, 0ah, 0
 
 .code
 main PROC
 	
-;Display program title
+;Display program title & instructions
 	mov		edx, OFFSET titleMess
 	call	WriteString
+	mov		edx, OFFSET intro
+	call	WriteString
+	call	CrLf
 
 ;Get first number
 	mov		edx, OFFSET prompt01
@@ -47,48 +52,77 @@ main PROC
 	call	WriteString
 	call	ReadInt
 	mov		secondNum, eax
+	call	CrLf
 
 ;calculate and display sum
+	mov		eax, firstNum
+	call	WriteDec
 	mov		edx, OFFSET sumMess
 	call	WriteString
+	mov		eax, secondNum
+	call	WriteDec
+	mov		edx, OFFSET equMess
+	call	WriteString
+
 	mov		eax, firstNum
 	add		eax, secondNum
 	call	WriteDec
 	call	CrLf
 
 ;calculate and display difference
+	mov		eax, firstNum
+	call	WriteDec
 	mov		edx, OFFSET diffMess
 	call	WriteString
+	mov		eax, secondNum
+	call	WriteDec
+	mov		edx, OFFSET equMess
+	call	WriteString
+	
 	mov		eax, firstNum
 	sub		eax, secondNum
 	call	WriteDec
 	call	CrLf
 
 ;calculate and display the product
+	mov		eax, firstNum
+	call	WriteDec
 	mov		edx, OFFSET prodMess
 	call	WriteString
+	mov		eax, secondNum
+	call	WriteDec
+	mov		edx, OFFSET equMess
+	call	WriteString
+
 	mov		eax, firstNum
 	mov		ebx, secondNum
 	mul		ebx
 	call	WriteDec
 	call	CrLf
 
-;calculate and display the difference
-	mov		edx, OFFSET diffMess
+;calculate and display the quotient
+	mov		eax, firstNum
+	call	WriteDec
+	mov		edx, OFFSET quotMess
 	call	WriteString
+	mov		eax, secondNum
+	call	WriteDec
+	mov		edx, OFFSET equMess
+	call	WriteString
+
 	cdq
 	mov		eax, firstNum
 	mov		ebx, secondNum
 	div		ebx
 	call	WriteDec
-	call	CrLf
 	
 ;display the remainder
 	mov		eax, edx
 	mov		edx, OFFSET remMess
 	call	WriteString
 	call	WriteDec
-	call	CrLf	
+	call	CrLf
+	call	CrLf
 
 ;display the goodbye message
 	mov		edx, OFFSET goodbye

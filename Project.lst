@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:30:39
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:37:35
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Page 1 - 1
 
 
@@ -170,19 +170,35 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:30:39
  00000085  F7 E3			mul		ebx
  00000087  E8 00000000 E		call	WriteDec
  0000008C  E8 00000000 E		call	CrLf
+
+				;calculate and display the difference
+ 00000091  BA 0000010E R		mov		edx, OFFSET diffMess
+ 00000096  E8 00000000 E		call	WriteString
+ 0000009B  99				cdq
+ 0000009C  A1 00000000 R		mov		eax, firstNum
+ 000000A1  8B 1D 00000004 R		mov		ebx, secondNum
+ 000000A7  F7 F3			div		ebx
+ 000000A9  E8 00000000 E		call	WriteDec
+ 000000AE  E8 00000000 E		call	CrLf
 					
-					
-					
+				;display the remainder
+ 000000B3  8B C2			mov		eax, edx
+ 000000B5  BA 0000017B R		mov		edx, OFFSET remMess
+ 000000BA  E8 00000000 E		call	WriteString
+ 000000BF  E8 00000000 E		call	WriteDec
+ 000000C4  E8 00000000 E		call	CrLf	
+
+
 
 					exit	; exit to operating system
- 00000091  6A 00	   *	    push   +000000000h
- 00000093  E8 00000000 E   *	    call   ExitProcess
- 00000098			main ENDP
+ 000000C9  6A 00	   *	    push   +000000000h
+ 000000CB  E8 00000000 E   *	    call   ExitProcess
+ 000000D0			main ENDP
 
 				; (insert additional procedures here)
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:30:39
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 15:37:35
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Symbols 2 - 1
 
 
@@ -277,7 +293,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 000001A0 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000098 Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000D0 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -384,7 +400,7 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000098 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000D0 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C

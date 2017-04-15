@@ -71,9 +71,25 @@ main PROC
 	mul		ebx
 	call	WriteDec
 	call	CrLf
+
+;calculate and display the difference
+	mov		edx, OFFSET diffMess
+	call	WriteString
+	cdq
+	mov		eax, firstNum
+	mov		ebx, secondNum
+	div		ebx
+	call	WriteDec
+	call	CrLf
 	
-	
-	
+;display the remainder
+	mov		eax, edx
+	mov		edx, OFFSET remMess
+	call	WriteString
+	call	WriteDec
+	call	CrLf	
+
+
 
 	exit	; exit to operating system
 main ENDP

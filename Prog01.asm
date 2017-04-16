@@ -20,7 +20,8 @@ INCLUDE Irvine32.inc
 firstNum	DWORD	?	;first number to be entered by user
 secondNum	DWORD	?	;second number to be entered by user
 titleMess	BYTE	"		Prog01 - Elementary Arithmetic		by Taylor Liss", 0dh, 0ah, 0
-extraCred01	BYTE	"**EC: Program repeats until the user chooses to quit", 0dh, 0ah, 0
+extraCred01	BYTE	"**EC: Program repeats until the user chooses to quit", 0
+extraCred02	BYTE	"**EC: Program verifies second number less than first", 0dh, 0ah, 0
 intro		BYTE	"Enter 2 numbers, and I'll show you the sum, difference, product, quotient, and remainder.",0dh,0ah,0
 prompt01	BYTE	"First number: ", 0
 prompt02	BYTE	"Second number: ", 0
@@ -34,6 +35,7 @@ notBadMess	BYTE	"Not bad, huh?", 0dh, 0ah, 0
 goodbyeMess	BYTE	"Goodbye!", 0dh, 0ah, 0
 startAgain	BYTE	"Would you like to go again? (y/n)", 0
 again		BYTE	?	;user's y/n response
+lessThan	BYTE	"The second number must be less than the first!", 0dh, 0ah, 0
 
 .code
 main PROC
@@ -44,6 +46,9 @@ startPoint: ;Program restarts to here when request.
 	mov		edx, OFFSET titleMess
 	call	WriteString	
 	mov		edx, OFFSET extraCred01
+	call	WriteString
+	call	CrLf
+	mov		edx, OFFSET extraCred02
 	call	WriteString
 	call	CrLf
 	mov		edx, OFFSET intro
@@ -62,6 +67,12 @@ startPoint: ;Program restarts to here when request.
 	call	ReadInt
 	mov		secondNum, eax
 	call	CrLf
+
+;Compare numbers
+	mov		eax, firstNum
+	mov		ebx, secondNum
+	cmp		eax, ebx
+	jl		lessJump
 
 ;calculate and display sum
 	mov		eax, firstNum
@@ -138,7 +149,7 @@ startPoint: ;Program restarts to here when request.
 	call	WriteString
 	call	CrLf
 
-;Check to see if user wants to restart the program
+restart: ;Check to see if user wants to restart the program
 	mov		edx, OFFSET startAgain
 	call	WriteString
 	call	ReadChar
@@ -151,6 +162,14 @@ startPoint: ;Program restarts to here when request.
 	mov		edx, OFFSET goodbyeMess
 	call	WriteString
 	call	CrLf
+	exit	; exit to operating system
+
+;will jump here if the first number is less than the second
+lessJump:
+	mov		edx, OFFSET lessThan
+	call	WriteString
+	call	CrLf
+	jmp		restart
 
 	exit	; exit to operating system
 main ENDP

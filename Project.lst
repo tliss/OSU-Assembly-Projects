@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 21:09:30
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 21:51:34
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Page 1 - 1
 
 
@@ -51,7 +51,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 21:09:30
 	   6C 6F 72 20 4C
 	   69 73 73 0D 0A
 	   00
- 0000003B 2A 2A 45 43 3A	extraCred01	BYTE	"**EC: Program repeats until the user chooses to quit", 0dh, 0ah, 0
+ 0000003B 2A 2A 45 43 3A	extraCred01	BYTE	"**EC: Program repeats until the user chooses to quit", 0
 	   20 50 72 6F 67
 	   72 61 6D 20 72
 	   65 70 65 61 74
@@ -61,8 +61,19 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 21:09:30
 	   72 20 63 68 6F
 	   6F 73 65 73 20
 	   74 6F 20 71 75
-	   69 74 0D 0A 00
- 00000072 45 6E 74 65 72	intro		BYTE	"Enter 2 numbers, and I'll show you the sum, difference, product, quotient, and remainder.",0dh,0ah,0
+	   69 74 00
+ 00000070 2A 2A 45 43 3A	extraCred02	BYTE	"**EC: Program verifies second number less than first", 0dh, 0ah, 0
+	   20 50 72 6F 67
+	   72 61 6D 20 76
+	   65 72 69 66 69
+	   65 73 20 73 65
+	   63 6F 6E 64 20
+	   6E 75 6D 62 65
+	   72 20 6C 65 73
+	   73 20 74 68 61
+	   6E 20 66 69 72
+	   73 74 0D 0A 00
+ 000000A7 45 6E 74 65 72	intro		BYTE	"Enter 2 numbers, and I'll show you the sum, difference, product, quotient, and remainder.",0dh,0ah,0
 	   20 32 20 6E 75
 	   6D 62 65 72 73
 	   2C 20 61 6E 64
@@ -81,36 +92,46 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 21:09:30
 	   65 6D 61 69 6E
 	   64 65 72 2E 0D
 	   0A 00
- 000000CE 46 69 72 73 74	prompt01	BYTE	"First number: ", 0
+ 00000103 46 69 72 73 74	prompt01	BYTE	"First number: ", 0
 	   20 6E 75 6D 62
 	   65 72 3A 20 00
- 000000DD 53 65 63 6F 6E	prompt02	BYTE	"Second number: ", 0
+ 00000112 53 65 63 6F 6E	prompt02	BYTE	"Second number: ", 0
 	   64 20 6E 75 6D
 	   62 65 72 3A 20
 	   00
- 000000ED 20 2B 20 00		sumMess		BYTE	" + ", 0
- 000000F1 20 2D 20 00		diffMess	BYTE	" - ", 0
- 000000F5 20 78 20 00		prodMess	BYTE	" x ", 0
- 000000F9 20 2F 20 00		quotMess	BYTE	" / ", 0
- 000000FD 20 3D 20 00		equMess		BYTE	" = ", 0
- 00000101 20 72 65 6D 61	remMess		BYTE	" remainder ", 0
+ 00000122 20 2B 20 00		sumMess		BYTE	" + ", 0
+ 00000126 20 2D 20 00		diffMess	BYTE	" - ", 0
+ 0000012A 20 78 20 00		prodMess	BYTE	" x ", 0
+ 0000012E 20 2F 20 00		quotMess	BYTE	" / ", 0
+ 00000132 20 3D 20 00		equMess		BYTE	" = ", 0
+ 00000136 20 72 65 6D 61	remMess		BYTE	" remainder ", 0
 	   69 6E 64 65 72
 	   20 00
- 0000010D 4E 6F 74 20 62	notBadMess	BYTE	"Not bad, huh?", 0dh, 0ah, 0
+ 00000142 4E 6F 74 20 62	notBadMess	BYTE	"Not bad, huh?", 0dh, 0ah, 0
 	   61 64 2C 20 68
 	   75 68 3F 0D 0A
 	   00
- 0000011D 47 6F 6F 64 62	goodbyeMess	BYTE	"Goodbye!", 0dh, 0ah, 0
+ 00000152 47 6F 6F 64 62	goodbyeMess	BYTE	"Goodbye!", 0dh, 0ah, 0
 	   79 65 21 0D 0A
 	   00
- 00000128 57 6F 75 6C 64	startAgain	BYTE	"Would you like to go again? (y/n)", 0
+ 0000015D 57 6F 75 6C 64	startAgain	BYTE	"Would you like to go again? (y/n)", 0
 	   20 79 6F 75 20
 	   6C 69 6B 65 20
 	   74 6F 20 67 6F
 	   20 61 67 61 69
 	   6E 3F 20 28 79
 	   2F 6E 29 00
- 0000014A 00			again		BYTE	?	;user's y/n response
+ 0000017F 00			again		BYTE	?	;user's y/n response
+ 00000180 54 68 65 20 73	lessThan	BYTE	"The second number must be less than the first!", 0dh, 0ah, 0
+	   65 63 6F 6E 64
+	   20 6E 75 6D 62
+	   65 72 20 6D 75
+	   73 74 20 62 65
+	   20 6C 65 73 73
+	   20 74 68 61 6E
+	   20 74 68 65 20
+	   66 69 72 73 74
+	   21 0D 0A 00
 
  00000000			.code
  00000000			main PROC
@@ -123,119 +144,138 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 21:09:30
  0000000A  BA 0000003B R		mov		edx, OFFSET extraCred01
  0000000F  E8 00000000 E		call	WriteString
  00000014  E8 00000000 E		call	CrLf
- 00000019  BA 00000072 R		mov		edx, OFFSET intro
+ 00000019  BA 00000070 R		mov		edx, OFFSET extraCred02
  0000001E  E8 00000000 E		call	WriteString
  00000023  E8 00000000 E		call	CrLf
+ 00000028  BA 000000A7 R		mov		edx, OFFSET intro
+ 0000002D  E8 00000000 E		call	WriteString
+ 00000032  E8 00000000 E		call	CrLf
 
 				;Get first number
- 00000028  BA 000000CE R		mov		edx, OFFSET prompt01
- 0000002D  E8 00000000 E		call	WriteString
- 00000032  E8 00000000 E		call	ReadInt
- 00000037  A3 00000000 R		mov		firstNum, eax
+ 00000037  BA 00000103 R		mov		edx, OFFSET prompt01
+ 0000003C  E8 00000000 E		call	WriteString
+ 00000041  E8 00000000 E		call	ReadInt
+ 00000046  A3 00000000 R		mov		firstNum, eax
 
 				;Get second number
- 0000003C  BA 000000DD R		mov		edx, OFFSET prompt02
- 00000041  E8 00000000 E		call	WriteString
- 00000046  E8 00000000 E		call	ReadInt
- 0000004B  A3 00000004 R		mov		secondNum, eax
- 00000050  E8 00000000 E		call	CrLf
+ 0000004B  BA 00000112 R		mov		edx, OFFSET prompt02
+ 00000050  E8 00000000 E		call	WriteString
+ 00000055  E8 00000000 E		call	ReadInt
+ 0000005A  A3 00000004 R		mov		secondNum, eax
+ 0000005F  E8 00000000 E		call	CrLf
+
+				;Compare numbers
+ 00000064  A1 00000000 R		mov		eax, firstNum
+ 00000069  8B 1D 00000004 R		mov		ebx, secondNum
+ 0000006F  3B C3			cmp		eax, ebx
+ 00000071  0F 8C 00000155		jl		lessJump
 
 				;calculate and display sum
- 00000055  A1 00000000 R		mov		eax, firstNum
- 0000005A  E8 00000000 E		call	WriteDec
- 0000005F  BA 000000ED R		mov		edx, OFFSET sumMess
- 00000064  E8 00000000 E		call	WriteString
- 00000069  A1 00000004 R		mov		eax, secondNum
- 0000006E  E8 00000000 E		call	WriteDec
- 00000073  BA 000000FD R		mov		edx, OFFSET equMess
- 00000078  E8 00000000 E		call	WriteString
+ 00000077  A1 00000000 R		mov		eax, firstNum
+ 0000007C  E8 00000000 E		call	WriteDec
+ 00000081  BA 00000122 R		mov		edx, OFFSET sumMess
+ 00000086  E8 00000000 E		call	WriteString
+ 0000008B  A1 00000004 R		mov		eax, secondNum
+ 00000090  E8 00000000 E		call	WriteDec
+ 00000095  BA 00000132 R		mov		edx, OFFSET equMess
+ 0000009A  E8 00000000 E		call	WriteString
 
- 0000007D  A1 00000000 R		mov		eax, firstNum
- 00000082  03 05 00000004 R		add		eax, secondNum
- 00000088  E8 00000000 E		call	WriteDec
- 0000008D  E8 00000000 E		call	CrLf
+ 0000009F  A1 00000000 R		mov		eax, firstNum
+ 000000A4  03 05 00000004 R		add		eax, secondNum
+ 000000AA  E8 00000000 E		call	WriteDec
+ 000000AF  E8 00000000 E		call	CrLf
 
 				;calculate and display difference
- 00000092  A1 00000000 R		mov		eax, firstNum
- 00000097  E8 00000000 E		call	WriteDec
- 0000009C  BA 000000F1 R		mov		edx, OFFSET diffMess
- 000000A1  E8 00000000 E		call	WriteString
- 000000A6  A1 00000004 R		mov		eax, secondNum
- 000000AB  E8 00000000 E		call	WriteDec
- 000000B0  BA 000000FD R		mov		edx, OFFSET equMess
- 000000B5  E8 00000000 E		call	WriteString
+ 000000B4  A1 00000000 R		mov		eax, firstNum
+ 000000B9  E8 00000000 E		call	WriteDec
+ 000000BE  BA 00000126 R		mov		edx, OFFSET diffMess
+ 000000C3  E8 00000000 E		call	WriteString
+ 000000C8  A1 00000004 R		mov		eax, secondNum
+ 000000CD  E8 00000000 E		call	WriteDec
+ 000000D2  BA 00000132 R		mov		edx, OFFSET equMess
+ 000000D7  E8 00000000 E		call	WriteString
 					
- 000000BA  A1 00000000 R		mov		eax, firstNum
- 000000BF  2B 05 00000004 R		sub		eax, secondNum
- 000000C5  E8 00000000 E		call	WriteDec
- 000000CA  E8 00000000 E		call	CrLf
+ 000000DC  A1 00000000 R		mov		eax, firstNum
+ 000000E1  2B 05 00000004 R		sub		eax, secondNum
+ 000000E7  E8 00000000 E		call	WriteDec
+ 000000EC  E8 00000000 E		call	CrLf
 
 				;calculate and display the product
- 000000CF  A1 00000000 R		mov		eax, firstNum
- 000000D4  E8 00000000 E		call	WriteDec
- 000000D9  BA 000000F5 R		mov		edx, OFFSET prodMess
- 000000DE  E8 00000000 E		call	WriteString
- 000000E3  A1 00000004 R		mov		eax, secondNum
- 000000E8  E8 00000000 E		call	WriteDec
- 000000ED  BA 000000FD R		mov		edx, OFFSET equMess
- 000000F2  E8 00000000 E		call	WriteString
+ 000000F1  A1 00000000 R		mov		eax, firstNum
+ 000000F6  E8 00000000 E		call	WriteDec
+ 000000FB  BA 0000012A R		mov		edx, OFFSET prodMess
+ 00000100  E8 00000000 E		call	WriteString
+ 00000105  A1 00000004 R		mov		eax, secondNum
+ 0000010A  E8 00000000 E		call	WriteDec
+ 0000010F  BA 00000132 R		mov		edx, OFFSET equMess
+ 00000114  E8 00000000 E		call	WriteString
 
- 000000F7  A1 00000000 R		mov		eax, firstNum
- 000000FC  8B 1D 00000004 R		mov		ebx, secondNum
- 00000102  F7 E3			mul		ebx
- 00000104  E8 00000000 E		call	WriteDec
- 00000109  E8 00000000 E		call	CrLf
+ 00000119  A1 00000000 R		mov		eax, firstNum
+ 0000011E  8B 1D 00000004 R		mov		ebx, secondNum
+ 00000124  F7 E3			mul		ebx
+ 00000126  E8 00000000 E		call	WriteDec
+ 0000012B  E8 00000000 E		call	CrLf
 
 				;calculate and display the quotient
- 0000010E  A1 00000000 R		mov		eax, firstNum
- 00000113  E8 00000000 E		call	WriteDec
- 00000118  BA 000000F9 R		mov		edx, OFFSET quotMess
- 0000011D  E8 00000000 E		call	WriteString
- 00000122  A1 00000004 R		mov		eax, secondNum
- 00000127  E8 00000000 E		call	WriteDec
- 0000012C  BA 000000FD R		mov		edx, OFFSET equMess
- 00000131  E8 00000000 E		call	WriteString
+ 00000130  A1 00000000 R		mov		eax, firstNum
+ 00000135  E8 00000000 E		call	WriteDec
+ 0000013A  BA 0000012E R		mov		edx, OFFSET quotMess
+ 0000013F  E8 00000000 E		call	WriteString
+ 00000144  A1 00000004 R		mov		eax, secondNum
+ 00000149  E8 00000000 E		call	WriteDec
+ 0000014E  BA 00000132 R		mov		edx, OFFSET equMess
+ 00000153  E8 00000000 E		call	WriteString
 
- 00000136  99				cdq
- 00000137  A1 00000000 R		mov		eax, firstNum
- 0000013C  8B 1D 00000004 R		mov		ebx, secondNum
- 00000142  F7 F3			div		ebx
- 00000144  E8 00000000 E		call	WriteDec
+ 00000158  99				cdq
+ 00000159  A1 00000000 R		mov		eax, firstNum
+ 0000015E  8B 1D 00000004 R		mov		ebx, secondNum
+ 00000164  F7 F3			div		ebx
+ 00000166  E8 00000000 E		call	WriteDec
 					
 				;display the remainder
- 00000149  8B C2			mov		eax, edx
- 0000014B  BA 00000101 R		mov		edx, OFFSET remMess
- 00000150  E8 00000000 E		call	WriteString
- 00000155  E8 00000000 E		call	WriteDec
- 0000015A  E8 00000000 E		call	CrLf
- 0000015F  E8 00000000 E		call	CrLf
+ 0000016B  8B C2			mov		eax, edx
+ 0000016D  BA 00000136 R		mov		edx, OFFSET remMess
+ 00000172  E8 00000000 E		call	WriteString
+ 00000177  E8 00000000 E		call	WriteDec
+ 0000017C  E8 00000000 E		call	CrLf
+ 00000181  E8 00000000 E		call	CrLf
 
 				;display the 'not bad' message
- 00000164  BA 0000010D R		mov		edx, OFFSET notBadMess
- 00000169  E8 00000000 E		call	WriteString
- 0000016E  E8 00000000 E		call	CrLf
+ 00000186  BA 00000142 R		mov		edx, OFFSET notBadMess
+ 0000018B  E8 00000000 E		call	WriteString
+ 00000190  E8 00000000 E		call	CrLf
 
-				;Check to see if user wants to restart the program
- 00000173  BA 00000128 R		mov		edx, OFFSET startAgain
- 00000178  E8 00000000 E		call	WriteString
- 0000017D  E8 00000000 E		call	ReadChar
- 00000182  E8 00000000 E		call	WriteChar
- 00000187  E8 00000000 E		call	ClrScr
- 0000018C  3C 79			cmp		al, 121
- 0000018E  0F 84 FFFFFE6C		jz		startPoint
+ 00000195			restart: ;Check to see if user wants to restart the program
+ 00000195  BA 0000015D R		mov		edx, OFFSET startAgain
+ 0000019A  E8 00000000 E		call	WriteString
+ 0000019F  E8 00000000 E		call	ReadChar
+ 000001A4  E8 00000000 E		call	WriteChar
+ 000001A9  E8 00000000 E		call	ClrScr
+ 000001AE  3C 79			cmp		al, 121
+ 000001B0  0F 84 FFFFFE4A		jz		startPoint
 
 				;display the goodbye message
- 00000194  BA 0000011D R		mov		edx, OFFSET goodbyeMess
- 00000199  E8 00000000 E		call	WriteString
- 0000019E  E8 00000000 E		call	CrLf
+ 000001B6  BA 00000152 R		mov		edx, OFFSET goodbyeMess
+ 000001BB  E8 00000000 E		call	WriteString
+ 000001C0  E8 00000000 E		call	CrLf
+					exit	; exit to operating system
+ 000001C5  6A 00	   *	    push   +000000000h
+ 000001C7  E8 00000000 E   *	    call   ExitProcess
+
+				;will jump here if the first number is less than the second
+ 000001CC			lessJump:
+ 000001CC  BA 00000180 R		mov		edx, OFFSET lessThan
+ 000001D1  E8 00000000 E		call	WriteString
+ 000001D6  E8 00000000 E		call	CrLf
+ 000001DB  EB B8			jmp		restart
 
 					exit	; exit to operating system
- 000001A3  6A 00	   *	    push   +000000000h
- 000001A5  E8 00000000 E   *	    call   ExitProcess
- 000001AA			main ENDP
+ 000001DD  6A 00	   *	    push   +000000000h
+ 000001DF  E8 00000000 E   *	    call   ExitProcess
+ 000001E4			main ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 21:09:30
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 21:51:34
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Symbols 2 - 1
 
 
@@ -329,8 +369,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 0000014B Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000001AA Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 000001B1 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000001E4 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -437,8 +477,10 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000001AA Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000001E4 Public STDCALL
   startPoint . . . . . . . . . .	L Near	 00000000 _TEXT	
+  restart  . . . . . . . . . . .	L Near	 00000195 _TEXT	
+  lessJump . . . . . . . . . . .	L Near	 000001CC _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -657,20 +699,22 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
-again  . . . . . . . . . . . . .	Byte	 0000014A _DATA	
+again  . . . . . . . . . . . . .	Byte	 0000017F _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
-diffMess . . . . . . . . . . . .	Byte	 000000F1 _DATA	
-equMess  . . . . . . . . . . . .	Byte	 000000FD _DATA	
+diffMess . . . . . . . . . . . .	Byte	 00000126 _DATA	
+equMess  . . . . . . . . . . . .	Byte	 00000132 _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 extraCred01  . . . . . . . . . .	Byte	 0000003B _DATA	
+extraCred02  . . . . . . . . . .	Byte	 00000070 _DATA	
 firstNum . . . . . . . . . . . .	DWord	 00000000 _DATA	
-goodbyeMess  . . . . . . . . . .	Byte	 0000011D _DATA	
+goodbyeMess  . . . . . . . . . .	Byte	 00000152 _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
-intro  . . . . . . . . . . . . .	Byte	 00000072 _DATA	
+intro  . . . . . . . . . . . . .	Byte	 000000A7 _DATA	
+lessThan . . . . . . . . . . . .	Byte	 00000180 _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -678,16 +722,16 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-notBadMess . . . . . . . . . . .	Byte	 0000010D _DATA	
-prodMess . . . . . . . . . . . .	Byte	 000000F5 _DATA	
-prompt01 . . . . . . . . . . . .	Byte	 000000CE _DATA	
-prompt02 . . . . . . . . . . . .	Byte	 000000DD _DATA	
-quotMess . . . . . . . . . . . .	Byte	 000000F9 _DATA	
+notBadMess . . . . . . . . . . .	Byte	 00000142 _DATA	
+prodMess . . . . . . . . . . . .	Byte	 0000012A _DATA	
+prompt01 . . . . . . . . . . . .	Byte	 00000103 _DATA	
+prompt02 . . . . . . . . . . . .	Byte	 00000112 _DATA	
+quotMess . . . . . . . . . . . .	Byte	 0000012E _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
-remMess  . . . . . . . . . . . .	Byte	 00000101 _DATA	
+remMess  . . . . . . . . . . . .	Byte	 00000136 _DATA	
 secondNum  . . . . . . . . . . .	DWord	 00000004 _DATA	
-startAgain . . . . . . . . . . .	Byte	 00000128 _DATA	
-sumMess  . . . . . . . . . . . .	Byte	 000000ED _DATA	
+startAgain . . . . . . . . . . .	Byte	 0000015D _DATA	
+sumMess  . . . . . . . . . . . .	Byte	 00000122 _DATA	
 titleMess  . . . . . . . . . . .	Byte	 00000008 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA

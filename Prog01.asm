@@ -29,11 +29,16 @@ prodMess	BYTE	" x ", 0
 quotMess	BYTE	" / ", 0
 equMess		BYTE	" = ", 0
 remMess		BYTE	" remainder ", 0
-goodbye		BYTE	"Not bad, huh? Goodbye!", 0dh, 0ah, 0
+notBadMess	BYTE	"Not bad, huh?", 0dh, 0ah, 0
+goodbyeMess	BYTE	"Goodbye!", 0dh, 0ah, 0
+startAgain	BYTE	"Would you like to go again? (y/n)", 0
+again		BYTE	?	;user's y/n response
 
 .code
 main PROC
 	
+startPoint: ;Program restarts to here when request.
+
 ;Display program title & instructions
 	mov		edx, OFFSET titleMess
 	call	WriteString
@@ -124,13 +129,26 @@ main PROC
 	call	CrLf
 	call	CrLf
 
-;display the goodbye message
-	mov		edx, OFFSET goodbye
+;display the 'not bad' message
+	mov		edx, OFFSET notBadMess
 	call	WriteString
+	call	CrLf
+
+;Check to see if user wants to restart the program
+	mov		edx, OFFSET startAgain
+	call	WriteString
+	call	ReadChar
+	call	WriteChar
+	call	ClrScr
+	cmp		al, 121
+	jz		startPoint
+
+;display the goodbye message
+	mov		edx, OFFSET goodbyeMess
+	call	WriteString
+	call	CrLf
 
 	exit	; exit to operating system
 main ENDP
-
-; (insert additional procedures here)
 
 END main

@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 16:10:18
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 21:05:12
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Page 1 - 1
 
 
@@ -85,15 +85,27 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 16:10:18
  000000CB 20 72 65 6D 61	remMess		BYTE	" remainder ", 0
 	   69 6E 64 65 72
 	   20 00
- 000000D7 4E 6F 74 20 62	goodbye		BYTE	"Not bad, huh? Goodbye!", 0dh, 0ah, 0
+ 000000D7 4E 6F 74 20 62	notBadMess	BYTE	"Not bad, huh?", 0dh, 0ah, 0
 	   61 64 2C 20 68
-	   75 68 3F 20 47
-	   6F 6F 64 62 79
-	   65 21 0D 0A 00
+	   75 68 3F 0D 0A
+	   00
+ 000000E7 47 6F 6F 64 62	goodbyeMess	BYTE	"Goodbye!", 0dh, 0ah, 0
+	   79 65 21 0D 0A
+	   00
+ 000000F2 57 6F 75 6C 64	startAgain	BYTE	"Would you like to go again? (y/n)", 0
+	   20 79 6F 75 20
+	   6C 69 6B 65 20
+	   74 6F 20 67 6F
+	   20 61 67 61 69
+	   6E 3F 20 28 79
+	   2F 6E 29 00
+ 00000114 00			again		BYTE	?	;user's y/n response
 
  00000000			.code
  00000000			main PROC
 					
+ 00000000			startPoint: ;Program restarts to here when request.
+
 				;Display program title & instructions
  00000000  BA 00000008 R		mov		edx, OFFSET titleMess
  00000005  E8 00000000 E		call	WriteString
@@ -184,19 +196,32 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 16:10:18
  0000014B  E8 00000000 E		call	CrLf
  00000150  E8 00000000 E		call	CrLf
 
-				;display the goodbye message
- 00000155  BA 000000D7 R		mov		edx, OFFSET goodbye
+				;display the 'not bad' message
+ 00000155  BA 000000D7 R		mov		edx, OFFSET notBadMess
  0000015A  E8 00000000 E		call	WriteString
+ 0000015F  E8 00000000 E		call	CrLf
+
+				;Check to see if user wants to restart the program
+ 00000164  BA 000000F2 R		mov		edx, OFFSET startAgain
+ 00000169  E8 00000000 E		call	WriteString
+ 0000016E  E8 00000000 E		call	ReadChar
+ 00000173  E8 00000000 E		call	WriteChar
+ 00000178  E8 00000000 E		call	ClrScr
+ 0000017D  3C 79			cmp		al, 121
+ 0000017F  0F 84 FFFFFE7B		jz		startPoint
+
+				;display the goodbye message
+ 00000185  BA 000000E7 R		mov		edx, OFFSET goodbyeMess
+ 0000018A  E8 00000000 E		call	WriteString
+ 0000018F  E8 00000000 E		call	CrLf
 
 					exit	; exit to operating system
- 0000015F  6A 00	   *	    push   +000000000h
- 00000161  E8 00000000 E   *	    call   ExitProcess
- 00000166			main ENDP
-
-				; (insert additional procedures here)
+ 00000194  6A 00	   *	    push   +000000000h
+ 00000196  E8 00000000 E   *	    call   ExitProcess
+ 0000019B			main ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 16:10:18
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/15/17 21:05:12
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Symbols 2 - 1
 
 
@@ -290,8 +315,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 000000F0 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000166 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000115 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000019B Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -398,7 +423,8 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000166 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000019B Public STDCALL
+  startPoint . . . . . . . . . .	L Near	 00000000 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -617,6 +643,7 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
+again  . . . . . . . . . . . . .	Byte	 00000114 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
@@ -625,7 +652,7 @@ diffMess . . . . . . . . . . . .	Byte	 000000BB _DATA
 equMess  . . . . . . . . . . . .	Byte	 000000C7 _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 firstNum . . . . . . . . . . . .	DWord	 00000000 _DATA	
-goodbye  . . . . . . . . . . . .	Byte	 000000D7 _DATA	
+goodbyeMess  . . . . . . . . . .	Byte	 000000E7 _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
 intro  . . . . . . . . . . . . .	Byte	 0000003C _DATA	
@@ -636,6 +663,7 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
+notBadMess . . . . . . . . . . .	Byte	 000000D7 _DATA	
 prodMess . . . . . . . . . . . .	Byte	 000000BF _DATA	
 prompt01 . . . . . . . . . . . .	Byte	 00000098 _DATA	
 prompt02 . . . . . . . . . . . .	Byte	 000000A7 _DATA	
@@ -643,6 +671,7 @@ quotMess . . . . . . . . . . . .	Byte	 000000C3 _DATA
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 remMess  . . . . . . . . . . . .	Byte	 000000CB _DATA	
 secondNum  . . . . . . . . . . .	DWord	 00000004 _DATA	
+startAgain . . . . . . . . . . .	Byte	 000000F2 _DATA	
 sumMess  . . . . . . . . . . . .	Byte	 000000B7 _DATA	
 titleMess  . . . . . . . . . . .	Byte	 00000008 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   

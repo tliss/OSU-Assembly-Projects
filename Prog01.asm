@@ -33,22 +33,23 @@ notBadMess	BYTE	"Not bad, huh?", 0dh, 0ah, 0
 goodbyeMess	BYTE	"Goodbye!", 0dh, 0ah, 0
 
 ;EC  #1
-extraCred01	BYTE	"**EC: Program repeats until the user chooses to quit", 0
+extraCred01	BYTE	"**EC #1: Program repeats until the user chooses to quit", 0
 startAgain	BYTE	"Would you like to go again? (y/n)", 0
 again		BYTE	?	;user's y/n response
 
 ;EC #2
-extraCred02	BYTE	"**EC: Program verifies second number less than first", 0dh, 0ah, 0
+extraCred02	BYTE	"**EC #2: Program verifies second number less than first", 0
 lessThan	BYTE	"The second number must be less than the first!", 0dh, 0ah, 0
 
 ;EC #3
+extraCred03	BYTE	"**EC #3: Program displays the quotient as a floating-point number, rounded to the nearest .001", 0dh, 0ah, 0
 firstDiv	DWORD	?	;The quotient after multiplying by 1000 and dividing by secondNum
 firstRem	DWORD	?	;The remainder after multiplying by 100 and dividing by secondNum
 doubRem		DWORD	?	;firstRem times 2
 dotMess		BYTE	".", 0
 wholeNum	DWORD	?	;The whole part of the quotient
 decNum		DWORD	?	;The decimal part of the quotient
-ecMess		BYTE	"**EC: Your quotient expressed as a floating-point is: ", 0
+ecMess		BYTE	"**EC #3: Your quotient expressed as a floating-point is: ", 0
 
 .code
 main PROC
@@ -62,6 +63,9 @@ startPoint: ;Program restarts to here when request.
 	call	WriteString
 	call	CrLf
 	mov		edx, OFFSET extraCred02
+	call	WriteString
+	call	CrLf
+	mov		edx, OFFSET extraCred03
 	call	WriteString
 	call	CrLf
 	mov		edx, OFFSET intro
@@ -81,7 +85,7 @@ startPoint: ;Program restarts to here when request.
 	mov		secondNum, eax
 	call	CrLf
 
-;Compare numbers
+;EC #2: This compare the numbers and stops the program if the second number is greater than the first
 	mov		eax, firstNum
 	mov		ebx, secondNum
 	cmp		eax, ebx
@@ -157,30 +161,33 @@ startPoint: ;Program restarts to here when request.
 	call	CrLf
 	call	CrLf
 
-	;Multiply firstNum by 10000 and divide it by seconNum
-	mov		eax, firstNum
-	mov		ebx, 1000
-	mul		ebx
-	mov		ebx, secondNum
-	cdq
-	div		ebx
+;EC #3: This section calculates and displays the number as a floating point
+		
+		;Multiply firstNum by 10000 and divide it by seconNum
+			mov		eax, firstNum
+			mov		ebx, 1000
+			mul		ebx
+			mov		ebx, secondNum
+			cdq
+			div		ebx
 
-	;Save the result and the remainder
-	mov		firstDiv, eax
-	mov		firstRem, edx
+		;Save the result and the remainder
+			mov		firstDiv, eax
+			mov		firstRem, edx
 	
-	;Multiply the remainder by 2
-	mov		eax, firstRem
-	mov		ebx, 2
-	mul		ebx
+		;Multiply the remainder by 2
+			mov		eax, firstRem
+			mov		ebx, 2
+			mul		ebx
 
-	;save the result into doubRem
-	mov		doubRem, eax
+		;save the result into doubRem
+			mov		doubRem, eax
 
-	cmp		eax, secondNum
-	jge		incrementResult
+		;compare the the doubleRem to secondNum and increment firstDiv (round up) if doubleRem is larger
+			cmp		eax, secondNum
+			jge		incrementResult
 
-	jmp		displayResult
+			jmp		displayResult
 
 ;display the 'not bad' message
 	mov		edx, OFFSET notBadMess
@@ -196,7 +203,7 @@ restart:	;Check to see if user wants to restart the program
 		cmp		al, 121
 		jz		startPoint
 
-	;display the goodbye message
+		;display the goodbye message
 		mov		edx, OFFSET goodbyeMess
 		call	WriteString
 		call	CrLf
@@ -209,11 +216,11 @@ lessJump:	;will jump here if the first number is less than the second
 	call	CrLf
 	jmp		restart
 
-incrementResult:
+incrementResult: ;EC #3: Here firstDiv is incremented (rounded up)
 	inc		firstDiv
 	jmp		displayResult
 
-displayResult:
+displayResult: ;EC #3: Here the floating-point value is calculated and displayed
 	mov		eax, firstDiv
 	mov		ebx, 1000
 	cdq

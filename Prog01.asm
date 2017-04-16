@@ -19,6 +19,11 @@ INCLUDE Irvine32.inc
 .data
 firstNum	DWORD	?	;first number to be entered by user
 secondNum	DWORD	?	;second number to be entered by user
+addResult	DWORD	?	;result for addition
+subResult	DWORD	?	;result for subtraction
+mulResult	DWORD	?	;result for multiplication
+divResult	DWORD	?	;result for division
+remResult	DWORD	?	;result for remainder
 titleMess	BYTE	"		Prog01 - Elementary Arithmetic		by Taylor Liss", 0dh, 0ah, 0
 intro		BYTE	"Enter 2 numbers, and I'll show you the sum, difference, product, quotient, and remainder.",0dh,0ah,0
 prompt01	BYTE	"First number: ", 0
@@ -103,6 +108,8 @@ startPoint: ;Program restarts to here when request.
 
 	mov		eax, firstNum
 	add		eax, secondNum
+	mov		addResult, eax
+	mov		eax, addResult
 	call	WriteDec
 	call	CrLf
 
@@ -118,6 +125,8 @@ startPoint: ;Program restarts to here when request.
 	
 	mov		eax, firstNum
 	sub		eax, secondNum
+	mov		subResult, eax
+	mov		eax, subResult
 	call	WriteDec
 	call	CrLf
 
@@ -134,6 +143,8 @@ startPoint: ;Program restarts to here when request.
 	mov		eax, firstNum
 	mov		ebx, secondNum
 	mul		ebx
+	mov		mulResult, eax
+	mov		eax, mulResult
 	call	WriteDec
 	call	CrLf
 
@@ -151,12 +162,16 @@ startPoint: ;Program restarts to here when request.
 	mov		eax, firstNum
 	mov		ebx, secondNum
 	div		ebx
+	mov		divResult, eax
+	mov		remResult, edx
+	mov		eax, divResult
 	call	WriteDec
 	
 ;display the remainder
-	mov		eax, edx
+	
 	mov		edx, OFFSET remMess
 	call	WriteString
+	mov		eax, remResult
 	call	WriteDec
 	call	CrLf
 	call	CrLf

@@ -20,8 +20,6 @@ INCLUDE Irvine32.inc
 firstNum	DWORD	?	;first number to be entered by user
 secondNum	DWORD	?	;second number to be entered by user
 titleMess	BYTE	"		Prog01 - Elementary Arithmetic		by Taylor Liss", 0dh, 0ah, 0
-extraCred01	BYTE	"**EC: Program repeats until the user chooses to quit", 0
-extraCred02	BYTE	"**EC: Program verifies second number less than first", 0dh, 0ah, 0
 intro		BYTE	"Enter 2 numbers, and I'll show you the sum, difference, product, quotient, and remainder.",0dh,0ah,0
 prompt01	BYTE	"First number: ", 0
 prompt02	BYTE	"Second number: ", 0
@@ -33,9 +31,24 @@ equMess		BYTE	" = ", 0
 remMess		BYTE	" remainder ", 0
 notBadMess	BYTE	"Not bad, huh?", 0dh, 0ah, 0
 goodbyeMess	BYTE	"Goodbye!", 0dh, 0ah, 0
+
+;EC  #1
+extraCred01	BYTE	"**EC: Program repeats until the user chooses to quit", 0
 startAgain	BYTE	"Would you like to go again? (y/n)", 0
 again		BYTE	?	;user's y/n response
+
+;EC #2
+extraCred02	BYTE	"**EC: Program verifies second number less than first", 0dh, 0ah, 0
 lessThan	BYTE	"The second number must be less than the first!", 0dh, 0ah, 0
+
+;EC #3
+firstDiv	DWORD	?	;The quotient after multiplying by 1000 and dividing by secondNum
+firstRem	DWORD	?	;The remainder after multiplying by 100 and dividing by secondNum
+doubRem		DWORD	?	;firstRem times 2
+dotMess		BYTE	".", 0
+wholeNum	DWORD	?	;The whole part of the quotient
+decNum		DWORD	?	;The decimal part of the quotient
+ecMess		BYTE	"**EC: Your quotient expressed as a floating-point is: ", 0
 
 .code
 main PROC
@@ -144,30 +157,78 @@ startPoint: ;Program restarts to here when request.
 	call	CrLf
 	call	CrLf
 
+	;Multiply firstNum by 10000 and divide it by seconNum
+	mov		eax, firstNum
+	mov		ebx, 1000
+	mul		ebx
+	mov		ebx, secondNum
+	cdq
+	div		ebx
+
+	;Save the result and the remainder
+	mov		firstDiv, eax
+	mov		firstRem, edx
+	
+	;Multiply the remainder by 2
+	mov		eax, firstRem
+	mov		ebx, 2
+	mul		ebx
+
+	;save the result into doubRem
+	mov		doubRem, eax
+
+	cmp		eax, secondNum
+	jge		incrementResult
+
+	jmp		displayResult
+
 ;display the 'not bad' message
 	mov		edx, OFFSET notBadMess
 	call	WriteString
 	call	CrLf
 
-restart: ;Check to see if user wants to restart the program
-	mov		edx, OFFSET startAgain
-	call	WriteString
-	call	ReadChar
-	call	WriteChar
-	call	ClrScr
-	cmp		al, 121
-	jz		startPoint
+restart:	;Check to see if user wants to restart the program
+		mov		edx, OFFSET startAgain
+		call	WriteString
+		call	ReadChar
+		call	WriteChar
+		call	ClrScr
+		cmp		al, 121
+		jz		startPoint
 
-;display the goodbye message
-	mov		edx, OFFSET goodbyeMess
-	call	WriteString
-	call	CrLf
-	exit	; exit to operating system
+	;display the goodbye message
+		mov		edx, OFFSET goodbyeMess
+		call	WriteString
+		call	CrLf
+		exit	; exit to operating system
 
-;will jump here if the first number is less than the second
-lessJump:
+
+lessJump:	;will jump here if the first number is less than the second
 	mov		edx, OFFSET lessThan
 	call	WriteString
+	call	CrLf
+	jmp		restart
+
+incrementResult:
+	inc		firstDiv
+	jmp		displayResult
+
+displayResult:
+	mov		eax, firstDiv
+	mov		ebx, 1000
+	cdq
+	div		ebx
+	mov		decNum, edx
+
+	mov		edx, OFFSET ecMess
+	call	WriteString
+	mov		wholeNum, eax
+	call	WriteDec
+	mov		edx, OFFSET dotMess
+	call	WriteString
+	mov		eax, decNum
+	call	WriteDec
+	call	CrLf
 	call	CrLf
 	jmp		restart
 

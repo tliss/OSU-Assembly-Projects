@@ -19,7 +19,8 @@ INCLUDE Irvine32.inc
 .data
 firstNum	DWORD	?	;first number to be entered by user
 secondNum	DWORD	?	;second number to be entered by user
-titleMess	BYTE	"		Prog01 - Elementary Arithmetic		by Taylor Liss",0dh,0ah,0ah,0
+titleMess	BYTE	"		Prog01 - Elementary Arithmetic		by Taylor Liss", 0dh, 0ah, 0
+extraCred01	BYTE	"**EC: Program repeats until the user chooses to quit", 0dh, 0ah, 0
 intro		BYTE	"Enter 2 numbers, and I'll show you the sum, difference, product, quotient, and remainder.",0dh,0ah,0
 prompt01	BYTE	"First number: ", 0
 prompt02	BYTE	"Second number: ", 0
@@ -41,7 +42,10 @@ startPoint: ;Program restarts to here when request.
 
 ;Display program title & instructions
 	mov		edx, OFFSET titleMess
+	call	WriteString	
+	mov		edx, OFFSET extraCred01
 	call	WriteString
+	call	CrLf
 	mov		edx, OFFSET intro
 	call	WriteString
 	call	CrLf

@@ -22,13 +22,12 @@ secondNum	DWORD	?		;second number placeholder
 thirdNum	DWORD	?		;third number placeholder
 
 MAX = 80
-userName	BYTE	MAX+1 DUP (?)
+userName	DWORD	MAX+1 DUP (?)
 
 titleMes	BYTE	"		Prog02 - Fibonacci Numbers		by Taylor Liss", 0dh, 0ah, 0
 introMes	BYTE	"This program calculates a Fibonacci sequence.", 0dh, 0ah, 0
 nameMes		BYTE	"Enter your name: ", 0
 helloMes	BYTE	"Hello, ", 0
-
 
 .code
 main PROC
@@ -48,7 +47,7 @@ main PROC
 	mov		ecx, MAX
 	call	ReadString
 
-	mov		userName, edx
+	mov		userName, edx ;need to null-termiante this somehow
 
 ;Say hello
 	mov		edx, OFFSET helloMes

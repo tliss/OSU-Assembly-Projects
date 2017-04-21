@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/20/17 23:05:12
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/20/17 23:22:14
 +Prog02 - Fibonacci Numbers     (Prog02.asm		     Page 1 - 1
 
 
@@ -43,7 +43,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/20/17 23:05:12
  00000008 00000000		thirdNum	DWORD	?		;third number placeholder
 
  = 00000050			MAX = 80
- 0000000C  00000051 [		userName	DWORD	MAX+1 DUP (0)
+ 0000000C  00000051 [		userName	DWORD	MAX+1 DUP (?)
 	    00000000
 	   ]
 
@@ -74,7 +74,6 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/20/17 23:05:12
  000001C1 48 65 6C 6C 6F	helloMes	BYTE	"Hello, ", 0
 	   2C 20 00
 
-
  00000000			.code
  00000000			main PROC
 
@@ -93,22 +92,28 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/20/17 23:05:12
  00000028  B9 00000050			mov		ecx, MAX
  0000002D  E8 00000000 E		call	ReadString
 
- 00000032  89 15 0000000C R		mov		userName, edx
+ 00000032  89 15 0000000C R		mov		userName, edx ;need to null-termiante this somehow
+ 00000038  E8 00000000 E		call	StrLength
+ 0000003D  A3 00000000 R		mov		firstNum, eax
+ 00000042  8D 05 0000000C R		lea		eax, userName
+ 00000048  C6 80 00000000 R		mov		byte ptr [eax+firstNum], 0
+	   00
+					
 
 				;Say hello
- 00000038  BA 000001C1 R		mov		edx, OFFSET helloMes
- 0000003D  E8 00000000 E		call	WriteString
- 00000042  BA 0000000C R		mov		edx, OFFSET userName
- 00000047  E8 00000000 E		call	WriteString
- 0000004C  E8 00000000 E		call	CrLf
+ 0000004F  BA 000001C1 R		mov		edx, OFFSET helloMes
+ 00000054  E8 00000000 E		call	WriteString
+ 00000059  BA 0000000C R		mov		edx, OFFSET userName
+ 0000005E  E8 00000000 E		call	WriteString
+ 00000063  E8 00000000 E		call	CrLf
 
 					exit	; exit to operating system
- 00000051  6A 00	   *	    push   +000000000h
- 00000053  E8 00000000 E   *	    call   ExitProcess
- 00000058			main ENDP
+ 00000068  6A 00	   *	    push   +000000000h
+ 0000006A  E8 00000000 E   *	    call   ExitProcess
+ 0000006F			main ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/20/17 23:05:12
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/20/17 23:22:14
 +Prog02 - Fibonacci Numbers     (Prog02.asm		     Symbols 2 - 1
 
 
@@ -203,7 +208,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 000001C9 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000058 Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000006F Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -310,7 +315,7 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000058 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000006F Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C

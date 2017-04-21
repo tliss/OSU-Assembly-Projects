@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/20/17 23:22:14
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/21/17 10:13:13
 +Prog02 - Fibonacci Numbers     (Prog02.asm		     Page 1 - 1
 
 
@@ -42,12 +42,11 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/20/17 23:22:14
  00000004 00000000		secondNum	DWORD	?		;second number placeholder
  00000008 00000000		thirdNum	DWORD	?		;third number placeholder
 
- = 00000050			MAX = 80
- 0000000C  00000051 [		userName	DWORD	MAX+1 DUP (?)
+ 0000000C  00000050 [		userName	DWORD	80 DUP (?)
 	    00000000
 	   ]
 
- 00000150 09 09 50 72 6F	titleMes	BYTE	"		Prog02 - Fibonacci Numbers		by Taylor Liss", 0dh, 0ah, 0
+ 0000014C 09 09 50 72 6F	titleMes	BYTE	"		Prog02 - Fibonacci Numbers		by Taylor Liss", 0dh, 0ah, 0
 	   67 30 32 20 2D
 	   20 46 69 62 6F
 	   6E 61 63 63 69
@@ -57,7 +56,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/20/17 23:22:14
 	   79 6C 6F 72 20
 	   4C 69 73 73 0D
 	   0A 00
- 0000017F 54 68 69 73 20	introMes	BYTE	"This program calculates a Fibonacci sequence.", 0dh, 0ah, 0
+ 0000017B 54 68 69 73 20	introMes	BYTE	"This program calculates a Fibonacci sequence.", 0dh, 0ah, 0
 	   70 72 6F 67 72
 	   61 6D 20 63 61
 	   6C 63 75 6C 61
@@ -67,53 +66,47 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/20/17 23:22:14
 	   20 73 65 71 75
 	   65 6E 63 65 2E
 	   0D 0A 00
- 000001AF 45 6E 74 65 72	nameMes		BYTE	"Enter your name: ", 0
+ 000001AB 45 6E 74 65 72	nameMes		BYTE	"Enter your name: ", 0
 	   20 79 6F 75 72
 	   20 6E 61 6D 65
 	   3A 20 00
- 000001C1 48 65 6C 6C 6F	helloMes	BYTE	"Hello, ", 0
+ 000001BD 48 65 6C 6C 6F	helloMes	BYTE	"Hello, ", 0
 	   2C 20 00
 
  00000000			.code
  00000000			main PROC
 
 				;Display program title & instructions
- 00000000  BA 00000150 R		mov		edx, OFFSET titleMes
+ 00000000  BA 0000014C R		mov		edx, OFFSET titleMes
  00000005  E8 00000000 E		call	WriteString	
  0000000A  E8 00000000 E		call	CrLf
- 0000000F  BA 0000017F R		mov		edx, OFFSET introMes
+ 0000000F  BA 0000017B R		mov		edx, OFFSET introMes
  00000014  E8 00000000 E		call	WriteString
 
 				;Get user name
- 00000019  BA 000001AF R		mov		edx, OFFSET nameMes
+ 00000019  BA 000001AB R		mov		edx, OFFSET nameMes
  0000001E  E8 00000000 E		call	WriteString
 
  00000023  BA 0000000C R		mov		edx, OFFSET userName
- 00000028  B9 00000050			mov		ecx, MAX
+ 00000028  B9 00000050			mov		ecx, 80
  0000002D  E8 00000000 E		call	ReadString
 
- 00000032  89 15 0000000C R		mov		userName, edx ;need to null-termiante this somehow
- 00000038  E8 00000000 E		call	StrLength
- 0000003D  A3 00000000 R		mov		firstNum, eax
- 00000042  8D 05 0000000C R		lea		eax, userName
- 00000048  C6 80 00000000 R		mov		byte ptr [eax+firstNum], 0
-	   00
-					
+					;mov		userName, edx ;need to null-termiante this somehow
 
 				;Say hello
- 0000004F  BA 000001C1 R		mov		edx, OFFSET helloMes
- 00000054  E8 00000000 E		call	WriteString
- 00000059  BA 0000000C R		mov		edx, OFFSET userName
- 0000005E  E8 00000000 E		call	WriteString
- 00000063  E8 00000000 E		call	CrLf
+ 00000032  BA 000001BD R		mov		edx, OFFSET helloMes
+ 00000037  E8 00000000 E		call	WriteString
+ 0000003C  BA 0000000C R		mov		edx, OFFSET userName
+ 00000041  E8 00000000 E		call	WriteString
+ 00000046  E8 00000000 E		call	CrLf
 
 					exit	; exit to operating system
- 00000068  6A 00	   *	    push   +000000000h
- 0000006A  E8 00000000 E   *	    call   ExitProcess
- 0000006F			main ENDP
+ 0000004B  6A 00	   *	    push   +000000000h
+ 0000004D  E8 00000000 E   *	    call   ExitProcess
+ 00000052			main ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/20/17 23:22:14
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/21/17 10:13:13
 +Prog02 - Fibonacci Numbers     (Prog02.asm		     Symbols 2 - 1
 
 
@@ -207,8 +200,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 000001C9 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000006F Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 000001C5 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000052 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -315,7 +308,7 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000006F Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000052 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -407,7 +400,6 @@ KEY_EVENT  . . . . . . . . . . .	Number	 00000001h
 KEY_MASKS  . . . . . . . . . . .	Number	 0000001Fh   
 LEFT_ALT_PRESSED . . . . . . . .	Number	 00000002h   
 LEFT_CTRL_PRESSED  . . . . . . .	Number	 00000008h   
-MAX  . . . . . . . . . . . . . .	Number	 00000050h   
 MB_ABORTRETRYIGNORE  . . . . . .	Number	 00000002h   
 MB_APPLMODAL . . . . . . . . . .	Number	 00000000h   
 MB_CANCELTRYCONTINUE . . . . . .	Number	 00000006h   
@@ -543,8 +535,8 @@ exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 firstNum . . . . . . . . . . . .	DWord	 00000000 _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
-helloMes . . . . . . . . . . . .	Byte	 000001C1 _DATA	
-introMes . . . . . . . . . . . .	Byte	 0000017F _DATA	
+helloMes . . . . . . . . . . . .	Byte	 000001BD _DATA	
+introMes . . . . . . . . . . . .	Byte	 0000017B _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -552,11 +544,11 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-nameMes  . . . . . . . . . . . .	Byte	 000001AF _DATA	
+nameMes  . . . . . . . . . . . .	Byte	 000001AB _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 secondNum  . . . . . . . . . . .	DWord	 00000004 _DATA	
 thirdNum . . . . . . . . . . . .	DWord	 00000008 _DATA	
-titleMes . . . . . . . . . . . .	Byte	 00000150 _DATA	
+titleMes . . . . . . . . . . . .	Byte	 0000014C _DATA	
 userName . . . . . . . . . . . .	DWord	 0000000C _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA

@@ -17,6 +17,7 @@ INCLUDE Irvine32.inc
 ; (insert constant definitions here)
 
 .data
+rangeNum	DWORD	?		;range of fibonacci terms
 firstNum	DWORD	?		;first number placeholder
 secondNum	DWORD	?		;second number placeholder
 thirdNum	DWORD	?		;third number placeholder
@@ -24,19 +25,21 @@ thirdNum	DWORD	?		;third number placeholder
 userName	DWORD	80 DUP (?)
 
 titleMes	BYTE	"		Prog02 - Fibonacci Numbers		by Taylor Liss", 0dh, 0ah, 0
-introMes	BYTE	"This program calculates a Fibonacci sequence.", 0dh, 0ah, 0
-nameMes		BYTE	"Enter your name: ", 0
+nameMes		BYTE	"What's your name? ", 0
 helloMes	BYTE	"Hello, ", 0
+fibPrompt	BYTE	"Enter the number of Fibonacci terms to be displayed", 0dh, 0ah, 0
+fibPrompt2	BYTE	"Give the number as an integer in the range [1 .. 46]", 0dh, 01h, 0
+fibPrompt3	BYTE	"How many Fibonacci terms do you want? ", 0
+
+invalidMes	BYTE	"Out of range. Enter a number in [1 .. 46]", 0
 
 .code
 main PROC
 
-;Display program title & instructions
+;Display program title
 	mov		edx, OFFSET titleMes
 	call	WriteString	
 	call	CrLf
-	mov		edx, OFFSET introMes
-	call	WriteString
 
 ;Get user name
 	mov		edx, OFFSET nameMes
@@ -53,7 +56,35 @@ main PROC
 	call	WriteString
 	call	CrLf
 
-	exit	; exit to operating system
+;Ask for for number of Fibonacci terms
+	mov		edx, OFFSET fibPrompt
+	call	WriteString
+	mov		edx, OFFSET fibPrompt2
+	call	WriteString
+	call	CrLf
+	call	CrLf
+
+rangePrompt:	;Get range
+	mov		edx, OFFSET fibPrompt3
+	call	WriteString
+	call	ReadInt
+	mov		rangeNum, eax
+
+;Check to see if number is 1-46
+	cmp		eax, 1
+	jl		notValid
+	cmp		eax, 46
+	jge		notValid
+
+	exit	;exit to operating system
+
+notValid:	;invalid range entered
+	mov		edx, OFFSET invalidMes
+	call	WriteString
+	call	CrLf
+	jmp		rangePrompt
+
+	exit	;exit to operating system
 main ENDP
 
 END main

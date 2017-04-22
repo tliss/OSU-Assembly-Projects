@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/21/17 10:13:13
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/22/17 15:26:17
 +Prog02 - Fibonacci Numbers     (Prog02.asm		     Page 1 - 1
 
 
@@ -38,15 +38,16 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/21/17 10:13:13
 				; (insert constant definitions here)
 
  00000000			.data
- 00000000 00000000		firstNum	DWORD	?		;first number placeholder
- 00000004 00000000		secondNum	DWORD	?		;second number placeholder
- 00000008 00000000		thirdNum	DWORD	?		;third number placeholder
+ 00000000 00000000		rangeNum	DWORD	?		;range of fibonacci terms
+ 00000004 00000000		firstNum	DWORD	?		;first number placeholder
+ 00000008 00000000		secondNum	DWORD	?		;second number placeholder
+ 0000000C 00000000		thirdNum	DWORD	?		;third number placeholder
 
- 0000000C  00000050 [		userName	DWORD	80 DUP (?)
+ 00000010  00000050 [		userName	DWORD	80 DUP (?)
 	    00000000
 	   ]
 
- 0000014C 09 09 50 72 6F	titleMes	BYTE	"		Prog02 - Fibonacci Numbers		by Taylor Liss", 0dh, 0ah, 0
+ 00000150 09 09 50 72 6F	titleMes	BYTE	"		Prog02 - Fibonacci Numbers		by Taylor Liss", 0dh, 0ah, 0
 	   67 30 32 20 2D
 	   20 46 69 62 6F
 	   6E 61 63 63 69
@@ -56,57 +57,113 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/21/17 10:13:13
 	   79 6C 6F 72 20
 	   4C 69 73 73 0D
 	   0A 00
- 0000017B 54 68 69 73 20	introMes	BYTE	"This program calculates a Fibonacci sequence.", 0dh, 0ah, 0
-	   70 72 6F 67 72
-	   61 6D 20 63 61
-	   6C 63 75 6C 61
-	   74 65 73 20 61
-	   20 46 69 62 6F
-	   6E 61 63 63 69
-	   20 73 65 71 75
-	   65 6E 63 65 2E
-	   0D 0A 00
- 000001AB 45 6E 74 65 72	nameMes		BYTE	"Enter your name: ", 0
-	   20 79 6F 75 72
-	   20 6E 61 6D 65
-	   3A 20 00
- 000001BD 48 65 6C 6C 6F	helloMes	BYTE	"Hello, ", 0
+ 0000017F 57 68 61 74 27	nameMes		BYTE	"What's your name? ", 0
+	   73 20 79 6F 75
+	   72 20 6E 61 6D
+	   65 3F 20 00
+ 00000192 48 65 6C 6C 6F	helloMes	BYTE	"Hello, ", 0
 	   2C 20 00
+ 0000019A 45 6E 74 65 72	fibPrompt	BYTE	"Enter the number of Fibonacci terms to be displayed", 0dh, 0ah, 0
+	   20 74 68 65 20
+	   6E 75 6D 62 65
+	   72 20 6F 66 20
+	   46 69 62 6F 6E
+	   61 63 63 69 20
+	   74 65 72 6D 73
+	   20 74 6F 20 62
+	   65 20 64 69 73
+	   70 6C 61 79 65
+	   64 0D 0A 00
+ 000001D0 47 69 76 65 20	fibPrompt2	BYTE	"Give the number as an integer in the range [1 .. 46]", 0dh, 01h, 0
+	   74 68 65 20 6E
+	   75 6D 62 65 72
+	   20 61 73 20 61
+	   6E 20 69 6E 74
+	   65 67 65 72 20
+	   69 6E 20 74 68
+	   65 20 72 61 6E
+	   67 65 20 5B 31
+	   20 2E 2E 20 34
+	   36 5D 0D 01 00
+ 00000207 48 6F 77 20 6D	fibPrompt3	BYTE	"How many Fibonacci terms do you want? ", 0
+	   61 6E 79 20 46
+	   69 62 6F 6E 61
+	   63 63 69 20 74
+	   65 72 6D 73 20
+	   64 6F 20 79 6F
+	   75 20 77 61 6E
+	   74 3F 20 00
+
+ 0000022E 4F 75 74 20 6F	invalidMes	BYTE	"Out of range. Enter a number in [1 .. 46]", 0
+	   66 20 72 61 6E
+	   67 65 2E 20 45
+	   6E 74 65 72 20
+	   61 20 6E 75 6D
+	   62 65 72 20 69
+	   6E 20 5B 31 20
+	   2E 2E 20 34 36
+	   5D 00
 
  00000000			.code
  00000000			main PROC
 
-				;Display program title & instructions
- 00000000  BA 0000014C R		mov		edx, OFFSET titleMes
+				;Display program title
+ 00000000  BA 00000150 R		mov		edx, OFFSET titleMes
  00000005  E8 00000000 E		call	WriteString	
  0000000A  E8 00000000 E		call	CrLf
- 0000000F  BA 0000017B R		mov		edx, OFFSET introMes
- 00000014  E8 00000000 E		call	WriteString
 
 				;Get user name
- 00000019  BA 000001AB R		mov		edx, OFFSET nameMes
- 0000001E  E8 00000000 E		call	WriteString
+ 0000000F  BA 0000017F R		mov		edx, OFFSET nameMes
+ 00000014  E8 00000000 E		call	WriteString
 
- 00000023  BA 0000000C R		mov		edx, OFFSET userName
- 00000028  B9 00000050			mov		ecx, 80
- 0000002D  E8 00000000 E		call	ReadString
-
-					;mov		userName, edx ;need to null-termiante this somehow
+ 00000019  BA 00000010 R		mov		edx, OFFSET userName
+ 0000001E  B9 00000050			mov		ecx, 80
+ 00000023  E8 00000000 E		call	ReadString
 
 				;Say hello
- 00000032  BA 000001BD R		mov		edx, OFFSET helloMes
+ 00000028  BA 00000192 R		mov		edx, OFFSET helloMes
+ 0000002D  E8 00000000 E		call	WriteString
+ 00000032  BA 00000010 R		mov		edx, OFFSET userName
  00000037  E8 00000000 E		call	WriteString
- 0000003C  BA 0000000C R		mov		edx, OFFSET userName
- 00000041  E8 00000000 E		call	WriteString
- 00000046  E8 00000000 E		call	CrLf
+ 0000003C  E8 00000000 E		call	CrLf
 
-					exit	; exit to operating system
- 0000004B  6A 00	   *	    push   +000000000h
- 0000004D  E8 00000000 E   *	    call   ExitProcess
- 00000052			main ENDP
+				;Ask for for number of Fibonacci terms
+ 00000041  BA 0000019A R		mov		edx, OFFSET fibPrompt
+ 00000046  E8 00000000 E		call	WriteString
+ 0000004B  BA 000001D0 R		mov		edx, OFFSET fibPrompt2
+ 00000050  E8 00000000 E		call	WriteString
+ 00000055  E8 00000000 E		call	CrLf
+ 0000005A  E8 00000000 E		call	CrLf
+
+ 0000005F			rangePrompt:	;Get range
+ 0000005F  BA 00000207 R		mov		edx, OFFSET fibPrompt3
+ 00000064  E8 00000000 E		call	WriteString
+ 00000069  E8 00000000 E		call	ReadInt
+ 0000006E  A3 00000000 R		mov		rangeNum, eax
+
+				;Check to see if number is 1-46
+ 00000073  83 F8 01			cmp		eax, 1
+ 00000076  7C 0C			jl		notValid
+ 00000078  83 F8 2E			cmp		eax, 46
+ 0000007B  7D 07			jge		notValid
+
+					exit	;exit to operating system
+ 0000007D  6A 00	   *	    push   +000000000h
+ 0000007F  E8 00000000 E   *	    call   ExitProcess
+
+ 00000084			notValid:	;invalid range entered
+ 00000084  BA 0000022E R		mov		edx, OFFSET invalidMes
+ 00000089  E8 00000000 E		call	WriteString
+ 0000008E  E8 00000000 E		call	CrLf
+ 00000093  EB CA			jmp		rangePrompt
+
+					exit	;exit to operating system
+ 00000095  6A 00	   *	    push   +000000000h
+ 00000097  E8 00000000 E   *	    call   ExitProcess
+ 0000009C			main ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/21/17 10:13:13
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/22/17 15:26:17
 +Prog02 - Fibonacci Numbers     (Prog02.asm		     Symbols 2 - 1
 
 
@@ -200,8 +257,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 000001C5 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000052 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000258 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000009C Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -308,7 +365,9 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000052 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000009C Public STDCALL
+  rangePrompt  . . . . . . . . .	L Near	 0000005F _TEXT	
+  notValid . . . . . . . . . . .	L Near	 00000084 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -532,11 +591,14 @@ blue . . . . . . . . . . . . . .	Number	 00000001h
 brown  . . . . . . . . . . . . .	Number	 00000006h   
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
-firstNum . . . . . . . . . . . .	DWord	 00000000 _DATA	
+fibPrompt2 . . . . . . . . . . .	Byte	 000001D0 _DATA	
+fibPrompt3 . . . . . . . . . . .	Byte	 00000207 _DATA	
+fibPrompt  . . . . . . . . . . .	Byte	 0000019A _DATA	
+firstNum . . . . . . . . . . . .	DWord	 00000004 _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
-helloMes . . . . . . . . . . . .	Byte	 000001BD _DATA	
-introMes . . . . . . . . . . . .	Byte	 0000017B _DATA	
+helloMes . . . . . . . . . . . .	Byte	 00000192 _DATA	
+invalidMes . . . . . . . . . . .	Byte	 0000022E _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -544,12 +606,13 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-nameMes  . . . . . . . . . . . .	Byte	 000001AB _DATA	
+nameMes  . . . . . . . . . . . .	Byte	 0000017F _DATA	
+rangeNum . . . . . . . . . . . .	DWord	 00000000 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
-secondNum  . . . . . . . . . . .	DWord	 00000004 _DATA	
-thirdNum . . . . . . . . . . . .	DWord	 00000008 _DATA	
-titleMes . . . . . . . . . . . .	Byte	 0000014C _DATA	
-userName . . . . . . . . . . . .	DWord	 0000000C _DATA	
+secondNum  . . . . . . . . . . .	DWord	 00000008 _DATA	
+thirdNum . . . . . . . . . . . .	DWord	 0000000C _DATA	
+titleMes . . . . . . . . . . . .	Byte	 00000150 _DATA	
+userName . . . . . . . . . . . .	DWord	 00000010 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   

@@ -18,9 +18,11 @@ INCLUDE Irvine32.inc
 
 .data
 rangeNum	DWORD	?		;range of fibonacci terms
-firstNum	DWORD	?		;first number placeholder
-secondNum	DWORD	?		;second number placeholder
+firstNum	DWORD	1		;first number
+secondNum	DWORD	1		;second number
 thirdNum	DWORD	?		;third number placeholder
+tempNum		DWORD	?
+nextNum		DWORD	?		;next fibonacci number in the sequence
 
 userName	DWORD	80 DUP (?)
 
@@ -74,7 +76,22 @@ rangePrompt:	;Get range
 	cmp		eax, 1
 	jl		notValid
 	cmp		eax, 46
-	jge		notValid
+	jg		notValid
+
+;Setup fibonacci loop
+	mov		eax, 0
+	mov		ebx, 1
+	mov		ecx, rangeNum
+	mov		nextNum, 1
+fibLoop:
+	mov		nextNum, eax
+	add		eax, ebx
+	call	WriteDec
+	call	CrLf
+	mov		nextNum, ebx
+	mov		ebx, eax
+
+	loop	fibLoop
 
 	exit	;exit to operating system
 
@@ -83,6 +100,7 @@ notValid:	;invalid range entered
 	call	WriteString
 	call	CrLf
 	jmp		rangePrompt
+	exit
 
 	exit	;exit to operating system
 main ENDP

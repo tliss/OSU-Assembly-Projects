@@ -20,6 +20,9 @@ INCLUDE Irvine32.inc
 rangeNum	DWORD	?		;range of fibonacci terms
 nextNum		DWORD	?		;next fibonacci number in the sequence
 
+UPPER_LIMIT = 46	;max size for Fibonacci range
+LOWER_LIMIT = 1		;min size for Fibonacci range
+
 userName	DWORD	80 DUP (?)
 
 titleMes	BYTE	"		Prog02 - Fibonacci Numbers		by Taylor Liss", 0dh, 0ah, 0
@@ -72,9 +75,9 @@ rangePrompt:	;Get range
 	mov		rangeNum, eax
 
 ;Check to see if number is 1-46
-	cmp		eax, 1
+	cmp		eax, LOWER_LIMIT
 	jl		notValid
-	cmp		eax, 46
+	cmp		eax, UPPER_LIMIT
 	jg		notValid
 
 ;-----displayFibs-----

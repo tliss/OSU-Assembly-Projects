@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 11:09:13
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 12:01:16
 +Prog02 - Fibonacci Numbers     (Prog02.asm		     Page 1 - 1
 
 
@@ -40,6 +40,9 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 11:09:13
  00000000			.data
  00000000 00000000		rangeNum	DWORD	?		;range of fibonacci terms
  00000004 00000000		nextNum		DWORD	?		;next fibonacci number in the sequence
+
+ = 0000002E			UPPER_LIMIT = 46
+ = 00000001			LOWER_LIMIT = 1
 
  00000008  00000050 [		userName	DWORD	80 DUP (?)
 	    00000000
@@ -113,7 +116,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 11:09:13
 
  00000000			.code
  00000000			main PROC
-
+				;-----introduction-----
 				;Display program title
  00000000  BA 00000148 R		mov		edx, OFFSET titleMes
  00000005  E8 00000000 E		call	WriteString	
@@ -134,6 +137,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 11:09:13
  00000037  E8 00000000 E		call	WriteString
  0000003C  E8 00000000 E		call	CrLf
 
+				;-----userInstructions-----
 				;Ask for for number of Fibonacci terms
  00000041  BA 00000192 R		mov		edx, OFFSET fibPrompt
  00000046  E8 00000000 E		call	WriteString
@@ -141,6 +145,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 11:09:13
  00000050  E8 00000000 E		call	WriteString
  00000055  E8 00000000 E		call	CrLf
 
+				;-----getUserData-----
  0000005A			rangePrompt:	;Get range
  0000005A  BA 000001FF R		mov		edx, OFFSET fibPrompt3
  0000005F  E8 00000000 E		call	WriteString
@@ -148,18 +153,19 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 11:09:13
  00000069  A3 00000000 R		mov		rangeNum, eax
 
 				;Check to see if number is 1-46
- 0000006E  83 F8 01			cmp		eax, 1
+ 0000006E  83 F8 01			cmp		eax, LOWER_LIMIT
  00000071  7C 67			jl		notValid
- 00000073  83 F8 2E			cmp		eax, 46
+ 00000073  83 F8 2E			cmp		eax, UPPER_LIMIT
  00000076  7F 62			jg		notValid
 
+				;-----displayFibs-----
 				;Setup fibonacci loop
  00000078  B8 00000000			mov		eax, 0
  0000007D  BB 00000001			mov		ebx, 1
  00000082  8B 0D 00000000 R		mov		ecx, rangeNum
  00000088  C7 05 00000004 R		mov		nextNum, 1
 	   00000001
- 00000092			fibLoop:
+ 00000092			fibLoop:	;displayFibs
  00000092  A3 00000004 R		mov		nextNum, eax
  00000097  03 C3			add		eax, ebx
  00000099  E8 00000000 E		call	WriteDec
@@ -167,7 +173,8 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 11:09:13
  000000A3  8B 1D 00000004 R		mov		ebx, nextNum
  000000A9  E2 E7			loop	fibLoop
 
-				;End message
+				;-----farewell-----
+				;Farewell
  000000AB  E8 00000000 E		call	CrLf
  000000B0  BA 00000226 R		mov		edx, OFFSET certMes
  000000B5  E8 00000000 E		call	WriteString
@@ -186,17 +193,11 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 11:09:13
  000000DF  E8 00000000 E		call	WriteString
  000000E4  E8 00000000 E		call	CrLf
  000000E9  E9 FFFFFF6C			jmp		rangePrompt
-					exit
- 000000EE  6A 00	   *	    push   +000000000h
- 000000F0  E8 00000000 E   *	    call   ExitProcess
 
-					exit	;exit to operating system
- 000000F5  6A 00	   *	    push   +000000000h
- 000000F7  E8 00000000 E   *	    call   ExitProcess
- 000000FC			main ENDP
+ 000000EE			main ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 11:09:13
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 12:01:16
 +Prog02 - Fibonacci Numbers     (Prog02.asm		     Symbols 2 - 1
 
 
@@ -291,7 +292,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 0000027D Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000FC Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000EE Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -398,7 +399,7 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000FC Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000EE Public STDCALL
   rangePrompt  . . . . . . . . .	L Near	 0000005A _TEXT	
   fibLoop  . . . . . . . . . . .	L Near	 00000092 _TEXT	
   notValid . . . . . . . . . . .	L Near	 000000DA _TEXT	
@@ -493,6 +494,7 @@ KEY_EVENT  . . . . . . . . . . .	Number	 00000001h
 KEY_MASKS  . . . . . . . . . . .	Number	 0000001Fh   
 LEFT_ALT_PRESSED . . . . . . . .	Number	 00000002h   
 LEFT_CTRL_PRESSED  . . . . . . .	Number	 00000008h   
+LOWER_LIMIT  . . . . . . . . . .	Number	 00000001h   
 MB_ABORTRETRYIGNORE  . . . . . .	Number	 00000002h   
 MB_APPLMODAL . . . . . . . . . .	Number	 00000000h   
 MB_CANCELTRYCONTINUE . . . . . .	Number	 00000006h   
@@ -539,6 +541,7 @@ SetConsoleTitle  . . . . . . . .	Text   	 SetConsoleTitleA
 TAB  . . . . . . . . . . . . . .	Number	 00000009h   
 TRUE . . . . . . . . . . . . . .	Number	 00000001h   
 TRUNCATE_EXISTING  . . . . . . .	Number	 00000005h   
+UPPER_LIMIT  . . . . . . . . . .	Number	 0000002Eh   
 VK_11  . . . . . . . . . . . . .	Number	 000000BDh   
 VK_12  . . . . . . . . . . . . .	Number	 000000BBh   
 VK_ADD . . . . . . . . . . . . .	Number	 0000006Bh   

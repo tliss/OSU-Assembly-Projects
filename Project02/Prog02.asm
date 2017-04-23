@@ -5,6 +5,7 @@ TITLE Prog02 - Fibonacci Numbers     (Prog02.asm)
 ; Email: lisst@oregonstate.edu
 ; Course / Project ID  CS271_400_S2017 / Prog02
 ; Date: 4/19/2017
+; Due Date: 4/23/2017
 ; Description: This program calculates Fibonacci numbers. It
 ;	asks for the users name and displays a greeting and a
 ;	farewell to them. It also validates that the user only

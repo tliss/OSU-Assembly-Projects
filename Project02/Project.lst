@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/22/17 20:38:47
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 10:50:34
 +Prog02 - Fibonacci Numbers     (Prog02.asm		     Page 1 - 1
 
 
@@ -76,7 +76,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/22/17 20:38:47
 	   65 20 64 69 73
 	   70 6C 61 79 65
 	   64 0D 0A 00
- 000001D8 47 69 76 65 20	fibPrompt2	BYTE	"Give the number as an integer in the range [1 .. 46]", 0dh, 01h, 0
+ 000001D8 47 69 76 65 20	fibPrompt2	BYTE	"Give the number as an integer in the range [1 .. 46]", 0dh, 0ah, 0
 	   74 68 65 20 6E
 	   75 6D 62 65 72
 	   20 61 73 20 61
@@ -86,7 +86,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/22/17 20:38:47
 	   65 20 72 61 6E
 	   67 65 20 5B 31
 	   20 2E 2E 20 34
-	   36 5D 0D 01 00
+	   36 5D 0D 0A 00
  0000020F 48 6F 77 20 6D	fibPrompt3	BYTE	"How many Fibonacci terms do you want? ", 0
 	   61 6E 79 20 46
 	   69 62 6F 6E 61
@@ -145,9 +145,9 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/22/17 20:38:47
 
 				;Check to see if number is 1-46
  00000073  83 F8 01			cmp		eax, 1
- 00000076  7C 41			jl		notValid
+ 00000076  7C 3F			jl		notValid
  00000078  83 F8 2E			cmp		eax, 46
- 0000007B  7F 3C			jg		notValid
+ 0000007B  7F 3A			jg		notValid
 
 				;Setup fibonacci loop
  0000007D  B8 00000000			mov		eax, 0
@@ -160,31 +160,31 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/22/17 20:38:47
  0000009C  03 C3			add		eax, ebx
  0000009E  E8 00000000 E		call	WriteDec
  000000A3  E8 00000000 E		call	CrLf
- 000000A8  89 1D 00000014 R		mov		nextNum, ebx
- 000000AE  8B D8			mov		ebx, eax
+ 000000A8  8B 1D 00000014 R		mov		ebx, nextNum
 
- 000000B0  E2 E5			loop	fibLoop
+
+ 000000AE  E2 E7			loop	fibLoop
 
 					exit	;exit to operating system
- 000000B2  6A 00	   *	    push   +000000000h
- 000000B4  E8 00000000 E   *	    call   ExitProcess
+ 000000B0  6A 00	   *	    push   +000000000h
+ 000000B2  E8 00000000 E   *	    call   ExitProcess
 
- 000000B9			notValid:	;invalid range entered
- 000000B9  BA 00000236 R		mov		edx, OFFSET invalidMes
- 000000BE  E8 00000000 E		call	WriteString
- 000000C3  E8 00000000 E		call	CrLf
- 000000C8  EB 95			jmp		rangePrompt
+ 000000B7			notValid:	;invalid range entered
+ 000000B7  BA 00000236 R		mov		edx, OFFSET invalidMes
+ 000000BC  E8 00000000 E		call	WriteString
+ 000000C1  E8 00000000 E		call	CrLf
+ 000000C6  EB 97			jmp		rangePrompt
 					exit
- 000000CA  6A 00	   *	    push   +000000000h
- 000000CC  E8 00000000 E   *	    call   ExitProcess
+ 000000C8  6A 00	   *	    push   +000000000h
+ 000000CA  E8 00000000 E   *	    call   ExitProcess
 
 					exit	;exit to operating system
- 000000D1  6A 00	   *	    push   +000000000h
- 000000D3  E8 00000000 E   *	    call   ExitProcess
- 000000D8			main ENDP
+ 000000CF  6A 00	   *	    push   +000000000h
+ 000000D1  E8 00000000 E   *	    call   ExitProcess
+ 000000D6			main ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/22/17 20:38:47
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 10:50:34
 +Prog02 - Fibonacci Numbers     (Prog02.asm		     Symbols 2 - 1
 
 
@@ -279,7 +279,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 00000260 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000D8 Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000D6 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -386,10 +386,10 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000D8 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000D6 Public STDCALL
   rangePrompt  . . . . . . . . .	L Near	 0000005F _TEXT	
   fibLoop  . . . . . . . . . . .	L Near	 00000097 _TEXT	
-  notValid . . . . . . . . . . .	L Near	 000000B9 _TEXT	
+  notValid . . . . . . . . . . .	L Near	 000000B7 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C

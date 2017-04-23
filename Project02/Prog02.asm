@@ -30,7 +30,7 @@ titleMes	BYTE	"		Prog02 - Fibonacci Numbers		by Taylor Liss", 0dh, 0ah, 0
 nameMes		BYTE	"What's your name? ", 0
 helloMes	BYTE	"Hello, ", 0
 fibPrompt	BYTE	"Enter the number of Fibonacci terms to be displayed", 0dh, 0ah, 0
-fibPrompt2	BYTE	"Give the number as an integer in the range [1 .. 46]", 0dh, 01h, 0
+fibPrompt2	BYTE	"Give the number as an integer in the range [1 .. 46]", 0dh, 0ah, 0
 fibPrompt3	BYTE	"How many Fibonacci terms do you want? ", 0
 
 invalidMes	BYTE	"Out of range. Enter a number in [1 .. 46]", 0
@@ -88,8 +88,8 @@ fibLoop:
 	add		eax, ebx
 	call	WriteDec
 	call	CrLf
-	mov		nextNum, ebx
-	mov		ebx, eax
+	mov		ebx, nextNum
+
 
 	loop	fibLoop
 

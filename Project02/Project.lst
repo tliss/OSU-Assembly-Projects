@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 14:23:36
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 14:47:43
 +Prog02 - Fibonacci Numbers     (Prog02.asm		     Page 1 - 1
 
 
@@ -13,7 +13,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 14:23:36
 				;	asks for the users name and displays a greeting and a
 				;	farewell to them. It also validates that the user only
 				;	enters terms between the range [1 .. 46]. It displays
-				;	the results in aligned columns.
+				;	the results in aligned columns. It also colors the columns.
 
 				INCLUDE Irvine32.inc
 			      C ; Include file for Irvine32.lib             (Irvine32.inc)
@@ -72,13 +72,23 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 14:23:36
 	   65 64 20 63 6F
 	   6C 75 6D 6E 73
 	   0D 0A 00
- 000001BF 57 68 61 74 27	nameMes		BYTE	"What's your name? ", 0
+ 000001BF 2A 2A 45 43 20	EC2Mes		BYTE	"**EC #2: This program colorizes the columns", 0dh, 0ah, 0
+	   23 32 3A 20 54
+	   68 69 73 20 70
+	   72 6F 67 72 61
+	   6D 20 63 6F 6C
+	   6F 72 69 7A 65
+	   73 20 74 68 65
+	   20 63 6F 6C 75
+	   6D 6E 73 0D 0A
+	   00
+ 000001ED 57 68 61 74 27	nameMes		BYTE	"What's your name? ", 0
 	   73 20 79 6F 75
 	   72 20 6E 61 6D
 	   65 3F 20 00
- 000001D2 48 65 6C 6C 6F	helloMes	BYTE	"Hello, ", 0
+ 00000200 48 65 6C 6C 6F	helloMes	BYTE	"Hello, ", 0
 	   2C 20 00
- 000001DA 45 6E 74 65 72	fibPrompt	BYTE	"Enter the number of Fibonacci terms to be displayed", 0dh, 0ah, 0
+ 00000208 45 6E 74 65 72	fibPrompt	BYTE	"Enter the number of Fibonacci terms to be displayed", 0dh, 0ah, 0
 	   20 74 68 65 20
 	   6E 75 6D 62 65
 	   72 20 6F 66 20
@@ -89,7 +99,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 14:23:36
 	   65 20 64 69 73
 	   70 6C 61 79 65
 	   64 0D 0A 00
- 00000210 47 69 76 65 20	fibPrompt2	BYTE	"Give the number as an integer in the range [1 .. 46]", 0dh, 0ah, 0
+ 0000023E 47 69 76 65 20	fibPrompt2	BYTE	"Give the number as an integer in the range [1 .. 46]", 0dh, 0ah, 0
 	   74 68 65 20 6E
 	   75 6D 62 65 72
 	   20 61 73 20 61
@@ -100,7 +110,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 14:23:36
 	   67 65 20 5B 31
 	   20 2E 2E 20 34
 	   36 5D 0D 0A 00
- 00000247 48 6F 77 20 6D	fibPrompt3	BYTE	"How many Fibonacci terms do you want? ", 0
+ 00000275 48 6F 77 20 6D	fibPrompt3	BYTE	"How many Fibonacci terms do you want? ", 0
 	   61 6E 79 20 46
 	   69 62 6F 6E 61
 	   63 63 69 20 74
@@ -108,17 +118,17 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 14:23:36
 	   64 6F 20 79 6F
 	   75 20 77 61 6E
 	   74 3F 20 00
- 0000026E 52 65 73 75 6C	certMes		BYTE	"Results certified by Taylor Liss", 0dh, 0ah, 0
+ 0000029C 52 65 73 75 6C	certMes		BYTE	"Results certified by Taylor Liss", 0dh, 0ah, 0
 	   74 73 20 63 65
 	   72 74 69 66 69
 	   65 64 20 62 79
 	   20 54 61 79 6C
 	   6F 72 20 4C 69
 	   73 73 0D 0A 00
- 00000291 47 6F 6F 64 62	goodbyeMes	BYTE	"Goodbye, ", 0
+ 000002BF 47 6F 6F 64 62	goodbyeMes	BYTE	"Goodbye, ", 0
 	   79 65 2C 20 00
 
- 0000029B 4F 75 74 20 6F	invalidMes	BYTE	"Out of range. Enter a number in [1 .. 46]", 0
+ 000002C9 4F 75 74 20 6F	invalidMes	BYTE	"Out of range. Enter a number in [1 .. 46]", 0
 	   66 20 72 61 6E
 	   67 65 2E 20 45
 	   6E 74 65 72 20
@@ -129,22 +139,25 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 14:23:36
 	   5D 00
 
 				;**EC 1: The following strings are used to display the numbers in aligned columns
- 000002C5 20 20 00		space2		BYTE	"  ", 0
- 000002C8 20 20 20 00		space3		BYTE	"   ", 0
- 000002CC 20 20 20 20 00	space4		BYTE	"    ", 0
- 000002D1 20 20 20 20 20	space5		BYTE	"     ", 0
+ 000002F3 20 20 00		space2		BYTE	"  ", 0
+ 000002F6 20 20 20 00		space3		BYTE	"   ", 0
+ 000002FA 20 20 20 20 00	space4		BYTE	"    ", 0
+ 000002FF 20 20 20 20 20	space5		BYTE	"     ", 0
 	   00
- 000002D7 20 20 20 20 20	space6		BYTE	"      ", 0
+ 00000305 20 20 20 20 20	space6		BYTE	"      ", 0
 	   20 00
- 000002DE 20 20 20 20 20	space7		BYTE	"       ", 0
+ 0000030C 20 20 20 20 20	space7		BYTE	"       ", 0
 	   20 20 00
- 000002E6 20 20 20 20 20	space8		BYTE	"        ", 0
+ 00000314 20 20 20 20 20	space8		BYTE	"        ", 0
 	   20 20 20 00
- 000002EF 20 20 20 20 20	space9		BYTE	"         ", 0
+ 0000031D 20 20 20 20 20	space9		BYTE	"         ", 0
 	   20 20 20 20 00
- 000002F9 20 20 20 20 20	space10		BYTE	"          ", 0
+ 00000327 20 20 20 20 20	space10		BYTE	"          ", 0
 	   20 20 20 20 20
 	   00
+
+				;**EC 2: The following is used to assist the changing of colors:
+ 00000332 00000000		tempNum		DWORD	?
 
  00000000			.code
  00000000			main PROC
@@ -154,178 +167,208 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 14:23:36
  00000005  E8 00000000 E		call	WriteString	
  0000000A  BA 0000017B R		mov		edx, OFFSET EC1Mes
  0000000F  E8 00000000 E		call	WriteString
- 00000014  E8 00000000 E		call	CrLf
+ 00000014  BA 000001BF R		mov		edx, OFFSET EC2Mes
+ 00000019  E8 00000000 E		call	WriteString
+ 0000001E  E8 00000000 E		call	CrLf
 
 				;Get user name
- 00000019  BA 000001BF R		mov		edx, OFFSET nameMes
- 0000001E  E8 00000000 E		call	WriteString
+ 00000023  BA 000001ED R		mov		edx, OFFSET nameMes
+ 00000028  E8 00000000 E		call	WriteString
 
- 00000023  BA 0000000C R		mov		edx, OFFSET userName
- 00000028  B9 00000050			mov		ecx, 80
- 0000002D  E8 00000000 E		call	ReadString
+ 0000002D  BA 0000000C R		mov		edx, OFFSET userName
+ 00000032  B9 00000050			mov		ecx, 80
+ 00000037  E8 00000000 E		call	ReadString
 
 				;Say hello
- 00000032  BA 000001D2 R		mov		edx, OFFSET helloMes
- 00000037  E8 00000000 E		call	WriteString
- 0000003C  BA 0000000C R		mov		edx, OFFSET userName
+ 0000003C  BA 00000200 R		mov		edx, OFFSET helloMes
  00000041  E8 00000000 E		call	WriteString
- 00000046  E8 00000000 E		call	CrLf
+ 00000046  BA 0000000C R		mov		edx, OFFSET userName
+ 0000004B  E8 00000000 E		call	WriteString
+ 00000050  E8 00000000 E		call	CrLf
 
 				;-----userInstructions-----
 				;Ask for for number of Fibonacci terms
- 0000004B  BA 000001DA R		mov		edx, OFFSET fibPrompt
- 00000050  E8 00000000 E		call	WriteString
- 00000055  BA 00000210 R		mov		edx, OFFSET fibPrompt2
+ 00000055  BA 00000208 R		mov		edx, OFFSET fibPrompt
  0000005A  E8 00000000 E		call	WriteString
- 0000005F  E8 00000000 E		call	CrLf
+ 0000005F  BA 0000023E R		mov		edx, OFFSET fibPrompt2
+ 00000064  E8 00000000 E		call	WriteString
+ 00000069  E8 00000000 E		call	CrLf
 
 				;-----getUserData-----
- 00000064			rangePrompt:	;Get range
- 00000064  BA 00000247 R		mov		edx, OFFSET fibPrompt3
- 00000069  E8 00000000 E		call	WriteString
- 0000006E  E8 00000000 E		call	ReadInt
- 00000073  A3 00000000 R		mov		rangeNum, eax
+ 0000006E			rangePrompt:	;Get range
+ 0000006E  BA 00000275 R		mov		edx, OFFSET fibPrompt3
+ 00000073  E8 00000000 E		call	WriteString
+ 00000078  E8 00000000 E		call	ReadInt
+ 0000007D  A3 00000000 R		mov		rangeNum, eax
 
 				;Check to see if number is 1-46
- 00000078  83 F8 01			cmp		eax, LOWER_LIMIT
- 0000007B  0F 8C 000000D9		jl		notValid
- 00000081  83 F8 2E			cmp		eax, UPPER_LIMIT
- 00000084  0F 8F 000000D0		jg		notValid
+ 00000082  83 F8 01			cmp		eax, LOWER_LIMIT
+ 00000085  0F 8C 000000E8		jl		notValid
+ 0000008B  83 F8 2E			cmp		eax, UPPER_LIMIT
+ 0000008E  0F 8F 000000DF		jg		notValid
 
 				;-----displayFibs-----
 				;Setup fibonacci loop
- 0000008A  B8 00000000			mov		eax, 0
- 0000008F  BB 00000001			mov		ebx, 1
- 00000094  8B 0D 00000000 R		mov		ecx, rangeNum
- 0000009A  C7 05 00000004 R		mov		nextNum, 1
+ 00000094  B8 00000000			mov		eax, 0
+ 00000099  BB 00000001			mov		ebx, 1
+ 0000009E  8B 0D 00000000 R		mov		ecx, rangeNum
+ 000000A4  C7 05 00000004 R		mov		nextNum, 1
 	   00000001
- 000000A4  C7 05 00000008 R		mov		columnNum, 1
+ 000000AE  C7 05 00000008 R		mov		columnNum, 1
 	   00000001
- 000000AE			fibLoop:	;displayFibs
- 000000AE  A3 00000004 R		mov		nextNum, eax
- 000000B3  03 C3			add		eax, ebx
- 000000B5  E8 00000000 E		call	WriteDec
- 000000BA  8B 1D 00000004 R		mov		ebx, nextNum
+ 000000B8			fibLoop:	;displayFibs
+ 000000B8  E9 0000015E			jmp		changeColor
+ 000000BD			loopMain:
+ 000000BD  A3 00000004 R		mov		nextNum, eax
+ 000000C2  03 C3			add		eax, ebx
+ 000000C4  E8 00000000 E		call	WriteDec
+ 000000C9  8B 1D 00000004 R		mov		ebx, nextNum
 
 				;EC1: This code formats the strings into columns based on the length of the length of the integer
- 000000C0  83 F8 0A			cmp		eax, 10
- 000000C3  0F 8C 000000A5		jl		addTenSpace
+ 000000CF  83 F8 0A			cmp		eax, 10
+ 000000D2  0F 8C 000000AF		jl		addTenSpace
 
- 000000C9  83 F8 64			cmp		eax, 100
- 000000CC  0F 8C 000000A8		jl		addNineSpace
+ 000000D8  83 F8 64			cmp		eax, 100
+ 000000DB  0F 8C 000000B2		jl		addNineSpace
 
- 000000D2  3D 000003E8			cmp		eax, 1000
- 000000D7  0F 8C 000000A9		jl		addEightSpace
+ 000000E1  3D 000003E8			cmp		eax, 1000
+ 000000E6  0F 8C 000000B3		jl		addEightSpace
 
- 000000DD  3D 00002710			cmp		eax, 10000
- 000000E2  0F 8C 000000AA		jl		addSevenSpace
+ 000000EC  3D 00002710			cmp		eax, 10000
+ 000000F1  0F 8C 000000B4		jl		addSevenSpace
 
- 000000E8  3D 000186A0			cmp		eax, 100000
- 000000ED  0F 8C 000000AB		jl		addSixSpace
+ 000000F7  3D 000186A0			cmp		eax, 100000
+ 000000FC  0F 8C 000000B5		jl		addSixSpace
 
- 000000F3  3D 000F4240			cmp		eax, 1000000
- 000000F8  0F 8C 000000AC		jl		addFiveSpace
+ 00000102  3D 000F4240			cmp		eax, 1000000
+ 00000107  0F 8C 000000B6		jl		addFiveSpace
 
- 000000FE  3D 00989680			cmp		eax, 10000000
- 00000103  0F 8C 000000AD		jl		addFourSpace
+ 0000010D  3D 00989680			cmp		eax, 10000000
+ 00000112  0F 8C 000000B7		jl		addFourSpace
 
- 00000109  3D 05F5E100			cmp		eax, 100000000
- 0000010E  0F 8C 000000AE		jl		addThreeSpace
+ 00000118  3D 05F5E100			cmp		eax, 100000000
+ 0000011D  0F 8C 000000B8		jl		addThreeSpace
 
- 00000114  3D 3B9ACA00			cmp		eax, 1000000000
- 00000119  0F 8C 000000AF		jl		addTwoSpace
+ 00000123  3D 3B9ACA00			cmp		eax, 1000000000
+ 00000128  0F 8C 000000B9		jl		addTwoSpace
 
- 0000011F  E9 000000B6			jmp		columnCheck	;This ensures that a column check will always be done
+ 0000012E  E9 000000C0			jmp		columnCheck	;This ensures that a column check will always be done
 
- 00000124			continueLoop:
- 00000124  E2 88			loop	fibLoop
+ 00000133			continueLoop:
+ 00000133  E2 83			loop	fibLoop
 
 				;-----farewell-----
 				;Farewell
- 00000126  E8 00000000 E		call	CrLf
- 0000012B  E8 00000000 E		call	CrLf
- 00000130  BA 0000026E R		mov		edx, OFFSET certMes
- 00000135  E8 00000000 E		call	WriteString
- 0000013A  BA 00000291 R		mov		edx, OFFSET goodbyeMes
- 0000013F  E8 00000000 E		call	WriteString
- 00000144  BA 0000000C R		mov		edx, OFFSET userName
- 00000149  E8 00000000 E		call	WriteString
- 0000014E  E8 00000000 E		call	CrLf
+ 00000135  B8 00000007			mov		eax, lightGray + (black * 16)
+ 0000013A  E8 00000000 E		call	SetTextColor
+ 0000013F  E8 00000000 E		call	CrLf
+ 00000144  E8 00000000 E		call	CrLf
+ 00000149  BA 0000029C R		mov		edx, OFFSET certMes
+ 0000014E  E8 00000000 E		call	WriteString
+ 00000153  BA 000002BF R		mov		edx, OFFSET goodbyeMes
+ 00000158  E8 00000000 E		call	WriteString
+ 0000015D  BA 0000000C R		mov		edx, OFFSET userName
+ 00000162  E8 00000000 E		call	WriteString
+ 00000167  E8 00000000 E		call	CrLf
 
 					exit	;exit to operating system
- 00000153  6A 00	   *	    push   +000000000h
- 00000155  E8 00000000 E   *	    call   ExitProcess
+ 0000016C  6A 00	   *	    push   +000000000h
+ 0000016E  E8 00000000 E   *	    call   ExitProcess
 
- 0000015A			notValid:	;invalid range entered
- 0000015A  BA 0000029B R		mov		edx, OFFSET invalidMes
- 0000015F  E8 00000000 E		call	WriteString
- 00000164  E8 00000000 E		call	CrLf
- 00000169  E9 FFFFFEF6			jmp		rangePrompt
+ 00000173			notValid:	;invalid range entered
+ 00000173  BA 000002C9 R		mov		edx, OFFSET invalidMes
+ 00000178  E8 00000000 E		call	WriteString
+ 0000017D  E8 00000000 E		call	CrLf
+ 00000182  E9 FFFFFEE7			jmp		rangePrompt
 
 				;EC 1: The following labels are used to format the numbers into columns
- 0000016E			addTenSpace:
- 0000016E  BA 000002F9 R		mov		edx, OFFSET space10
- 00000173  E8 00000000 E		call	WriteString
- 00000178  EB 60			jmp		columnCheck
+ 00000187			addTenSpace:
+ 00000187  BA 00000327 R		mov		edx, OFFSET space10
+ 0000018C  E8 00000000 E		call	WriteString
+ 00000191  EB 60			jmp		columnCheck
 
- 0000017A			addNineSpace:
- 0000017A  BA 000002EF R		mov		edx, OFFSET space9
- 0000017F  E8 00000000 E		call	WriteString
- 00000184  EB 54			jmp		columnCheck
+ 00000193			addNineSpace:
+ 00000193  BA 0000031D R		mov		edx, OFFSET space9
+ 00000198  E8 00000000 E		call	WriteString
+ 0000019D  EB 54			jmp		columnCheck
 
- 00000186			addEightSpace:
- 00000186  BA 000002E6 R		mov		edx, OFFSET space8
- 0000018B  E8 00000000 E		call	WriteString
- 00000190  EB 48			jmp		columnCheck
+ 0000019F			addEightSpace:
+ 0000019F  BA 00000314 R		mov		edx, OFFSET space8
+ 000001A4  E8 00000000 E		call	WriteString
+ 000001A9  EB 48			jmp		columnCheck
 
- 00000192			addSevenSpace:
- 00000192  BA 000002DE R		mov		edx, OFFSET space7
- 00000197  E8 00000000 E		call	WriteString
- 0000019C  EB 3C			jmp		columnCheck
+ 000001AB			addSevenSpace:
+ 000001AB  BA 0000030C R		mov		edx, OFFSET space7
+ 000001B0  E8 00000000 E		call	WriteString
+ 000001B5  EB 3C			jmp		columnCheck
 
- 0000019E			addSixSpace:
- 0000019E  BA 000002D7 R		mov		edx, OFFSET space6
- 000001A3  E8 00000000 E		call	WriteString
- 000001A8  EB 30			jmp		columnCheck
+ 000001B7			addSixSpace:
+ 000001B7  BA 00000305 R		mov		edx, OFFSET space6
+ 000001BC  E8 00000000 E		call	WriteString
+ 000001C1  EB 30			jmp		columnCheck
 
- 000001AA			addFiveSpace:
- 000001AA  BA 000002D1 R		mov		edx, OFFSET space5
- 000001AF  E8 00000000 E		call	WriteString
- 000001B4  EB 24			jmp		columnCheck
+ 000001C3			addFiveSpace:
+ 000001C3  BA 000002FF R		mov		edx, OFFSET space5
+ 000001C8  E8 00000000 E		call	WriteString
+ 000001CD  EB 24			jmp		columnCheck
 
- 000001B6			addFourSpace:
- 000001B6  BA 000002CC R		mov		edx, OFFSET space4
- 000001BB  E8 00000000 E		call	WriteString
- 000001C0  EB 18			jmp		columnCheck
+ 000001CF			addFourSpace:
+ 000001CF  BA 000002FA R		mov		edx, OFFSET space4
+ 000001D4  E8 00000000 E		call	WriteString
+ 000001D9  EB 18			jmp		columnCheck
 
- 000001C2			addThreeSpace:
- 000001C2  BA 000002C8 R		mov		edx, OFFSET space3
- 000001C7  E8 00000000 E		call	WriteString
- 000001CC  EB 0C			jmp		columnCheck
+ 000001DB			addThreeSpace:
+ 000001DB  BA 000002F6 R		mov		edx, OFFSET space3
+ 000001E0  E8 00000000 E		call	WriteString
+ 000001E5  EB 0C			jmp		columnCheck
 
- 000001CE			addTwoSpace:
- 000001CE  BA 000002C5 R		mov		edx, OFFSET space2
- 000001D3  E8 00000000 E		call	WriteString
- 000001D8  EB 00			jmp		columnCheck
+ 000001E7			addTwoSpace:
+ 000001E7  BA 000002F3 R		mov		edx, OFFSET space2
+ 000001EC  E8 00000000 E		call	WriteString
+ 000001F1  EB 00			jmp		columnCheck
 
 				;This checks to see if the last number was placed into the fifth column
- 000001DA			columnCheck:
- 000001DA  83 3D 00000008 R		cmp		columnNum, 5
+ 000001F3			columnCheck:
+ 000001F3  83 3D 00000008 R		cmp		columnNum, 5
 	   05
- 000001E1  74 0B			je		addRow
- 000001E3  FF 05 00000008 R		inc		columnNum
- 000001E9  E9 FFFFFF36			jmp		continueLoop
+ 000001FA  74 0B			je		addRow
+ 000001FC  FF 05 00000008 R		inc		columnNum
+ 00000202  E9 FFFFFF2C			jmp		continueLoop
 
- 000001EE			addRow:		;adds a new row if the last number printed was the fifth number in a row.
- 000001EE  E8 00000000 E		call	CrLf
- 000001F3  C7 05 00000008 R		mov		columnNum, 1
+ 00000207			addRow:		;adds a new row if the last number printed was the fifth number in a row.
+ 00000207  E8 00000000 E		call	CrLf
+ 0000020C  C7 05 00000008 R		mov		columnNum, 1
 	   00000001
- 000001FD  E9 FFFFFF22			jmp		continueLoop
+ 00000216  E9 FFFFFF18			jmp		continueLoop
 
- 00000202			main ENDP
+				;EC#2: This code is used to color the columns
+ 0000021B			changeColor: 
+ 0000021B  A3 00000332 R		mov		tempNum, eax
+ 00000220  83 3D 00000008 R		cmp		columnNum, 1
+	   01
+ 00000227  74 26			je		changeRed
+ 00000229  83 3D 00000008 R		cmp		columnNum, 3
+	   03
+ 00000230  74 1D			je		changeRed
+ 00000232  83 3D 00000008 R		cmp		columnNum, 5
+	   05
+ 00000239  74 14			je		changeRed
+ 0000023B  B8 00000042			mov		eax, green + (red * 16)
+ 00000240  E8 00000000 E		call	SetTextColor
+ 00000245  A1 00000332 R		mov		eax, tempNum
+ 0000024A  E9 FFFFFE6E			jmp		loopMain
+
+ 0000024F			changeRed:
+ 0000024F  B8 00000024			mov		eax, red + (green * 16)
+ 00000254  E8 00000000 E		call	SetTextColor
+ 00000259  A1 00000332 R		mov		eax, tempNum
+ 0000025E  E9 FFFFFE5A			jmp		loopMain
+					
+
+ 00000263			main ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 14:23:36
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/23/17 14:47:43
 +Prog02 - Fibonacci Numbers     (Prog02.asm		     Symbols 2 - 1
 
 
@@ -419,8 +462,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000304 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000202 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000336 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000263 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -527,22 +570,25 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000202 Public STDCALL
-  rangePrompt  . . . . . . . . .	L Near	 00000064 _TEXT	
-  fibLoop  . . . . . . . . . . .	L Near	 000000AE _TEXT	
-  continueLoop . . . . . . . . .	L Near	 00000124 _TEXT	
-  notValid . . . . . . . . . . .	L Near	 0000015A _TEXT	
-  addTenSpace  . . . . . . . . .	L Near	 0000016E _TEXT	
-  addNineSpace . . . . . . . . .	L Near	 0000017A _TEXT	
-  addEightSpace  . . . . . . . .	L Near	 00000186 _TEXT	
-  addSevenSpace  . . . . . . . .	L Near	 00000192 _TEXT	
-  addSixSpace  . . . . . . . . .	L Near	 0000019E _TEXT	
-  addFiveSpace . . . . . . . . .	L Near	 000001AA _TEXT	
-  addFourSpace . . . . . . . . .	L Near	 000001B6 _TEXT	
-  addThreeSpace  . . . . . . . .	L Near	 000001C2 _TEXT	
-  addTwoSpace  . . . . . . . . .	L Near	 000001CE _TEXT	
-  columnCheck  . . . . . . . . .	L Near	 000001DA _TEXT	
-  addRow . . . . . . . . . . . .	L Near	 000001EE _TEXT	
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000263 Public STDCALL
+  rangePrompt  . . . . . . . . .	L Near	 0000006E _TEXT	
+  fibLoop  . . . . . . . . . . .	L Near	 000000B8 _TEXT	
+  loopMain . . . . . . . . . . .	L Near	 000000BD _TEXT	
+  continueLoop . . . . . . . . .	L Near	 00000133 _TEXT	
+  notValid . . . . . . . . . . .	L Near	 00000173 _TEXT	
+  addTenSpace  . . . . . . . . .	L Near	 00000187 _TEXT	
+  addNineSpace . . . . . . . . .	L Near	 00000193 _TEXT	
+  addEightSpace  . . . . . . . .	L Near	 0000019F _TEXT	
+  addSevenSpace  . . . . . . . .	L Near	 000001AB _TEXT	
+  addSixSpace  . . . . . . . . .	L Near	 000001B7 _TEXT	
+  addFiveSpace . . . . . . . . .	L Near	 000001C3 _TEXT	
+  addFourSpace . . . . . . . . .	L Near	 000001CF _TEXT	
+  addThreeSpace  . . . . . . . .	L Near	 000001DB _TEXT	
+  addTwoSpace  . . . . . . . . .	L Near	 000001E7 _TEXT	
+  columnCheck  . . . . . . . . .	L Near	 000001F3 _TEXT	
+  addRow . . . . . . . . . . . .	L Near	 00000207 _TEXT	
+  changeColor  . . . . . . . . .	L Near	 0000021B _TEXT	
+  changeRed  . . . . . . . . . .	L Near	 0000024F _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -569,6 +615,7 @@ CTRL_MASK  . . . . . . . . . . .	Number	 0000000Ch
 CreateFile . . . . . . . . . . .	Text   	 CreateFileA
 DO_NOT_SHARE . . . . . . . . . .	Number	 00000000h   
 EC1Mes . . . . . . . . . . . . .	Byte	 0000017B _DATA	
+EC2Mes . . . . . . . . . . . . .	Byte	 000001BF _DATA	
 ENABLE_ECHO_INPUT  . . . . . . .	Number	 00000004h   
 ENABLE_LINE_INPUT  . . . . . . .	Number	 00000002h   
 ENABLE_MOUSE_INPUT . . . . . . .	Number	 00000010h   
@@ -767,18 +814,18 @@ WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
-certMes  . . . . . . . . . . . .	Byte	 0000026E _DATA	
+certMes  . . . . . . . . . . . .	Byte	 0000029C _DATA	
 columnNum  . . . . . . . . . . .	DWord	 00000008 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
-fibPrompt2 . . . . . . . . . . .	Byte	 00000210 _DATA	
-fibPrompt3 . . . . . . . . . . .	Byte	 00000247 _DATA	
-fibPrompt  . . . . . . . . . . .	Byte	 000001DA _DATA	
-goodbyeMes . . . . . . . . . . .	Byte	 00000291 _DATA	
+fibPrompt2 . . . . . . . . . . .	Byte	 0000023E _DATA	
+fibPrompt3 . . . . . . . . . . .	Byte	 00000275 _DATA	
+fibPrompt  . . . . . . . . . . .	Byte	 00000208 _DATA	
+goodbyeMes . . . . . . . . . . .	Byte	 000002BF _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
-helloMes . . . . . . . . . . . .	Byte	 000001D2 _DATA	
-invalidMes . . . . . . . . . . .	Byte	 0000029B _DATA	
+helloMes . . . . . . . . . . . .	Byte	 00000200 _DATA	
+invalidMes . . . . . . . . . . .	Byte	 000002C9 _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -786,19 +833,20 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-nameMes  . . . . . . . . . . . .	Byte	 000001BF _DATA	
+nameMes  . . . . . . . . . . . .	Byte	 000001ED _DATA	
 nextNum  . . . . . . . . . . . .	DWord	 00000004 _DATA	
 rangeNum . . . . . . . . . . . .	DWord	 00000000 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
-space10  . . . . . . . . . . . .	Byte	 000002F9 _DATA	
-space2 . . . . . . . . . . . . .	Byte	 000002C5 _DATA	
-space3 . . . . . . . . . . . . .	Byte	 000002C8 _DATA	
-space4 . . . . . . . . . . . . .	Byte	 000002CC _DATA	
-space5 . . . . . . . . . . . . .	Byte	 000002D1 _DATA	
-space6 . . . . . . . . . . . . .	Byte	 000002D7 _DATA	
-space7 . . . . . . . . . . . . .	Byte	 000002DE _DATA	
-space8 . . . . . . . . . . . . .	Byte	 000002E6 _DATA	
-space9 . . . . . . . . . . . . .	Byte	 000002EF _DATA	
+space10  . . . . . . . . . . . .	Byte	 00000327 _DATA	
+space2 . . . . . . . . . . . . .	Byte	 000002F3 _DATA	
+space3 . . . . . . . . . . . . .	Byte	 000002F6 _DATA	
+space4 . . . . . . . . . . . . .	Byte	 000002FA _DATA	
+space5 . . . . . . . . . . . . .	Byte	 000002FF _DATA	
+space6 . . . . . . . . . . . . .	Byte	 00000305 _DATA	
+space7 . . . . . . . . . . . . .	Byte	 0000030C _DATA	
+space8 . . . . . . . . . . . . .	Byte	 00000314 _DATA	
+space9 . . . . . . . . . . . . .	Byte	 0000031D _DATA	
+tempNum  . . . . . . . . . . . .	DWord	 00000332 _DATA	
 titleMes . . . . . . . . . . . .	Byte	 0000014C _DATA	
 userName . . . . . . . . . . . .	DWord	 0000000C _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   

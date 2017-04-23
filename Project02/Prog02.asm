@@ -9,7 +9,7 @@ TITLE Prog02 - Fibonacci Numbers     (Prog02.asm)
 ;	asks for the users name and displays a greeting and a
 ;	farewell to them. It also validates that the user only
 ;	enters terms between the range [1 .. 46]. It displays
-;	the results in aligned columns.
+;	the results in aligned columns. It also colors the columns.
 
 INCLUDE Irvine32.inc
 
@@ -27,6 +27,7 @@ userName	DWORD	80 DUP (?)
 
 titleMes	BYTE	"		Prog02 - Fibonacci Numbers		by Taylor Liss", 0dh, 0ah, 0
 EC1Mes		BYTE	"**EC #1: This program list the Fibonacci terms in aligned columns", 0dh, 0ah, 0
+EC2Mes		BYTE	"**EC #2: This program colorizes the columns", 0dh, 0ah, 0
 nameMes		BYTE	"What's your name? ", 0
 helloMes	BYTE	"Hello, ", 0
 fibPrompt	BYTE	"Enter the number of Fibonacci terms to be displayed", 0dh, 0ah, 0
@@ -48,6 +49,9 @@ space8		BYTE	"        ", 0
 space9		BYTE	"         ", 0
 space10		BYTE	"          ", 0
 
+;**EC 2: The following is used to assist the changing of colors:
+tempNum		DWORD	?
+
 .code
 main PROC
 ;-----introduction-----
@@ -55,6 +59,8 @@ main PROC
 	mov		edx, OFFSET titleMes
 	call	WriteString	
 	mov		edx, OFFSET EC1Mes
+	call	WriteString
+	mov		edx, OFFSET EC2Mes
 	call	WriteString
 	call	CrLf
 
@@ -102,6 +108,8 @@ rangePrompt:	;Get range
 	mov		nextNum, 1
 	mov		columnNum, 1
 fibLoop:	;displayFibs
+	jmp		changeColor
+loopMain:
 	mov		nextNum, eax
 	add		eax, ebx
 	call	WriteDec
@@ -142,6 +150,8 @@ continueLoop:
 
 ;-----farewell-----
 ;Farewell
+	mov		eax, lightGray + (black * 16)
+	call	SetTextColor
 	call	CrLf
 	call	CrLf
 	mov		edx, OFFSET certMes
@@ -217,6 +227,27 @@ addRow:		;adds a new row if the last number printed was the fifth number in a ro
 	call	CrLf
 	mov		columnNum, 1
 	jmp		continueLoop
+
+;EC#2: This code is used to color the columns
+changeColor: 
+	mov		tempNum, eax
+	cmp		columnNum, 1
+	je		changeRed
+	cmp		columnNum, 3
+	je		changeRed
+	cmp		columnNum, 5
+	je		changeRed
+	mov		eax, green + (red * 16)
+	call	SetTextColor
+	mov		eax, tempNum
+	jmp		loopMain
+
+changeRed:
+	mov		eax, red + (green * 16)
+	call	SetTextColor
+	mov		eax, tempNum
+	jmp		loopMain
+	
 
 main ENDP
 

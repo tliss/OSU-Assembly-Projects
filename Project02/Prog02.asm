@@ -18,10 +18,6 @@ INCLUDE Irvine32.inc
 
 .data
 rangeNum	DWORD	?		;range of fibonacci terms
-firstNum	DWORD	1		;first number
-secondNum	DWORD	1		;second number
-thirdNum	DWORD	?		;third number placeholder
-tempNum		DWORD	?
 nextNum		DWORD	?		;next fibonacci number in the sequence
 
 userName	DWORD	80 DUP (?)
@@ -32,12 +28,14 @@ helloMes	BYTE	"Hello, ", 0
 fibPrompt	BYTE	"Enter the number of Fibonacci terms to be displayed", 0dh, 0ah, 0
 fibPrompt2	BYTE	"Give the number as an integer in the range [1 .. 46]", 0dh, 0ah, 0
 fibPrompt3	BYTE	"How many Fibonacci terms do you want? ", 0
+certMes		BYTE	"Results certified by Taylor Liss", 0dh, 0ah, 0
+goodbyeMes	BYTE	"Goodbye, ", 0
 
 invalidMes	BYTE	"Out of range. Enter a number in [1 .. 46]", 0
 
 .code
 main PROC
-
+;-----introduction-----
 ;Display program title
 	mov		edx, OFFSET titleMes
 	call	WriteString	
@@ -58,14 +56,15 @@ main PROC
 	call	WriteString
 	call	CrLf
 
+;-----userInstructions-----
 ;Ask for for number of Fibonacci terms
 	mov		edx, OFFSET fibPrompt
 	call	WriteString
 	mov		edx, OFFSET fibPrompt2
 	call	WriteString
 	call	CrLf
-	call	CrLf
 
+;-----getUserData-----
 rangePrompt:	;Get range
 	mov		edx, OFFSET fibPrompt3
 	call	WriteString
@@ -78,20 +77,30 @@ rangePrompt:	;Get range
 	cmp		eax, 46
 	jg		notValid
 
+;-----displayFibs-----
 ;Setup fibonacci loop
 	mov		eax, 0
 	mov		ebx, 1
 	mov		ecx, rangeNum
 	mov		nextNum, 1
-fibLoop:
+fibLoop:	;displayFibs
 	mov		nextNum, eax
 	add		eax, ebx
 	call	WriteDec
 	call	CrLf
 	mov		ebx, nextNum
-
-
 	loop	fibLoop
+
+;-----farewell-----
+;Farewell
+	call	CrLf
+	mov		edx, OFFSET certMes
+	call	WriteString
+	mov		edx, OFFSET goodbyeMes
+	call	WriteString
+	mov		edx, OFFSET userName
+	call	WriteString
+	call	CrLf
 
 	exit	;exit to operating system
 
@@ -100,9 +109,7 @@ notValid:	;invalid range entered
 	call	WriteString
 	call	CrLf
 	jmp		rangePrompt
-	exit
 
-	exit	;exit to operating system
 main ENDP
 
 END main

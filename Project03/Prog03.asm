@@ -104,16 +104,18 @@ tooSmall:
 	jmp		L1
 
 finished:
+	dec		totalNums
 	mov		edx, OFFSET totalNumMess1
 	call	WriteString
-	mov		eax, accumulator
-	call	WriteInt
+	mov		eax, totalNums
+	call	WriteDec
 	mov		edx, OFFSET	totalNumMess2
 	call	WriteString
 	mov		edx, OFFSET sumMess
 	call	WriteString
-	mov		eax, totalNums
-	call	WriteDec
+	mov		eax, accumulator
+	call	WriteInt
+	call	CrLf
 
 	;calculate average
 

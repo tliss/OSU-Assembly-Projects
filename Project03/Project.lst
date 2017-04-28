@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 13:36:10
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 14:07:40
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Page 1 - 1
 
 
@@ -91,16 +91,31 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 13:36:10
 	   68 61 6E 20 2D
 	   31 30 30 2E 0D
 	   0A 00
+ 000000F1 59 6F 75 20 65	totalNumMess1	BYTE	"You entered ", 0
+	   6E 74 65 72 65
+	   64 20 00
+ 000000FE 20 76 61 6C 69	totalNumMess2	BYTE	" valid numbers.", 0dh, 0ah, 0
+	   64 20 6E 75 6D
+	   62 65 72 73 2E
+	   0D 0A 00
+ 00000110 54 68 65 20 73	sumMess			BYTE	"The sum of your valid numbers is ", 0
+	   75 6D 20 6F 66
+	   20 79 6F 75 72
+	   20 76 61 6C 69
+	   64 20 6E 75 6D
+	   62 65 72 73 20
+	   69 73 20 00
 
- 000000F1  00000050 [		userName		DWORD	80 DUP (?)
+ 00000132  00000050 [		userName		DWORD	80 DUP (?)
 	    00000000
 	   ]
 
  =-00000064			LOWER_LIMIT = -100
  =-00000001			UPPER_LIMIT = -1
 
- 00000231 00000000		totalNums		DWORD	?
- 00000235 00000000		userNum			DWORD	?
+ 00000272 00000000		totalNums		DWORD	?
+ 00000276 00000000		userNum			DWORD	?
+ 0000027A 00000000		accumulator		DWORD	?
 
 
  00000000			.code
@@ -119,14 +134,14 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 13:36:10
  00000019  BA 00000030 R		mov		edx, OFFSET reqNameMess
  0000001E  E8 00000000 E		call	WriteString
 
- 00000023  BA 000000F1 R		mov		edx, OFFSET userName
+ 00000023  BA 00000132 R		mov		edx, OFFSET userName
  00000028  B9 00000050			mov		ecx, 80
  0000002D  E8 00000000 E		call	ReadString
 
 				;Say hello
  00000032  BA 00000044 R		mov		edx, OFFSET helloMes
  00000037  E8 00000000 E		call	WriteString
- 0000003C  BA 000000F1 R		mov		edx, OFFSET userName
+ 0000003C  BA 00000132 R		mov		edx, OFFSET userName
  00000041  E8 00000000 E		call	WriteString
  00000046  E8 00000000 E		call	CrLf
 
@@ -136,46 +151,62 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 13:36:10
  00000055  BA 00000072 R		mov		edx, OFFSET instructMess2
  0000005A  E8 00000000 E		call	WriteString
 
- 0000005F  C7 05 00000231 R		mov		totalNums, 0	;setup totalNums
+ 0000005F  C7 05 00000272 R		mov		totalNums, 0	;setup totalNums
 	   00000000
 
  00000069			L1:
- 00000069  FF 05 00000231 R		inc		totalNums
+ 00000069  FF 05 00000272 R		inc		totalNums
  0000006F  BA 000000B6 R		mov		edx, OFFSET numberPrompt
  00000074  E8 00000000 E		call	WriteString
- 00000079  A1 00000231 R		mov		eax, totalNums
+ 00000079  A1 00000272 R		mov		eax, totalNums
  0000007E  E8 00000000 E		call	WriteDec
  00000083  BA 000000BF R		mov		edx, OFFSET	colon
  00000088  E8 00000000 E		call	WriteString
 
  0000008D  E8 00000000 E		call	ReadInt
- 00000092  A3 00000235 R		mov		userNum, eax
- 00000097  83 3D 00000235 R		cmp		userNum, LOWER_LIMIT
+ 00000092  A3 00000276 R		mov		userNum, eax
+ 00000097  83 3D 00000276 R		cmp		userNum, LOWER_LIMIT	;if number less than -100 is entered
 	   9C
- 0000009E  7C 0B			jl		tooSmall
- 000000A0  83 3D 00000235 R		cmp		userNum, UPPER_LIMIT
+ 0000009E  7C 11			jl		tooSmall
+ 000000A0  83 3D 00000276 R		cmp		userNum, UPPER_LIMIT	;if positive # is entered
 	   FF
- 000000A7  7F 1E			jg		finished
- 000000A9  EB BE			jmp		L1
+ 000000A7  7F 24			jg		finished
 
- 000000AB			tooSmall:
- 000000AB  BA 000000C2 R		mov		edx, OFFSET tooSmallMess
- 000000B0  E8 00000000 E		call	WriteString
- 000000B5  BA 0000004C R		mov		edx, OFFSET	instructMess1
- 000000BA  E8 00000000 E		call	WriteString
- 000000BF  FF 0D 00000231 R		dec		totalNums
- 000000C5  EB A2			jmp		L1
+ 000000A9  01 05 0000027A R		add		accumulator, eax
+ 000000AF  EB B8			jmp		L1
 
- 000000C7			finished:
+ 000000B1			tooSmall:
+ 000000B1  BA 000000C2 R		mov		edx, OFFSET tooSmallMess
+ 000000B6  E8 00000000 E		call	WriteString
+ 000000BB  BA 0000004C R		mov		edx, OFFSET	instructMess1
+ 000000C0  E8 00000000 E		call	WriteString
+ 000000C5  FF 0D 00000272 R		dec		totalNums
+ 000000CB  EB 9C			jmp		L1
+
+ 000000CD			finished:
+ 000000CD  FF 0D 00000272 R		dec		totalNums
+ 000000D3  BA 000000F1 R		mov		edx, OFFSET totalNumMess1
+ 000000D8  E8 00000000 E		call	WriteString
+ 000000DD  A1 00000272 R		mov		eax, totalNums
+ 000000E2  E8 00000000 E		call	WriteDec
+ 000000E7  BA 000000FE R		mov		edx, OFFSET	totalNumMess2
+ 000000EC  E8 00000000 E		call	WriteString
+ 000000F1  BA 00000110 R		mov		edx, OFFSET sumMess
+ 000000F6  E8 00000000 E		call	WriteString
+ 000000FB  A1 0000027A R		mov		eax, accumulator
+ 00000100  E8 00000000 E		call	WriteInt
+ 00000105  E8 00000000 E		call	CrLf
+
+					;calculate average
 
 
 					exit	; exit to operating system
- 000000C7  6A 00	   *	    push   +000000000h
- 000000C9  E8 00000000 E   *	    call   ExitProcess
- 000000CE			main ENDP
+ 0000010A  6A 00	   *	    push   +000000000h
+ 0000010C  E8 00000000 E   *	    call   ExitProcess
+ 00000111			main ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 13:36:10
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 14:07:40
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Symbols 2 - 1
 
 
@@ -269,8 +300,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000239 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000CE Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000027E Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000111 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -377,11 +408,11 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000CE Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000111 Public STDCALL
   startPoint . . . . . . . . . .	L Near	 00000000 _TEXT	
   L1 . . . . . . . . . . . . . .	L Near	 00000069 _TEXT	
-  tooSmall . . . . . . . . . . .	L Near	 000000AB _TEXT	
-  finished . . . . . . . . . . .	L Near	 000000C7 _TEXT	
+  tooSmall . . . . . . . . . . .	L Near	 000000B1 _TEXT	
+  finished . . . . . . . . . . .	L Near	 000000CD _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -602,6 +633,7 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
+accumulator  . . . . . . . . . .	DWord	 0000027A _DATA	
 authName . . . . . . . . . . . .	Byte	 0000001F _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
@@ -625,10 +657,13 @@ numberPrompt . . . . . . . . . .	Byte	 000000B6 _DATA
 projName . . . . . . . . . . . .	Byte	 00000000 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 reqNameMess  . . . . . . . . . .	Byte	 00000030 _DATA	
+sumMess  . . . . . . . . . . . .	Byte	 00000110 _DATA	
 tooSmallMess . . . . . . . . . .	Byte	 000000C2 _DATA	
-totalNums  . . . . . . . . . . .	DWord	 00000231 _DATA	
-userName . . . . . . . . . . . .	DWord	 000000F1 _DATA	
-userNum  . . . . . . . . . . . .	DWord	 00000235 _DATA	
+totalNumMess1  . . . . . . . . .	Byte	 000000F1 _DATA	
+totalNumMess2  . . . . . . . . .	Byte	 000000FE _DATA	
+totalNums  . . . . . . . . . . .	DWord	 00000272 _DATA	
+userName . . . . . . . . . . . .	DWord	 00000132 _DATA	
+userNum  . . . . . . . . . . . .	DWord	 00000276 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   

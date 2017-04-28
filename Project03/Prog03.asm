@@ -23,7 +23,7 @@ authName		BYTE	"By Taylor Liss", 0dh, 0ah, 0
 reqNameMess		BYTE	"What is your name? ", 0
 helloMes		BYTE	"Hello, ", 0
 instructMess1	BYTE	"Please enter numbers in [-100, -1].", 0dh, 0ah, 0
-instructMess2	BYTE	"Enter a non-negative number when you are finished to see results."
+instructMess2	BYTE	"Enter a non-negative number when you are finished to see results.", 0dh, 0ah, 0
 numberPrompt	BYTE	"Number #", 0
 colon			BYTE	": ", 0
 tooSmallMess	BYTE	"The number you entered is smaller than -100.", 0dh, 0ah, 0
@@ -86,10 +86,11 @@ L1:
 	cmp		userNum, LOWER_LIMIT
 	jl		tooSmall
 	cmp		userNum, UPPER_LIMIT
-	jmp		finished
+	jg		finished
+	jmp		L1
 
 tooSmall:
-	mov		edx, OFFSET tooSmall
+	mov		edx, OFFSET tooSmallMess
 	call	WriteString
 	mov		edx, OFFSET	instructMess1
 	call	WriteString

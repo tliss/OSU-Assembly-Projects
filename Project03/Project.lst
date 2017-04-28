@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 09:56:44
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 10:02:03
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Page 1 - 1
 
 
@@ -56,8 +56,29 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 09:56:44
 	   6D 65 3F 20 00
  00000044 48 65 6C 6C 6F	helloMes		BYTE	"Hello, ", 0
 	   2C 20 00
+ 0000004C 50 6C 65 61 73	instructMess1	BYTE	"Please enter numbers in [-100, -1].", 0dh, 0ah, 0
+	   65 20 65 6E 74
+	   65 72 20 6E 75
+	   6D 62 65 72 73
+	   20 69 6E 20 5B
+	   2D 31 30 30 2C
+	   20 2D 31 5D 2E
+	   0D 0A 00
+ 00000072 45 6E 74 65 72	instructMess2	BYTE	"Enter a non-negative number when you are finished to see results."
+	   20 61 20 6E 6F
+	   6E 2D 6E 65 67
+	   61 74 69 76 65
+	   20 6E 75 6D 62
+	   65 72 20 77 68
+	   65 6E 20 79 6F
+	   75 20 61 72 65
+	   20 66 69 6E 69
+	   73 68 65 64 20
+	   74 6F 20 73 65
+	   65 20 72 65 73
+	   75 6C 74 73 2E
 
- 0000004C  00000050 [		userName		DWORD	80 DUP (?)
+ 000000B3  00000050 [		userName		DWORD	80 DUP (?)
 	    00000000
 	   ]
 
@@ -79,24 +100,30 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 09:56:44
  00000019  BA 00000030 R		mov		edx, OFFSET reqNameMess
  0000001E  E8 00000000 E		call	WriteString
 
- 00000023  BA 0000004C R		mov		edx, OFFSET userName
+ 00000023  BA 000000B3 R		mov		edx, OFFSET userName
  00000028  B9 00000050			mov		ecx, 80
  0000002D  E8 00000000 E		call	ReadString
 
 				;Say hello
  00000032  BA 00000044 R		mov		edx, OFFSET helloMes
  00000037  E8 00000000 E		call	WriteString
- 0000003C  BA 0000004C R		mov		edx, OFFSET userName
+ 0000003C  BA 000000B3 R		mov		edx, OFFSET userName
  00000041  E8 00000000 E		call	WriteString
  00000046  E8 00000000 E		call	CrLf
 
+				;Display isntructions
+ 0000004B  BA 0000004C R		mov		edx, OFFSET instructMess1
+ 00000050  E8 00000000 E		call	WriteString
+ 00000055  BA 00000072 R		mov		edx, OFFSET instructMess2
+ 0000005A  E8 00000000 E		call	WriteString
+
 					exit	; exit to operating system
- 0000004B  6A 00	   *	    push   +000000000h
- 0000004D  E8 00000000 E   *	    call   ExitProcess
- 00000052			main ENDP
+ 0000005F  6A 00	   *	    push   +000000000h
+ 00000061  E8 00000000 E   *	    call   ExitProcess
+ 00000066			main ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 09:56:44
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 10:02:03
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Symbols 2 - 1
 
 
@@ -190,8 +217,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 0000018C Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000052 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 000001F3 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000066 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -298,7 +325,7 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000052 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000066 Public STDCALL
   startPoint . . . . . . . . . .	L Near	 00000000 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -527,6 +554,8 @@ exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
 helloMes . . . . . . . . . . . .	Byte	 00000044 _DATA	
+instructMess1  . . . . . . . . .	Byte	 0000004C _DATA	
+instructMess2  . . . . . . . . .	Byte	 00000072 _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -537,7 +566,7 @@ magenta  . . . . . . . . . . . .	Number	 00000005h
 projName . . . . . . . . . . . .	Byte	 00000000 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 reqNameMess  . . . . . . . . . .	Byte	 00000030 _DATA	
-userName . . . . . . . . . . . .	DWord	 0000004C _DATA	
+userName . . . . . . . . . . . .	DWord	 000000B3 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   

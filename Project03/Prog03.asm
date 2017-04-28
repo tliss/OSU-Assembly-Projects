@@ -27,6 +27,9 @@ instructMess2	BYTE	"Enter a non-negative number when you are finished to see res
 numberPrompt	BYTE	"Number #", 0
 colon			BYTE	": ", 0
 tooSmallMess	BYTE	"The number you entered is smaller than -100.", 0dh, 0ah, 0
+totalNumMess1	BYTE	"You entered ", 0
+totalNumMess2	BYTE	" valid numbers.", 0dh, 0ah, 0
+sumMess			BYTE	"The sum of your valid numbers is ", 0
 
 userName		DWORD	80 DUP (?)
 
@@ -35,6 +38,7 @@ UPPER_LIMIT = -1
 
 totalNums		DWORD	?
 userNum			DWORD	?
+accumulator		DWORD	?
 
 
 .code
@@ -83,10 +87,12 @@ L1:
 
 	call	ReadInt
 	mov		userNum, eax
-	cmp		userNum, LOWER_LIMIT
+	cmp		userNum, LOWER_LIMIT	;if number less than -100 is entered
 	jl		tooSmall
-	cmp		userNum, UPPER_LIMIT
+	cmp		userNum, UPPER_LIMIT	;if positive # is entered
 	jg		finished
+
+	add		accumulator, eax
 	jmp		L1
 
 tooSmall:
@@ -98,6 +104,18 @@ tooSmall:
 	jmp		L1
 
 finished:
+	mov		edx, OFFSET totalNumMess1
+	call	WriteString
+	mov		eax, accumulator
+	call	WriteInt
+	mov		edx, OFFSET	totalNumMess2
+	call	WriteString
+	mov		edx, OFFSET sumMess
+	call	WriteString
+	mov		eax, totalNums
+	call	WriteDec
+
+	;calculate average
 
 
 	exit	; exit to operating system

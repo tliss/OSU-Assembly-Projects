@@ -30,6 +30,7 @@ tooSmallMess	BYTE	"The number you entered is smaller than -100.", 0dh, 0ah, 0
 totalNumMess1	BYTE	"You entered ", 0
 totalNumMess2	BYTE	" valid numbers.", 0dh, 0ah, 0
 sumMess			BYTE	"The sum of your valid numbers is ", 0
+averMess		BYTE	"The rounded average is ", 0
 
 userName		DWORD	80 DUP (?)
 
@@ -39,6 +40,9 @@ UPPER_LIMIT = -1
 totalNums		DWORD	?
 userNum			DWORD	?
 accumulator		DWORD	?
+average			DWORD	?
+remainder		DWORD	?
+doubleRem		DWORD	?
 
 
 .code
@@ -115,9 +119,46 @@ finished:
 	call	WriteString
 	mov		eax, accumulator
 	call	WriteInt
-	call	CrLf
 
 	;calculate average
+	mov		eax, accumulator
+	mov		ebx, 1000
+	mul		ebx
+	call	CrLf
+	mov		ebx, totalNums
+	cdq
+	idiv	ebx
+	mov		average, eax
+	mov		remainder, edx
+
+	;mulitply remainder by 2
+	mov		eax, remainder
+	mov		ebx, 2
+	mul		ebx
+	mov		doubleRem, eax
+
+	;compare doubleRem to totalNums and increment average (round up) if doubleRem is larger
+	cmp		eax, totalNums
+	jge		incrementAverage
+	
+	jmp		displayResult
+
+incrementAverage:
+	inc		average
+	jmp		displayResult
+
+displayResult:
+	mov		edx, OFFSET averMess
+	call	WriteString
+
+	mov		eax, average
+	mov		ebx, 1000
+	cdq
+	idiv	ebx	
+	call	WriteInt
+
+	call	CrLf
+	
 
 
 	exit	; exit to operating system

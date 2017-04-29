@@ -31,6 +31,7 @@ totalNumMess1	BYTE	"You entered ", 0
 totalNumMess2	BYTE	" valid numbers.", 0dh, 0ah, 0
 sumMess			BYTE	"The sum of your valid numbers is ", 0
 averMess		BYTE	"The rounded average is ", 0
+dotMess			BYTE	".", 0
 
 userName		DWORD	80 DUP (?)
 
@@ -43,6 +44,8 @@ accumulator		DWORD	?
 average			DWORD	?
 remainder		DWORD	?
 doubleRem		DWORD	?
+wholeNum		DWORD	?
+decNum			DWORD	?
 
 
 .code
@@ -124,12 +127,13 @@ finished:
 	mov		eax, accumulator
 	mov		ebx, 1000
 	mul		ebx
-	call	CrLf
 	mov		ebx, totalNums
 	cdq
 	idiv	ebx
 	mov		average, eax
+	neg		edx
 	mov		remainder, edx
+	call	CrLf
 
 	;mulitply remainder by 2
 	mov		eax, remainder
@@ -138,13 +142,15 @@ finished:
 	mov		doubleRem, eax
 
 	;compare doubleRem to totalNums and increment average (round up) if doubleRem is larger
+	mov		eax, doubleRem
 	cmp		eax, totalNums
-	jge		incrementAverage
+	jge		decrementAverage
 	
 	jmp		displayResult
 
-incrementAverage:
-	inc		average
+decrementAverage:
+	mov		eax, average
+	dec		average
 	jmp		displayResult
 
 displayResult:
@@ -156,10 +162,12 @@ displayResult:
 	cdq
 	idiv	ebx	
 	call	WriteInt
-
+	mov		eax, edx
+	neg		eax
+	mov		edx, OFFSET dotMess
+	call	WriteString
+	call	WriteDec
 	call	CrLf
-	
-
 
 	exit	; exit to operating system
 main ENDP

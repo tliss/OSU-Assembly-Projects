@@ -15,6 +15,10 @@ TITLE Prog01 - Elementary Arithmetic     (Prog01.asm)
 ; of all integers entered. The program will then
 ; display a farewell message.
 
+;**EC#1: This program numbers the lines during input
+;**EC#2: This program calculates and displays the average as a floating-point number, rounded to the nearest .001
+;**EC#3: This program
+
 INCLUDE Irvine32.inc
 
 .data
@@ -32,31 +36,38 @@ totalNumMess2	BYTE	" valid numbers.", 0dh, 0ah, 0
 sumMess			BYTE	"The sum of your valid numbers is ", 0
 averMess		BYTE	"The rounded average is ", 0
 dotMess			BYTE	".", 0
+goodbyeMess		BYTE	"Goodbye, ", 0
+
+ecMessage1		BYTE	"**EC#1: This program numbers the lines during input", 0dh, 0ah, 0
+ecMessage2		BYTE	"**EC#2: This program calculates and displays the average as a floating-point number, rounded to the nearest .001", 0dh, 0ah, 0
+ecMessage3		BYTE	"**EC#3: This program ", 0dh, 0ah, 0
 
 userName		DWORD	80 DUP (?)
 
 LOWER_LIMIT = -100
 UPPER_LIMIT = -1
 
-totalNums		DWORD	?
-userNum			DWORD	?
-accumulator		DWORD	?
-average			DWORD	?
-remainder		DWORD	?
-doubleRem		DWORD	?
-wholeNum		DWORD	?
-decNum			DWORD	?
-
+totalNums		DWORD	?	;keeps track of how many numbers were entered
+userNum			DWORD	?	;the current number entered by the user
+accumulator		DWORD	?	;where all numbers entered in are added together
+average			DWORD	?	;the average of all numbers entered in
+remainder		DWORD	?	;the remainder left over after averaging
+doubleRem		DWORD	?	;double the value of the remainder
 
 .code
 main PROC
-	
-startPoint: ;Program restarts to here when request.
 
 ;Display program title & author name
 	mov		edx, OFFSET projName
 	call	WriteString	
 	mov		edx, OFFSET authName
+	call	WriteString
+	call	CrLf
+	mov		edx, OFFSET ecMessage1
+	call	WriteString
+	mov		edx, OFFSET ecMessage2
+	call	WriteString
+	mov		edx, OFFSET ecMessage3
 	call	WriteString
 	call	CrLf
 
@@ -83,7 +94,7 @@ startPoint: ;Program restarts to here when request.
 
 	mov		totalNums, 0	;setup totalNums
 
-L1:
+mainLoop:	;this loop is where the user enters in values until they enter in a positive integer
 	inc		totalNums
 	mov		edx, OFFSET numberPrompt
 	call	WriteString
@@ -100,17 +111,17 @@ L1:
 	jg		finished
 
 	add		accumulator, eax
-	jmp		L1
+	jmp		mainLoop
 
-tooSmall:
+tooSmall:	;this is where you end up if the number entered is lower than -100
 	mov		edx, OFFSET tooSmallMess
 	call	WriteString
 	mov		edx, OFFSET	instructMess1
 	call	WriteString
 	dec		totalNums
-	jmp		L1
+	jmp		mainLoop
 
-finished:
+finished:	;this is where you end up once a non-negative number is entered
 	dec		totalNums
 	mov		edx, OFFSET totalNumMess1
 	call	WriteString
@@ -123,7 +134,7 @@ finished:
 	mov		eax, accumulator
 	call	WriteInt
 
-	;calculate average
+	;calculate average with the proper math to get the right decimal value
 	mov		eax, accumulator
 	mov		ebx, 1000
 	mul		ebx
@@ -141,19 +152,19 @@ finished:
 	mul		ebx
 	mov		doubleRem, eax
 
-	;compare doubleRem to totalNums and increment average (round up) if doubleRem is larger
+	;compare doubleRem to totalNums and decrement average (round down) if doubleRem is larger
 	mov		eax, doubleRem
 	cmp		eax, totalNums
 	jge		decrementAverage
 	
 	jmp		displayResult
 
-decrementAverage:
+decrementAverage:	;decrement average here 
 	mov		eax, average
 	dec		average
 	jmp		displayResult
 
-displayResult:
+displayResult:		;display the rounded decimal here
 	mov		edx, OFFSET averMess
 	call	WriteString
 
@@ -167,6 +178,14 @@ displayResult:
 	mov		edx, OFFSET dotMess
 	call	WriteString
 	call	WriteDec
+	call	CrLf
+
+	;say goodbye
+	mov		edx, OFFSET goodbyeMess
+	call	WriteString
+	mov		edx, OFFSET userName
+	call	WriteString
+	call	CrLf
 	call	CrLf
 
 	exit	; exit to operating system

@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 23:32:55
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 23:57:34
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Page 1 - 1
 
 
@@ -18,6 +18,10 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 23:32:55
 				; The program will also display the average (rounded)
 				; of all integers entered. The program will then
 				; display a farewell message.
+
+				;**EC#1: This program numbers the lines during input
+				;**EC#2: This program calculates and displays the average as a floating-point number, rounded to the nearest .001
+				;**EC#3: This program
 
 				INCLUDE Irvine32.inc
 			      C ; Include file for Irvine32.lib             (Irvine32.inc)
@@ -111,156 +115,206 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 23:32:55
 	   72 61 67 65 20
 	   69 73 20 00
  0000014A 2E 00			dotMess			BYTE	".", 0
+ 0000014C 47 6F 6F 64 62	goodbyeMess		BYTE	"Goodbye, ", 0
+	   79 65 2C 20 00
 
- 0000014C  00000050 [		userName		DWORD	80 DUP (?)
+ 00000156 2A 2A 45 43 23	ecMessage1		BYTE	"**EC#1: This program numbers the lines during input", 0dh, 0ah, 0
+	   31 3A 20 54 68
+	   69 73 20 70 72
+	   6F 67 72 61 6D
+	   20 6E 75 6D 62
+	   65 72 73 20 74
+	   68 65 20 6C 69
+	   6E 65 73 20 64
+	   75 72 69 6E 67
+	   20 69 6E 70 75
+	   74 0D 0A 00
+ 0000018C 2A 2A 45 43 23	ecMessage2		BYTE	"**EC#2: This program calculates and displays the average as a floating-point number, rounded to the nearest .001", 0dh, 0ah, 0
+	   32 3A 20 54 68
+	   69 73 20 70 72
+	   6F 67 72 61 6D
+	   20 63 61 6C 63
+	   75 6C 61 74 65
+	   73 20 61 6E 64
+	   20 64 69 73 70
+	   6C 61 79 73 20
+	   74 68 65 20 61
+	   76 65 72 61 67
+	   65 20 61 73 20
+	   61 20 66 6C 6F
+	   61 74 69 6E 67
+	   2D 70 6F 69 6E
+	   74 20 6E 75 6D
+	   62 65 72 2C 20
+	   72 6F 75 6E 64
+	   65 64 20 74 6F
+	   20 74 68 65 20
+	   6E 65 61 72 65
+	   73 74 20 2E 30
+	   30 31 0D 0A 00
+ 000001FF 2A 2A 45 43 23	ecMessage3		BYTE	"**EC#3: This program ", 0dh, 0ah, 0
+	   33 3A 20 54 68
+	   69 73 20 70 72
+	   6F 67 72 61 6D
+	   20 0D 0A 00
+
+ 00000217  00000050 [		userName		DWORD	80 DUP (?)
 	    00000000
 	   ]
 
  =-00000064			LOWER_LIMIT = -100
  =-00000001			UPPER_LIMIT = -1
 
- 0000028C 00000000		totalNums		DWORD	?
- 00000290 00000000		userNum			DWORD	?
- 00000294 00000000		accumulator		DWORD	?
- 00000298 00000000		average			DWORD	?
- 0000029C 00000000		remainder		DWORD	?
- 000002A0 00000000		doubleRem		DWORD	?
- 000002A4 00000000		wholeNum		DWORD	?
- 000002A8 00000000		decNum			DWORD	?
-
+ 00000357 00000000		totalNums		DWORD	?	;keeps track of how many numbers were entered
+ 0000035B 00000000		userNum			DWORD	?	;the current number entered by the user
+ 0000035F 00000000		accumulator		DWORD	?	;where all numbers entered in are added together
+ 00000363 00000000		average			DWORD	?	;the average of all numbers entered in
+ 00000367 00000000		remainder		DWORD	?	;the remainder left over after averaging
+ 0000036B 00000000		doubleRem		DWORD	?	;double the value of the remainder
 
  00000000			.code
  00000000			main PROC
-					
- 00000000			startPoint: ;Program restarts to here when request.
 
 				;Display program title & author name
  00000000  BA 00000000 R		mov		edx, OFFSET projName
  00000005  E8 00000000 E		call	WriteString	
  0000000A  BA 0000001F R		mov		edx, OFFSET authName
  0000000F  E8 00000000 E		call	WriteString
- 00000014  E8 00000000 E		call	CrLf
+ 00000014  BA 00000156 R		mov		edx, OFFSET ecMessage1
+ 00000019  E8 00000000 E		call	WriteString
+ 0000001E  BA 0000018C R		mov		edx, OFFSET ecMessage2
+ 00000023  E8 00000000 E		call	WriteString
+ 00000028  BA 000001FF R		mov		edx, OFFSET ecMessage3
+ 0000002D  E8 00000000 E		call	WriteString
+ 00000032  E8 00000000 E		call	CrLf
 
 				;Get user name
- 00000019  BA 00000030 R		mov		edx, OFFSET reqNameMess
- 0000001E  E8 00000000 E		call	WriteString
+ 00000037  BA 00000030 R		mov		edx, OFFSET reqNameMess
+ 0000003C  E8 00000000 E		call	WriteString
 
- 00000023  BA 0000014C R		mov		edx, OFFSET userName
- 00000028  B9 00000050			mov		ecx, 80
- 0000002D  E8 00000000 E		call	ReadString
+ 00000041  BA 00000217 R		mov		edx, OFFSET userName
+ 00000046  B9 00000050			mov		ecx, 80
+ 0000004B  E8 00000000 E		call	ReadString
 
 				;Say hello
- 00000032  BA 00000044 R		mov		edx, OFFSET helloMes
- 00000037  E8 00000000 E		call	WriteString
- 0000003C  BA 0000014C R		mov		edx, OFFSET userName
- 00000041  E8 00000000 E		call	WriteString
- 00000046  E8 00000000 E		call	CrLf
+ 00000050  BA 00000044 R		mov		edx, OFFSET helloMes
+ 00000055  E8 00000000 E		call	WriteString
+ 0000005A  BA 00000217 R		mov		edx, OFFSET userName
+ 0000005F  E8 00000000 E		call	WriteString
+ 00000064  E8 00000000 E		call	CrLf
 
 				;Display isntructions
- 0000004B  BA 0000004C R		mov		edx, OFFSET instructMess1
- 00000050  E8 00000000 E		call	WriteString
- 00000055  BA 00000072 R		mov		edx, OFFSET instructMess2
- 0000005A  E8 00000000 E		call	WriteString
+ 00000069  BA 0000004C R		mov		edx, OFFSET instructMess1
+ 0000006E  E8 00000000 E		call	WriteString
+ 00000073  BA 00000072 R		mov		edx, OFFSET instructMess2
+ 00000078  E8 00000000 E		call	WriteString
 
- 0000005F  C7 05 0000028C R		mov		totalNums, 0	;setup totalNums
+ 0000007D  C7 05 00000357 R		mov		totalNums, 0	;setup totalNums
 	   00000000
 
- 00000069			L1:
- 00000069  FF 05 0000028C R		inc		totalNums
- 0000006F  BA 000000B6 R		mov		edx, OFFSET numberPrompt
- 00000074  E8 00000000 E		call	WriteString
- 00000079  A1 0000028C R		mov		eax, totalNums
- 0000007E  E8 00000000 E		call	WriteDec
- 00000083  BA 000000BF R		mov		edx, OFFSET	colon
- 00000088  E8 00000000 E		call	WriteString
+ 00000087			mainLoop:	;this loop is where the user enters in values until they enter in a positive integer
+ 00000087  FF 05 00000357 R		inc		totalNums
+ 0000008D  BA 000000B6 R		mov		edx, OFFSET numberPrompt
+ 00000092  E8 00000000 E		call	WriteString
+ 00000097  A1 00000357 R		mov		eax, totalNums
+ 0000009C  E8 00000000 E		call	WriteDec
+ 000000A1  BA 000000BF R		mov		edx, OFFSET	colon
+ 000000A6  E8 00000000 E		call	WriteString
 
- 0000008D  E8 00000000 E		call	ReadInt
- 00000092  A3 00000290 R		mov		userNum, eax
- 00000097  83 3D 00000290 R		cmp		userNum, LOWER_LIMIT	;if number less than -100 is entered
+ 000000AB  E8 00000000 E		call	ReadInt
+ 000000B0  A3 0000035B R		mov		userNum, eax
+ 000000B5  83 3D 0000035B R		cmp		userNum, LOWER_LIMIT	;if number less than -100 is entered
 	   9C
- 0000009E  7C 11			jl		tooSmall
- 000000A0  83 3D 00000290 R		cmp		userNum, UPPER_LIMIT	;if positive # is entered
+ 000000BC  7C 11			jl		tooSmall
+ 000000BE  83 3D 0000035B R		cmp		userNum, UPPER_LIMIT	;if positive # is entered
 	   FF
- 000000A7  7F 24			jg		finished
+ 000000C5  7F 24			jg		finished
 
- 000000A9  01 05 00000294 R		add		accumulator, eax
- 000000AF  EB B8			jmp		L1
+ 000000C7  01 05 0000035F R		add		accumulator, eax
+ 000000CD  EB B8			jmp		mainLoop
 
- 000000B1			tooSmall:
- 000000B1  BA 000000C2 R		mov		edx, OFFSET tooSmallMess
- 000000B6  E8 00000000 E		call	WriteString
- 000000BB  BA 0000004C R		mov		edx, OFFSET	instructMess1
- 000000C0  E8 00000000 E		call	WriteString
- 000000C5  FF 0D 0000028C R		dec		totalNums
- 000000CB  EB 9C			jmp		L1
+ 000000CF			tooSmall:	;this is where you end up if the number entered is lower than -100
+ 000000CF  BA 000000C2 R		mov		edx, OFFSET tooSmallMess
+ 000000D4  E8 00000000 E		call	WriteString
+ 000000D9  BA 0000004C R		mov		edx, OFFSET	instructMess1
+ 000000DE  E8 00000000 E		call	WriteString
+ 000000E3  FF 0D 00000357 R		dec		totalNums
+ 000000E9  EB 9C			jmp		mainLoop
 
- 000000CD			finished:
- 000000CD  FF 0D 0000028C R		dec		totalNums
- 000000D3  BA 000000F1 R		mov		edx, OFFSET totalNumMess1
- 000000D8  E8 00000000 E		call	WriteString
- 000000DD  A1 0000028C R		mov		eax, totalNums
- 000000E2  E8 00000000 E		call	WriteDec
- 000000E7  BA 000000FE R		mov		edx, OFFSET	totalNumMess2
- 000000EC  E8 00000000 E		call	WriteString
- 000000F1  BA 00000110 R		mov		edx, OFFSET sumMess
+ 000000EB			finished:	;this is where you end up once a non-negative number is entered
+ 000000EB  FF 0D 00000357 R		dec		totalNums
+ 000000F1  BA 000000F1 R		mov		edx, OFFSET totalNumMess1
  000000F6  E8 00000000 E		call	WriteString
- 000000FB  A1 00000294 R		mov		eax, accumulator
- 00000100  E8 00000000 E		call	WriteInt
+ 000000FB  A1 00000357 R		mov		eax, totalNums
+ 00000100  E8 00000000 E		call	WriteDec
+ 00000105  BA 000000FE R		mov		edx, OFFSET	totalNumMess2
+ 0000010A  E8 00000000 E		call	WriteString
+ 0000010F  BA 00000110 R		mov		edx, OFFSET sumMess
+ 00000114  E8 00000000 E		call	WriteString
+ 00000119  A1 0000035F R		mov		eax, accumulator
+ 0000011E  E8 00000000 E		call	WriteInt
 
-					;calculate average
- 00000105  A1 00000294 R		mov		eax, accumulator
- 0000010A  BB 000003E8			mov		ebx, 1000
- 0000010F  F7 E3			mul		ebx
- 00000111  8B 1D 0000028C R		mov		ebx, totalNums
- 00000117  99				cdq
- 00000118  F7 FB			idiv	ebx
- 0000011A  A3 00000298 R		mov		average, eax
- 0000011F  F7 DA			neg		edx
- 00000121  89 15 0000029C R		mov		remainder, edx
- 00000127  E8 00000000 E		call	CrLf
+					;calculate average with the proper math to get the right decimal value
+ 00000123  A1 0000035F R		mov		eax, accumulator
+ 00000128  BB 000003E8			mov		ebx, 1000
+ 0000012D  F7 E3			mul		ebx
+ 0000012F  8B 1D 00000357 R		mov		ebx, totalNums
+ 00000135  99				cdq
+ 00000136  F7 FB			idiv	ebx
+ 00000138  A3 00000363 R		mov		average, eax
+ 0000013D  F7 DA			neg		edx
+ 0000013F  89 15 00000367 R		mov		remainder, edx
+ 00000145  E8 00000000 E		call	CrLf
 
 					;mulitply remainder by 2
- 0000012C  A1 0000029C R		mov		eax, remainder
- 00000131  BB 00000002			mov		ebx, 2
- 00000136  F7 E3			mul		ebx
- 00000138  A3 000002A0 R		mov		doubleRem, eax
+ 0000014A  A1 00000367 R		mov		eax, remainder
+ 0000014F  BB 00000002			mov		ebx, 2
+ 00000154  F7 E3			mul		ebx
+ 00000156  A3 0000036B R		mov		doubleRem, eax
 
-					;compare doubleRem to totalNums and increment average (round up) if doubleRem is larger
- 0000013D  A1 000002A0 R		mov		eax, doubleRem
- 00000142  3B 05 0000028C R		cmp		eax, totalNums
- 00000148  7D 02			jge		decrementAverage
+					;compare doubleRem to totalNums and decrement average (round down) if doubleRem is larger
+ 0000015B  A1 0000036B R		mov		eax, doubleRem
+ 00000160  3B 05 00000357 R		cmp		eax, totalNums
+ 00000166  7D 02			jge		decrementAverage
 					
- 0000014A  EB 12			jmp		displayResult
+ 00000168  EB 0D			jmp		displayResult
 
- 0000014C			decrementAverage:
- 0000014C  A1 00000298 R		mov		eax, average
- 00000151  E8 00000000 E		call	WriteInt
- 00000156  FF 0D 00000298 R		dec		average
- 0000015C  EB 00			jmp		displayResult
+ 0000016A			decrementAverage:	;decrement average here 
+ 0000016A  A1 00000363 R		mov		eax, average
+ 0000016F  FF 0D 00000363 R		dec		average
+ 00000175  EB 00			jmp		displayResult
 
- 0000015E			displayResult:
- 0000015E  BA 00000132 R		mov		edx, OFFSET averMess
- 00000163  E8 00000000 E		call	WriteString
+ 00000177			displayResult:		;display the rounded decimal here
+ 00000177  BA 00000132 R		mov		edx, OFFSET averMess
+ 0000017C  E8 00000000 E		call	WriteString
 
- 00000168  A1 00000298 R		mov		eax, average
- 0000016D  BB 000003E8			mov		ebx, 1000
- 00000172  99				cdq
- 00000173  F7 FB			idiv	ebx	
- 00000175  E8 00000000 E		call	WriteInt
- 0000017A  8B C2			mov		eax, edx
- 0000017C  F7 D8			neg		eax
- 0000017E  BA 0000014A R		mov		edx, OFFSET dotMess
- 00000183  E8 00000000 E		call	WriteString
- 00000188  E8 00000000 E		call	WriteDec
- 0000018D  E8 00000000 E		call	CrLf
+ 00000181  A1 00000363 R		mov		eax, average
+ 00000186  BB 000003E8			mov		ebx, 1000
+ 0000018B  99				cdq
+ 0000018C  F7 FB			idiv	ebx	
+ 0000018E  E8 00000000 E		call	WriteInt
+ 00000193  8B C2			mov		eax, edx
+ 00000195  F7 D8			neg		eax
+ 00000197  BA 0000014A R		mov		edx, OFFSET dotMess
+ 0000019C  E8 00000000 E		call	WriteString
+ 000001A1  E8 00000000 E		call	WriteDec
+ 000001A6  E8 00000000 E		call	CrLf
+
+					;say goodbye
+ 000001AB  BA 0000014C R		mov		edx, OFFSET goodbyeMess
+ 000001B0  E8 00000000 E		call	WriteString
+ 000001B5  BA 00000217 R		mov		edx, OFFSET userName
+ 000001BA  E8 00000000 E		call	WriteString
+ 000001BF  E8 00000000 E		call	CrLf
+ 000001C4  E8 00000000 E		call	CrLf
 
 					exit	; exit to operating system
- 00000192  6A 00	   *	    push   +000000000h
- 00000194  E8 00000000 E   *	    call   ExitProcess
- 00000199			main ENDP
+ 000001C9  6A 00	   *	    push   +000000000h
+ 000001CB  E8 00000000 E   *	    call   ExitProcess
+ 000001D0			main ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 23:32:55
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    04/28/17 23:57:34
 /Prog01 - Elementary Arithmetic     (Prog01.asm		     Symbols 2 - 1
 
 
@@ -354,8 +408,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 000002AC Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000199 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000036F Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000001D0 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -462,13 +516,12 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000199 Public STDCALL
-  startPoint . . . . . . . . . .	L Near	 00000000 _TEXT	
-  L1 . . . . . . . . . . . . . .	L Near	 00000069 _TEXT	
-  tooSmall . . . . . . . . . . .	L Near	 000000B1 _TEXT	
-  finished . . . . . . . . . . .	L Near	 000000CD _TEXT	
-  decrementAverage . . . . . . .	L Near	 0000014C _TEXT	
-  displayResult  . . . . . . . .	L Near	 0000015E _TEXT	
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000001D0 Public STDCALL
+  mainLoop . . . . . . . . . . .	L Near	 00000087 _TEXT	
+  tooSmall . . . . . . . . . . .	L Near	 000000CF _TEXT	
+  finished . . . . . . . . . . .	L Near	 000000EB _TEXT	
+  decrementAverage . . . . . . .	L Near	 0000016A _TEXT	
+  displayResult  . . . . . . . .	L Near	 00000177 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -689,19 +742,22 @@ VK_UP  . . . . . . . . . . . . .	Number	 00000026h
 WINDOW_BUFFER_SIZE_EVENT . . . .	Number	 00000004h   
 WriteConsoleOutputCharacter  . .	Text   	 WriteConsoleOutputCharacterA
 WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
-accumulator  . . . . . . . . . .	DWord	 00000294 _DATA	
+accumulator  . . . . . . . . . .	DWord	 0000035F _DATA	
 authName . . . . . . . . . . . .	Byte	 0000001F _DATA	
 averMess . . . . . . . . . . . .	Byte	 00000132 _DATA	
-average  . . . . . . . . . . . .	DWord	 00000298 _DATA	
+average  . . . . . . . . . . . .	DWord	 00000363 _DATA	
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
 colon  . . . . . . . . . . . . .	Byte	 000000BF _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
-decNum . . . . . . . . . . . . .	DWord	 000002A8 _DATA	
 dotMess  . . . . . . . . . . . .	Byte	 0000014A _DATA	
-doubleRem  . . . . . . . . . . .	DWord	 000002A0 _DATA	
+doubleRem  . . . . . . . . . . .	DWord	 0000036B _DATA	
+ecMessage1 . . . . . . . . . . .	Byte	 00000156 _DATA	
+ecMessage2 . . . . . . . . . . .	Byte	 0000018C _DATA	
+ecMessage3 . . . . . . . . . . .	Byte	 000001FF _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
+goodbyeMess  . . . . . . . . . .	Byte	 0000014C _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
 helloMes . . . . . . . . . . . .	Byte	 00000044 _DATA	
@@ -717,17 +773,16 @@ magenta  . . . . . . . . . . . .	Number	 00000005h
 numberPrompt . . . . . . . . . .	Byte	 000000B6 _DATA	
 projName . . . . . . . . . . . .	Byte	 00000000 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
-remainder  . . . . . . . . . . .	DWord	 0000029C _DATA	
+remainder  . . . . . . . . . . .	DWord	 00000367 _DATA	
 reqNameMess  . . . . . . . . . .	Byte	 00000030 _DATA	
 sumMess  . . . . . . . . . . . .	Byte	 00000110 _DATA	
 tooSmallMess . . . . . . . . . .	Byte	 000000C2 _DATA	
 totalNumMess1  . . . . . . . . .	Byte	 000000F1 _DATA	
 totalNumMess2  . . . . . . . . .	Byte	 000000FE _DATA	
-totalNums  . . . . . . . . . . .	DWord	 0000028C _DATA	
-userName . . . . . . . . . . . .	DWord	 0000014C _DATA	
-userNum  . . . . . . . . . . . .	DWord	 00000290 _DATA	
+totalNums  . . . . . . . . . . .	DWord	 00000357 _DATA	
+userName . . . . . . . . . . . .	DWord	 00000217 _DATA	
+userNum  . . . . . . . . . . . .	DWord	 0000035B _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
-wholeNum . . . . . . . . . . . .	DWord	 000002A4 _DATA	
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
 

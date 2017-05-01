@@ -17,7 +17,7 @@ TITLE Prog01 - Elementary Arithmetic     (Prog01.asm)
 
 ;**EC#1: This program numbers the lines during input
 ;**EC#2: This program calculates and displays the average as a floating-point number, rounded to the nearest .001
-;**EC#3: This program
+;**EC#3: This program displays some ASCII art and gives a popup message thanking the user
 
 INCLUDE Irvine32.inc
 
@@ -37,10 +37,15 @@ sumMess			BYTE	"The sum of your valid numbers is ", 0
 averMess		BYTE	"The rounded average is ", 0
 dotMess			BYTE	".", 0
 goodbyeMess		BYTE	"Goodbye, ", 0
+caption			BYTE	"One more thing...", 0
+thanksMess		BYTE	"Thanks for trying my program!", 0
+art1			BYTE	"     <(o )___ ", 0dh, 0ah, 0
+art2			BYTE	"      ( ._> / ", 0dh, 0ah, 0
+art3			BYTE	"       `---'  ", 0dh, 0ah, 0
 
 ecMessage1		BYTE	"**EC#1: This program numbers the lines during input", 0dh, 0ah, 0
 ecMessage2		BYTE	"**EC#2: This program calculates and displays the average as a floating-point number, rounded to the nearest .001", 0dh, 0ah, 0
-ecMessage3		BYTE	"**EC#3: This program ", 0dh, 0ah, 0
+ecMessage3		BYTE	"**EC#3: This program displays some ASCII art and gives a popup message thanking the user", 0dh, 0ah, 0
 
 userName		DWORD	80 DUP (?)
 
@@ -187,6 +192,20 @@ displayResult:		;display the rounded decimal here
 	call	WriteString
 	call	CrLf
 	call	CrLf
+	mov		edx, OFFSET art1
+	call	WriteString
+	mov		edx, OFFSET art2
+	call	WriteString
+	mov		edx, OFFSET art3
+	call	WriteString
+	call	CrLf
+	call	CrLf
+
+	;display message box
+	call	WaitMsg	
+	mov		ebx, OFFSET	caption
+	mov		edx, OFFSET thanksMess
+	call	MsgBox
 
 	exit	; exit to operating system
 main ENDP

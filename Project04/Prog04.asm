@@ -22,12 +22,23 @@ intro01		BYTE	"Enter the number of composite numbers you would like to see.",0dh
 intro02		BYTE	"I'll accept orders for up to 400 composites.",0dh,0ah,0
 prompt01	BYTE	"Enter the number of composites to display [1 .. 400]: ", 0
 errorMess	BYTE	"Out of range. Try again.", 0dh, 0ah, 0
+validNum	BYTE	"Valid number entered!", 0dh, 0ah, 0
 
+UPPERLIMIT = 400
+LOWERLIMIT = 1
 
 .code
 main PROC
 
-;Display program title & instructions
+	call introduction
+	call getUserData
+
+	exit
+main ENDP
+
+introduction PROC
+
+	;Display program title & instructions
 	mov		edx, OFFSET titleMess
 	call	WriteString	
 	mov		edx, OFFSET intro01
@@ -36,14 +47,35 @@ main PROC
 	call	WriteString
 	call	CrLf
 
-;Get number
+introduction ENDP
+
+getUserData	PROC
+
+	;Get number
 	mov		edx, OFFSET prompt01
 	call	WriteString
 	call	ReadInt
 	mov		userNum, eax
+	call	validate
+	mov		edx, OFFSET validNum
 
+getUserData ENDP
 
-	exit	; exit to operating system
-main ENDP
+validate PROC
+
+	validateLoop:
+	mov		eax, userNum
+	cmp		eax, UPPERLIMIT
+	jg		invalid
+	cmp		eax, LOWERLIMIT
+	jl		invalid
+	ret
+
+	invalid:
+	mov		edx, OFFSET errorMess
+	call	writeString
+	jmp		validateLoop
+
+validate ENDP
 
 END main

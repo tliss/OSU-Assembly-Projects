@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/09/17 09:42:54
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/10/17 16:31:11
 +Prog04 - Composite Numbers     (Prog04.asm		     Page 1 - 1
 
 
@@ -88,34 +88,70 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/09/17 09:42:54
 	   72 79 20 61 67
 	   61 69 6E 2E 0D
 	   0A 00
+ 000000F3 56 61 6C 69 64	validNum	BYTE	"Valid number entered!", 0dh, 0ah, 0
+	   20 6E 75 6D 62
+	   65 72 20 65 6E
+	   74 65 72 65 64
+	   21 0D 0A 00
 
+ = 00000190			UPPERLIMIT = 400
+ = 00000001			LOWERLIMIT = 1
 
  00000000			.code
  00000000			main PROC
 
-				;Display program title & instructions
- 00000000  BA 00000004 R		mov		edx, OFFSET titleMess
- 00000005  E8 00000000 E		call	WriteString	
- 0000000A  BA 00000033 R		mov		edx, OFFSET intro01
- 0000000F  E8 00000000 E		call	WriteString
- 00000014  BA 00000072 R		mov		edx, OFFSET intro02
- 00000019  E8 00000000 E		call	WriteString
- 0000001E  E8 00000000 E		call	CrLf
+ 00000000  E8 0000000C			call introduction
+ 00000005  E8 0000002A			call getUserData
 
-				;Get number
- 00000023  BA 000000A1 R		mov		edx, OFFSET prompt01
- 00000028  E8 00000000 E		call	WriteString
- 0000002D  E8 00000000 E		call	ReadInt
- 00000032  A3 00000000 R		mov		userNum, eax
+					exit
+ 0000000A  6A 00	   *	    push   +000000000h
+ 0000000C  E8 00000000 E   *	    call   ExitProcess
+ 00000011			main ENDP
 
+ 00000011			introduction PROC
 
-					exit	; exit to operating system
- 00000037  6A 00	   *	    push   +000000000h
- 00000039  E8 00000000 E   *	    call   ExitProcess
- 0000003E			main ENDP
+					;Display program title & instructions
+ 00000011  BA 00000004 R		mov		edx, OFFSET titleMess
+ 00000016  E8 00000000 E		call	WriteString	
+ 0000001B  BA 00000033 R		mov		edx, OFFSET intro01
+ 00000020  E8 00000000 E		call	WriteString
+ 00000025  BA 00000072 R		mov		edx, OFFSET intro02
+ 0000002A  E8 00000000 E		call	WriteString
+ 0000002F  E8 00000000 E		call	CrLf
+
+ 00000034			introduction ENDP
+
+ 00000034			getUserData	PROC
+
+					;Get number
+ 00000034  BA 000000A1 R		mov		edx, OFFSET prompt01
+ 00000039  E8 00000000 E		call	WriteString
+ 0000003E  E8 00000000 E		call	ReadInt
+ 00000043  A3 00000000 R		mov		userNum, eax
+ 00000048  E8 00000005			call	validate
+ 0000004D  BA 000000F3 R		mov		edx, OFFSET validNum
+
+ 00000052			getUserData ENDP
+
+ 00000052			validate PROC
+
+ 00000052				validateLoop:
+ 00000052  A1 00000000 R		mov		eax, userNum
+ 00000057  3D 00000190			cmp		eax, UPPERLIMIT
+ 0000005C  7F 06			jg		invalid
+ 0000005E  83 F8 01			cmp		eax, LOWERLIMIT
+ 00000061  7C 01			jl		invalid
+ 00000063  C3				ret
+
+ 00000064				invalid:
+ 00000064  BA 000000D8 R		mov		edx, OFFSET errorMess
+ 00000069  E8 00000000 E		call	writeString
+ 0000006E  EB E2			jmp		validateLoop
+
+ 00000070			validate ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/09/17 09:42:54
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/10/17 16:31:11
 +Prog04 - Composite Numbers     (Prog04.asm		     Symbols 2 - 1
 
 
@@ -209,8 +245,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 000000F3 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000003E Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000010B Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000070 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -317,9 +353,14 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000003E Public STDCALL
+getUserData  . . . . . . . . . .	P Near	 00000034 _TEXT	Length= 0000001E Public STDCALL
+introduction . . . . . . . . . .	P Near	 00000011 _TEXT	Length= 00000023 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000011 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
+validate . . . . . . . . . . . .	P Near	 00000052 _TEXT	Length= 0000001E Public STDCALL
+  validateLoop . . . . . . . . .	L Near	 00000052 _TEXT	
+  invalid  . . . . . . . . . . .	L Near	 00000064 _TEXT	
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -409,6 +450,7 @@ KEY_EVENT  . . . . . . . . . . .	Number	 00000001h
 KEY_MASKS  . . . . . . . . . . .	Number	 0000001Fh   
 LEFT_ALT_PRESSED . . . . . . . .	Number	 00000002h   
 LEFT_CTRL_PRESSED  . . . . . . .	Number	 00000008h   
+LOWERLIMIT . . . . . . . . . . .	Number	 00000001h   
 MB_ABORTRETRYIGNORE  . . . . . .	Number	 00000002h   
 MB_APPLMODAL . . . . . . . . . .	Number	 00000000h   
 MB_CANCELTRYCONTINUE . . . . . .	Number	 00000006h   
@@ -455,6 +497,7 @@ SetConsoleTitle  . . . . . . . .	Text   	 SetConsoleTitleA
 TAB  . . . . . . . . . . . . . .	Number	 00000009h   
 TRUE . . . . . . . . . . . . . .	Number	 00000001h   
 TRUNCATE_EXISTING  . . . . . . .	Number	 00000005h   
+UPPERLIMIT . . . . . . . . . . .	Number	 00000190h   
 VK_11  . . . . . . . . . . . . .	Number	 000000BDh   
 VK_12  . . . . . . . . . . . . .	Number	 000000BBh   
 VK_ADD . . . . . . . . . . . . .	Number	 0000006Bh   
@@ -557,6 +600,7 @@ prompt01 . . . . . . . . . . . .	Byte	 000000A1 _DATA
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 titleMess  . . . . . . . . . . .	Byte	 00000004 _DATA	
 userNum  . . . . . . . . . . . .	DWord	 00000000 _DATA	
+validNum . . . . . . . . . . . .	Byte	 000000F3 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   

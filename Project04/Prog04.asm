@@ -16,6 +16,8 @@ INCLUDE Irvine32.inc
 
 .data
 userNum		DWORD	?	;number as entered by the user
+currentNum	DWORD	?	;number currently being test to see if it is a composite number
+testNum		DWORD	?	;number being tested against
 
 titleMess	BYTE	"		Prog04 - Composite Numbers		by Taylor Liss", 0dh, 0ah, 0
 intro01		BYTE	"Enter the number of composite numbers you would like to see.",0dh,0ah,0
@@ -32,6 +34,7 @@ main PROC
 
 	call introduction
 	call getUserData
+	call showComposites
 
 	exit
 main ENDP
@@ -46,6 +49,7 @@ introduction PROC
 	mov		edx, OFFSET intro02
 	call	WriteString
 	call	CrLf
+	ret
 
 introduction ENDP
 
@@ -58,12 +62,12 @@ getUserData	PROC
 	mov		userNum, eax
 	call	validate
 	mov		edx, OFFSET validNum
+	call	WriteString
 
 getUserData ENDP
 
 validate PROC
 
-	validateLoop:
 	mov		eax, userNum
 	cmp		eax, UPPERLIMIT
 	jg		invalid
@@ -74,8 +78,39 @@ validate PROC
 	invalid:
 	mov		edx, OFFSET errorMess
 	call	writeString
-	jmp		validateLoop
+	jmp		getUserData
 
 validate ENDP
+
+showComposites	PROC
+
+	mov		ecx, userNum
+	mov		currentNum, 1	
+	L1:	;for every number below userNumber...
+	inc		currentNum
+	mov		testNum, 1
+	jmp		L2
+	doneDiv:
+	loop	L1
+
+	L2: ;for every number below the current number
+	inc		testNum
+	mov		eax, testNum
+	cmp		eax, currentNum
+	je		doneDiv
+	cdq
+	div		currentNum
+	cmp		edx, 0
+	jz		noRemainder
+	jmp		L2
+
+	noRemainder:
+	call	WriteDec
+	jmp		L2
+
+	finished:
+	exit
+
+showComposites	ENDP
 
 END main

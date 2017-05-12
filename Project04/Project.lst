@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 20:29:36
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 21:49:16
 +Prog04 - Composite Numbers     (Prog04.asm		     Page 1 - 1
 
 
@@ -39,8 +39,9 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 20:29:36
  00000000 00000000		userNum		DWORD	?	;number as entered by the user
  00000004 00000000		currentNum	DWORD	?	;number currently being test to see if it is a composite number
  00000008 00000000		testNum		DWORD	?	;number being tested against
+ 0000000C 00000000		numCounter	DWORD	0	;used for counting how many numbers have been outputted (for formatting)
 
- 0000000C 09 09 50 72 6F	titleMess	BYTE	"		Prog04 - Composite Numbers		by Taylor Liss", 0dh, 0ah, 0
+ 00000010 09 09 50 72 6F	titleMess	BYTE	"		Prog04 - Composite Numbers		by Taylor Liss", 0dh, 0ah, 0
 	   67 30 34 20 2D
 	   20 43 6F 6D 70
 	   6F 73 69 74 65
@@ -50,7 +51,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 20:29:36
 	   79 6C 6F 72 20
 	   4C 69 73 73 0D
 	   0A 00
- 0000003B 45 6E 74 65 72	intro01		BYTE	"Enter the number of composite numbers you would like to see.",0dh,0ah,0
+ 0000003F 45 6E 74 65 72	intro01		BYTE	"Enter the number of composite numbers you would like to see.",0dh,0ah,0
 	   20 74 68 65 20
 	   6E 75 6D 62 65
 	   72 20 6F 66 20
@@ -63,7 +64,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 20:29:36
 	   6B 65 20 74 6F
 	   20 73 65 65 2E
 	   0D 0A 00
- 0000007A 49 27 6C 6C 20	intro02		BYTE	"I'll accept orders for up to 400 composites.",0dh,0ah,0
+ 0000007E 49 27 6C 6C 20	intro02		BYTE	"I'll accept orders for up to 400 composites.",0dh,0ah,0
 	   61 63 63 65 70
 	   74 20 6F 72 64
 	   65 72 73 20 66
@@ -73,7 +74,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 20:29:36
 	   6D 70 6F 73 69
 	   74 65 73 2E 0D
 	   0A 00
- 000000A9 45 6E 74 65 72	prompt01	BYTE	"Enter the number of composites to display [1 .. 400]: ", 0
+ 000000AD 45 6E 74 65 72	prompt01	BYTE	"Enter the number of composites to display [1 .. 400]: ", 0
 	   20 74 68 65 20
 	   6E 75 6D 62 65
 	   72 20 6F 66 20
@@ -84,17 +85,23 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 20:29:36
 	   79 20 5B 31 20
 	   2E 2E 20 34 30
 	   30 5D 3A 20 00
- 000000E0 4F 75 74 20 6F	errorMess	BYTE	"Out of range. Try again.", 0dh, 0ah, 0
+ 000000E4 4F 75 74 20 6F	errorMess	BYTE	"Out of range. Try again.", 0dh, 0ah, 0
 	   66 20 72 61 6E
 	   67 65 2E 20 54
 	   72 79 20 61 67
 	   61 69 6E 2E 0D
 	   0A 00
- 000000FB 56 61 6C 69 64	validNum	BYTE	"Valid number entered!", 0dh, 0ah, 0
-	   20 6E 75 6D 62
-	   65 72 20 65 6E
-	   74 65 72 65 64
-	   21 0D 0A 00
+ 000000FF 52 65 73 75 6C	goodbye		BYTE	"Results certified by Taylor Liss. Goodbye.", 0dh, 0ah, 0
+	   74 73 20 63 65
+	   72 74 69 66 69
+	   65 64 20 62 79
+	   20 54 61 79 6C
+	   6F 72 20 4C 69
+	   73 73 2E 20 47
+	   6F 6F 64 62 79
+	   65 2E 0D 0A 00
+ 0000012C 20 00			oneSpace	BYTE	" ", 0
+ 0000012E 20 20 00		twoSpaces	BYTE	"  ", 0
 
  = 00000190			UPPERLIMIT = 400
  = 00000001			LOWERLIMIT = 1
@@ -104,7 +111,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 20:29:36
 
  00000000  E8 00000011			call introduction
  00000005  E8 00000030			call getUserData
- 0000000A  E8 0000006C			call showComposites
+ 0000000A  E8 00000062			call showComposites
 
 					exit
  0000000F  6A 00	   *	    push   +000000000h
@@ -114,11 +121,11 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 20:29:36
  00000016			introduction PROC
 
 					;Display program title & instructions
- 00000016  BA 0000000C R		mov		edx, OFFSET titleMess
+ 00000016  BA 00000010 R		mov		edx, OFFSET titleMess
  0000001B  E8 00000000 E		call	WriteString	
- 00000020  BA 0000003B R		mov		edx, OFFSET intro01
+ 00000020  BA 0000003F R		mov		edx, OFFSET intro01
  00000025  E8 00000000 E		call	WriteString
- 0000002A  BA 0000007A R		mov		edx, OFFSET intro02
+ 0000002A  BA 0000007E R		mov		edx, OFFSET intro02
  0000002F  E8 00000000 E		call	WriteString
  00000034  E8 00000000 E		call	CrLf
  00000039  C3				ret
@@ -128,69 +135,83 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 20:29:36
  0000003A			getUserData	PROC
 
 					;Get number
- 0000003A  BA 000000A9 R		mov		edx, OFFSET prompt01
+ 0000003A  BA 000000AD R		mov		edx, OFFSET prompt01
  0000003F  E8 00000000 E		call	WriteString
  00000044  E8 00000000 E		call	ReadInt
  00000049  A3 00000000 R		mov		userNum, eax
- 0000004E  E8 0000000A			call	validate
- 00000053  BA 000000FB R		mov		edx, OFFSET validNum
- 00000058  E8 00000000 E		call	WriteString
+ 0000004E  E8 00000000			call	validate
 
- 0000005D			getUserData ENDP
+ 00000053			getUserData ENDP
 
- 0000005D			validate PROC
+ 00000053			validate PROC
 
- 0000005D  A1 00000000 R		mov		eax, userNum
- 00000062  3D 00000190			cmp		eax, UPPERLIMIT
- 00000067  7F 06			jg		invalid
- 00000069  83 F8 01			cmp		eax, LOWERLIMIT
- 0000006C  7C 01			jl		invalid
- 0000006E  C3				ret
+ 00000053  A1 00000000 R		mov		eax, userNum
+ 00000058  3D 00000190			cmp		eax, UPPERLIMIT
+ 0000005D  7F 06			jg		invalid
+ 0000005F  83 F8 01			cmp		eax, LOWERLIMIT
+ 00000062  7C 01			jl		invalid
+ 00000064  C3				ret
 
- 0000006F				invalid:
- 0000006F  BA 000000E0 R		mov		edx, OFFSET errorMess
- 00000074  E8 00000000 E		call	writeString
- 00000079  EB BF			jmp		getUserData
+ 00000065				invalid:
+ 00000065  BA 000000E4 R		mov		edx, OFFSET errorMess
+ 0000006A  E8 00000000 E		call	writeString
+ 0000006F  EB C9			jmp		getUserData
 
- 0000007B			validate ENDP
+ 00000071			validate ENDP
 
- 0000007B			showComposites	PROC
+ 00000071			showComposites	PROC
 
- 0000007B  8B 0D 00000000 R		mov		ecx, userNum
- 00000081  C7 05 00000004 R		mov		currentNum, 1	
+ 00000071  8B 0D 00000000 R		mov		ecx, userNum
+ 00000077  C7 05 00000004 R		mov		currentNum, 1	
 	   00000001
- 0000008B				L1:	;start testing numbers
- 0000008B  FF 05 00000004 R		inc		currentNum
- 00000091  C7 05 00000008 R		mov		testNum, 1
+ 00000081				L1:	;start testing numbers
+ 00000081  FF 05 00000004 R		inc		currentNum
+ 00000087  C7 05 00000008 R		mov		testNum, 1
 	   00000001
- 0000009B  EB 00			jmp		L2
+ 00000091  EB 00			jmp		L2
 
- 0000009D				L2: ;for every number below the current number
- 0000009D  FF 05 00000008 R		inc		testNum
- 000000A3  BA 00000000			mov		edx, 0
- 000000A8  A1 00000004 R		mov		eax, currentNum
- 000000AD  3B 05 00000008 R		cmp		eax, testNum
- 000000B3  74 D6			je		L1
- 000000B5  99				cdq
- 000000B6  F7 35 00000008 R		div		testNum
- 000000BC  83 FA 00			cmp		edx, 0
- 000000BF  74 02			je		noRemainder
- 000000C1  EB DA			jmp		L2
+ 00000093				L2: ;for every number below the current number
+ 00000093  FF 05 00000008 R		inc		testNum
+ 00000099  BA 00000000			mov		edx, 0
+ 0000009E  A1 00000004 R		mov		eax, currentNum
+ 000000A3  3B 05 00000008 R		cmp		eax, testNum
+ 000000A9  74 D6			je		L1
+ 000000AB  99				cdq
+ 000000AC  F7 35 00000008 R		div		testNum
+ 000000B2  83 FA 00			cmp		edx, 0
+ 000000B5  74 02			je		isComposite
+ 000000B7  EB DA			jmp		L2
 
- 000000C3				noRemainder:
- 000000C3  A1 00000004 R		mov		eax, currentNum
- 000000C8  E8 00000000 E		call	WriteDec
- 000000CD  E8 00000000 E		call	CrLf
- 000000D2  E2 B7			loop	L1
+ 000000B9				isComposite:
+ 000000B9  A1 00000004 R		mov		eax, currentNum
+ 000000BE  E8 00000000 E		call	WriteDec
+ 000000C3  BA 0000012C R		mov		edx, OFFSET oneSpace
+ 000000C8  E8 00000000 E		call	WriteString
+ 000000CD  FF 05 0000000C R		inc		numCounter
+ 000000D3  83 3D 0000000C R		cmp		numCounter, 10
+	   0A
+ 000000DA  74 1D			je		newLine
+ 000000DC				continue:
+ 000000DC  E2 A3			loop	L1
 
+ 000000DE  BA 000000FF R		mov		edx, OFFSET goodbye
+ 000000E3  E8 00000000 E		call	CrLf
+ 000000E8  E8 00000000 E		call	WriteString
+ 000000ED  E8 00000000 E		call	CrLf
 					exit
- 000000D4  6A 00	   *	    push   +000000000h
- 000000D6  E8 00000000 E   *	    call   ExitProcess
+ 000000F2  6A 00	   *	    push   +000000000h
+ 000000F4  E8 00000000 E   *	    call   ExitProcess
 
- 000000DB			showComposites	ENDP
+ 000000F9				newLine:
+ 000000F9  E8 00000000 E		call	CrLf
+ 000000FE  C7 05 0000000C R		mov		numCounter, 0
+	   00000000
+ 00000108  EB D2			jmp		continue
+
+ 0000010A			showComposites	ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 20:29:36
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 21:49:16
 +Prog04 - Composite Numbers     (Prog04.asm		     Symbols 2 - 1
 
 
@@ -284,8 +305,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000113 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000DB Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000131 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000010A Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -392,17 +413,19 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-getUserData  . . . . . . . . . .	P Near	 0000003A _TEXT	Length= 00000023 Public STDCALL
+getUserData  . . . . . . . . . .	P Near	 0000003A _TEXT	Length= 00000019 Public STDCALL
 introduction . . . . . . . . . .	P Near	 00000016 _TEXT	Length= 00000024 Public STDCALL
 main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000016 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-showComposites . . . . . . . . .	P Near	 0000007B _TEXT	Length= 00000060 Public STDCALL
-  L1 . . . . . . . . . . . . . .	L Near	 0000008B _TEXT	
-  L2 . . . . . . . . . . . . . .	L Near	 0000009D _TEXT	
-  noRemainder  . . . . . . . . .	L Near	 000000C3 _TEXT	
-validate . . . . . . . . . . . .	P Near	 0000005D _TEXT	Length= 0000001E Public STDCALL
-  invalid  . . . . . . . . . . .	L Near	 0000006F _TEXT	
+showComposites . . . . . . . . .	P Near	 00000071 _TEXT	Length= 00000099 Public STDCALL
+  L1 . . . . . . . . . . . . . .	L Near	 00000081 _TEXT	
+  L2 . . . . . . . . . . . . . .	L Near	 00000093 _TEXT	
+  isComposite  . . . . . . . . .	L Near	 000000B9 _TEXT	
+  continue . . . . . . . . . . .	L Near	 000000DC _TEXT	
+  newLine  . . . . . . . . . . .	L Near	 000000F9 _TEXT	
+validate . . . . . . . . . . . .	P Near	 00000053 _TEXT	Length= 0000001E Public STDCALL
+  invalid  . . . . . . . . . . .	L Near	 00000065 _TEXT	
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -626,12 +649,13 @@ blue . . . . . . . . . . . . . .	Number	 00000001h
 brown  . . . . . . . . . . . . .	Number	 00000006h   
 currentNum . . . . . . . . . . .	DWord	 00000004 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
-errorMess  . . . . . . . . . . .	Byte	 000000E0 _DATA	
+errorMess  . . . . . . . . . . .	Byte	 000000E4 _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
+goodbye  . . . . . . . . . . . .	Byte	 000000FF _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
-intro01  . . . . . . . . . . . .	Byte	 0000003B _DATA	
-intro02  . . . . . . . . . . . .	Byte	 0000007A _DATA	
+intro01  . . . . . . . . . . . .	Byte	 0000003F _DATA	
+intro02  . . . . . . . . . . . .	Byte	 0000007E _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -639,12 +663,14 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-prompt01 . . . . . . . . . . . .	Byte	 000000A9 _DATA	
+numCounter . . . . . . . . . . .	DWord	 0000000C _DATA	
+oneSpace . . . . . . . . . . . .	Byte	 0000012C _DATA	
+prompt01 . . . . . . . . . . . .	Byte	 000000AD _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 testNum  . . . . . . . . . . . .	DWord	 00000008 _DATA	
-titleMess  . . . . . . . . . . .	Byte	 0000000C _DATA	
+titleMess  . . . . . . . . . . .	Byte	 00000010 _DATA	
+twoSpaces  . . . . . . . . . . .	Byte	 0000012E _DATA	
 userNum  . . . . . . . . . . . .	DWord	 00000000 _DATA	
-validNum . . . . . . . . . . . .	Byte	 000000FB _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   

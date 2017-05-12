@@ -86,29 +86,29 @@ showComposites	PROC
 
 	mov		ecx, userNum
 	mov		currentNum, 1	
-	L1:	;for every number below userNumber...
+	L1:	;start testing numbers
 	inc		currentNum
 	mov		testNum, 1
 	jmp		L2
-	doneDiv:
-	loop	L1
 
 	L2: ;for every number below the current number
 	inc		testNum
-	mov		eax, testNum
-	cmp		eax, currentNum
-	je		doneDiv
+	mov		edx, 0
+	mov		eax, currentNum
+	cmp		eax, testNum
+	je		L1
 	cdq
-	div		currentNum
+	div		testNum
 	cmp		edx, 0
-	jz		noRemainder
+	je		noRemainder
 	jmp		L2
 
 	noRemainder:
+	mov		eax, currentNum
 	call	WriteDec
-	jmp		L2
+	call	CrLf
+	loop	L1
 
-	finished:
 	exit
 
 showComposites	ENDP

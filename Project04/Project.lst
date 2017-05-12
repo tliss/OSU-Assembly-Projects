@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 00:54:09
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 20:29:36
 +Prog04 - Composite Numbers     (Prog04.asm		     Page 1 - 1
 
 
@@ -159,38 +159,38 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 00:54:09
  0000007B  8B 0D 00000000 R		mov		ecx, userNum
  00000081  C7 05 00000004 R		mov		currentNum, 1	
 	   00000001
- 0000008B				L1:	;for every number below userNumber...
+ 0000008B				L1:	;start testing numbers
  0000008B  FF 05 00000004 R		inc		currentNum
  00000091  C7 05 00000008 R		mov		testNum, 1
 	   00000001
- 0000009B  EB 02			jmp		L2
- 0000009D				doneDiv:
- 0000009D  E2 EC			loop	L1
+ 0000009B  EB 00			jmp		L2
 
- 0000009F				L2: ;for every number below the current number
- 0000009F  FF 05 00000008 R		inc		testNum
- 000000A5  A1 00000004 R		mov		eax, currentNum
- 000000AA  3B 05 00000008 R		cmp		eax, testNum
- 000000B0  74 EB			je		doneDiv
- 000000B2  99				cdq
- 000000B3  F7 35 00000008 R		div		testNum
- 000000B9  83 FA 00			cmp		edx, 0
- 000000BC  74 02			jz		noRemainder
- 000000BE  EB DF			jmp		L2
+ 0000009D				L2: ;for every number below the current number
+ 0000009D  FF 05 00000008 R		inc		testNum
+ 000000A3  BA 00000000			mov		edx, 0
+ 000000A8  A1 00000004 R		mov		eax, currentNum
+ 000000AD  3B 05 00000008 R		cmp		eax, testNum
+ 000000B3  74 D6			je		L1
+ 000000B5  99				cdq
+ 000000B6  F7 35 00000008 R		div		testNum
+ 000000BC  83 FA 00			cmp		edx, 0
+ 000000BF  74 02			je		noRemainder
+ 000000C1  EB DA			jmp		L2
 
- 000000C0				noRemainder:
- 000000C0  E8 00000000 E		call	WriteDec
- 000000C5  EB D8			jmp		L2
+ 000000C3				noRemainder:
+ 000000C3  A1 00000004 R		mov		eax, currentNum
+ 000000C8  E8 00000000 E		call	WriteDec
+ 000000CD  E8 00000000 E		call	CrLf
+ 000000D2  E2 B7			loop	L1
 
- 000000C7				finished:
 					exit
- 000000C7  6A 00	   *	    push   +000000000h
- 000000C9  E8 00000000 E   *	    call   ExitProcess
+ 000000D4  6A 00	   *	    push   +000000000h
+ 000000D6  E8 00000000 E   *	    call   ExitProcess
 
- 000000CE			showComposites	ENDP
+ 000000DB			showComposites	ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 00:54:09
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/11/17 20:29:36
 +Prog04 - Composite Numbers     (Prog04.asm		     Symbols 2 - 1
 
 
@@ -285,7 +285,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 00000113 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000CE Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000DB Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -397,12 +397,10 @@ introduction . . . . . . . . . .	P Near	 00000016 _TEXT	Length= 00000024 Public 
 main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000016 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-showComposites . . . . . . . . .	P Near	 0000007B _TEXT	Length= 00000053 Public STDCALL
+showComposites . . . . . . . . .	P Near	 0000007B _TEXT	Length= 00000060 Public STDCALL
   L1 . . . . . . . . . . . . . .	L Near	 0000008B _TEXT	
-  doneDiv  . . . . . . . . . . .	L Near	 0000009D _TEXT	
-  L2 . . . . . . . . . . . . . .	L Near	 0000009F _TEXT	
-  noRemainder  . . . . . . . . .	L Near	 000000C0 _TEXT	
-  finished . . . . . . . . . . .	L Near	 000000C7 _TEXT	
+  L2 . . . . . . . . . . . . . .	L Near	 0000009D _TEXT	
+  noRemainder  . . . . . . . . .	L Near	 000000C3 _TEXT	
 validate . . . . . . . . . . . .	P Near	 0000005D _TEXT	Length= 0000001E Public STDCALL
   invalid  . . . . . . . . . . .	L Near	 0000006F _TEXT	
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C

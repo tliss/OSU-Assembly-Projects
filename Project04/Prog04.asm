@@ -8,9 +8,9 @@ TITLE Prog04 - Composite Numbers     (Prog04.asm)
 ; Date: 5/14/2017
 ; Description: This program calculates composite numbers.
 ;   A user enters in the number of composite numbers to
-;   be displayed and the program calculates and siplays 
+;   be displayed and the program calculates and displays 
 ;	all of the composite numbers up to and including the 
-;	nth composite.
+;	nth composite, spaced into columns.
 
 INCLUDE Irvine32.inc
 
@@ -26,8 +26,9 @@ intro02		BYTE	"I'll accept orders for up to 400 composites.",0dh,0ah,0
 prompt01	BYTE	"Enter the number of composites to display [1 .. 400]: ", 0
 errorMess	BYTE	"Out of range. Try again.", 0dh, 0ah, 0
 goodbye		BYTE	"Results certified by Taylor Liss. Goodbye.", 0dh, 0ah, 0
+extraCred1	BYTE	"**EC 1: This program displays the output in columns.", 0dh, 0ah, 0
 
-UPPERLIMIT = 400
+UPPERLIMIT = 1000
 LOWERLIMIT = 1
 
 ;**EC 1: The following strings are used to display the numbers in aligned columns
@@ -46,23 +47,41 @@ main PROC
 
 main ENDP
 
+;----------------------------------------
+;This procedure displays the introduction
+;message and the extra credit qualified for
+;Receives: N/A
+;Returns: N/A
+;Preconditions: N/A
+;Registers changed: edx
+;---------------------------------------
 introduction PROC
 
-	;Display program title & instructions
 	mov		edx, OFFSET titleMess
 	call	WriteString	
+	mov		edx, OFFSET extraCred1
+	call	WriteString
 	mov		edx, OFFSET intro01
 	call	WriteString
 	mov		edx, OFFSET intro02
 	call	WriteString
+
 	call	CrLf
 	ret
 
 introduction ENDP
 
+;----------------------------------------
+;This procedure gets the number of component
+;numbers to display and validates the user
+;input through the validate procedure
+;Receives: N/A
+;Returns: value to userNum
+;Preconditions: N/A
+;Registers changed: eax, edx
+;---------------------------------------
 getUserData	PROC
 
-	;Get number
 	mov		edx, OFFSET prompt01
 	call	WriteString
 	call	ReadInt
@@ -71,6 +90,14 @@ getUserData	PROC
 
 getUserData ENDP
 
+;----------------------------------------
+;This procedure validates that userNum
+;is between lower and uper limit
+;Receives: N/A
+;Returns: value to userNum
+;Preconditions: a number in userNum
+;Registers changed: eax, edx
+;---------------------------------------
 validate PROC
 
 	mov		eax, userNum
@@ -87,10 +114,20 @@ validate PROC
 
 validate ENDP
 
+;----------------------------------------
+;This procedure displays a number of composites
+;equal to userNum. It finds out if a number is
+;a composite through the isComposite subroutine
+;Receives: N/A
+;Returns: composites to the console
+;Preconditions: number in userNum
+;Registers changed: eax, ecx, edx, currentNum, testNum, numCounter
+;---------------------------------------
 showComposites	PROC
 
 	mov		ecx, userNum
-	mov		currentNum, 1	
+	mov		currentNum, 1
+
 	L1:	;start testing numbers
 	inc		currentNum
 	mov		testNum, 1
@@ -104,25 +141,14 @@ showComposites	PROC
 	je		continue
 	cdq
 	div		testNum
+
 	cmp		edx, 0
-	je		isComposite
+	call	isComposite
+
+	cmp		ecx, 0
+	je		finishLoop
+
 	jmp		L2
-	ret
-
-	isComposite:
-	dec		ecx
-	mov		eax, currentNum
-	call	WriteDec
-	inc		numCounter
-
-	cmp		eax, 10
-	jl		addThreeSpace
-
-	cmp		eax, 100
-	jl		addTwoSpace
-
-	cmp		eax, 1000
-	jl		addOneSpace
 
 	continue:
 	cmp		ecx, 0
@@ -132,35 +158,75 @@ showComposites	PROC
 	finishLoop:
 	ret
 
-	addThreeSpace:
+	;----------------------------------------
+	;This procedure displays actually writes the
+	;composite numbers to the screen and spaces
+	;them correctly into columns.
+	;Receives: N/A
+	;Returns: composites to the console with spaces
+	;Preconditions: integers in currentNum
+	;Registers changed: ecx, eax, numCounter
+	;---------------------------------------
+	isComposite	PROC
+
+		dec		ecx
+		mov		eax, currentNum
+		call	WriteDec
+		inc		numCounter
+
+		cmp		eax, 10
+		jl		addThreeSpace
+
+		cmp		eax, 100
+		jl		addTwoSpace
+
+		cmp		eax, 1000
+		jl		addOneSpace
+
+		addThreeSpace:
 		mov		edx, OFFSET space3
 		call	WriteString
 		cmp		numCounter, 10
 		je		newLine
 		jmp		continue
 
-	addTwoSpace:
+		addTwoSpace:
 		mov		edx, OFFSET space2
 		call	WriteString
 		cmp		numCounter, 10
 		je		newLine
 		jmp		continue
 
-	addOneSpace:
+		addOneSpace:
 		mov		edx, OFFSET space1
 		call	WriteString
 		cmp		numCounter, 10
 		je		newLine
 		jmp		continue
 
-	newLine:
-	call	CrLf
-	mov		numCounter, 0
-	jmp		continue
+		newLine:
+		call	CrLf
+		mov		numCounter, 0
+		jmp		continue
+
+		continue:
+		inc		currentNum
+		mov		testNum, 1
+		ret
+
+	isComposite ENDP
 
 showComposites	ENDP
 
+;----------------------------------------
+;This procedure displays a farwell greeting.
+;Receives: N/A
+;Returns: farewell to console
+;Preconditions: N/A
+;Registers changed: edx
+;---------------------------------------
 farewell PROC
+	call	CrLf
 	mov		edx, OFFSET goodbye
 	call	CrLf
 	call	WriteString

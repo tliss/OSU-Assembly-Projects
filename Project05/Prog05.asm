@@ -25,17 +25,24 @@ errorMess	BYTE	"Invalid input", 0dh, 0ah, 0
 
 MAX = 200
 MIN = 10
-HIGH = 999
-LO = 100
+
 
 .code
 main PROC
 
 	call Randomize
 
+	push OFFSET intro01
+	push OFFSET intro02
+	push OFFSET intro03
 	call introduction
+
+	push userNum
+	push OFFSET prompt01
+	push OFFSET errorMess
 	call getData
-	call showComposites
+
+	;call showComposites
 	exit
 
 main ENDP
@@ -49,17 +56,20 @@ main ENDP
 ;---------------------------------------
 introduction PROC
 
-	mov		edx, OFFSET titleMess
-	call	WriteString	
-	mov		edx, OFFSET intro01
+	push	ebp
+	mov		ebp, esp
+
+	mov		edx, [ebp+16]
 	call	WriteString
-	mov		edx, OFFSET intro02
-	call	WriteString
-	mov		edx, OFFSET intro03
+		
+	mov		edx, [ebp+12]
 	call	WriteString
 
-	call	CrLf
-	ret
+	mov		edx, [ebp+8]
+	call	WriteString
+
+	pop		ebp
+	ret		12		;offset of a word is 4 bits * 3 = 12
 
 introduction ENDP
 
@@ -72,36 +82,28 @@ introduction ENDP
 ;---------------------------------------
 getData	PROC
 
-	mov		edx, OFFSET prompt01
+	push	ebp
+	mov		ebp, esp
+
+	retrieveNum:
+
+	mov		edx, [ebp+12]
 	call	WriteString
+
 	call	ReadInt
-	mov		userNum, eax
-	call	validate
-
-getData ENDP
-
-;----------------------------------------
-;
-;Receives:
-;Returns:
-;Preconditions:
-;Registers changed:
-;---------------------------------------
-validate PROC
-
-	mov		eax, userNum
 	cmp		eax, MAX
 	jg		invalid
 	cmp		eax, MIN
 	jl		invalid
-	ret
+
+	ret		16
 
 	invalid:
-	mov		edx, OFFSET errorMess
+	mov		edx, [ebp+8]
 	call	writeString
-	jmp		getData
+	jmp		retrieveNum
 
-validate ENDP
+getData ENDP
 
 ;----------------------------------------
 ;

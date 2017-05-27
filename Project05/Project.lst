@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:00:15
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:19:55
 1Prog05 - Sorting Random Integers     (Prog05.asm	     Page 1 - 1
 
 
@@ -118,19 +118,22 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:00:15
  00000005  68 00000039 R		push OFFSET intro01
  0000000A  68 0000007C R		push OFFSET intro02
  0000000F  68 000000BD R		push OFFSET intro03
- 00000014  E8 0000001C			call introduction
+ 00000014  E8 00000026			call introduction
 
  00000019  FF 35 00000000 R		push userNum
  0000001F  68 00000107 R		push OFFSET prompt01
  00000024  68 0000013A R		push OFFSET errorMess
- 00000029  E8 00000026			call getData
+ 00000029  E8 00000030			call getData
+
+ 0000002E  A3 00000000 R		mov	 userNum, eax
+ 00000033  E8 00000000 E		call WriteInt
 
 					;call showComposites
 					exit
- 0000002E  6A 00	   *	    push   +000000000h
- 00000030  E8 00000000 E   *	    call   ExitProcess
+ 00000038  6A 00	   *	    push   +000000000h
+ 0000003A  E8 00000000 E   *	    call   ExitProcess
 
- 00000035			main ENDP
+ 0000003F			main ENDP
 
 				;----------------------------------------
 				;
@@ -139,62 +142,24 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:00:15
 				;Preconditions:
 				;Registers changed:
 				;---------------------------------------
- 00000035			introduction PROC
+ 0000003F			introduction PROC
 
- 00000035  55				push	ebp
- 00000036  8B EC			mov		ebp, esp
+ 0000003F  55				push	ebp
+ 00000040  8B EC			mov		ebp, esp
 
- 00000038  8B 55 10			mov		edx, [ebp+16]
- 0000003B  E8 00000000 E		call	WriteString
+ 00000042  8B 55 10			mov		edx, [ebp+16]
+ 00000045  E8 00000000 E		call	WriteString
 						
- 00000040  8B 55 0C			mov		edx, [ebp+12]
- 00000043  E8 00000000 E		call	WriteString
+ 0000004A  8B 55 0C			mov		edx, [ebp+12]
+ 0000004D  E8 00000000 E		call	WriteString
 
- 00000048  8B 55 08			mov		edx, [ebp+8]
- 0000004B  E8 00000000 E		call	WriteString
+ 00000052  8B 55 08			mov		edx, [ebp+8]
+ 00000055  E8 00000000 E		call	WriteString
 
- 00000050  5D				pop		ebp
- 00000051  C2 000C			ret		12		;offset of a word is 4 bits * 3 = 12
+ 0000005A  5D				pop		ebp
+ 0000005B  C2 000C			ret		12		;offset of a word is 4 bits * 3 = 12
 
- 00000054			introduction ENDP
-
-				;----------------------------------------
-				;
-				;Receives:
-				;Returns:
-				;Preconditions:
-				;Registers changed:
-				;---------------------------------------
- 00000054			getData	PROC
-
- 00000054  55				push	ebp
- 00000055  8B EC			mov		ebp, esp
-
- 00000057				retrieveNum:
-
- 00000057  8B 55 0C			mov		edx, [ebp+12]
- 0000005A  E8 00000000 E		call	WriteString
-
- 0000005F  E8 00000000 E		call	ReadInt
- 00000064  3D 000000C8			cmp		eax, MAX
- 00000069  7F 08			jg		invalid
- 0000006B  83 F8 0A			cmp		eax, MIN
- 0000006E  7C 03			jl		invalid
-
- 00000070  C2 0010			ret		16
-
- 00000073				invalid:
- 00000073  8B 55 08			mov		edx, [ebp+8]
- 00000076  E8 00000000 E		call	writeString
- 0000007B  EB DA			jmp		retrieveNum
-
-
-
-
-					;mov		[ebp+16], eax
-					;call	validate
-
- 0000007D			getData ENDP
+ 0000005E			introduction ENDP
 
 				;----------------------------------------
 				;
@@ -203,21 +168,31 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:00:15
 				;Preconditions:
 				;Registers changed:
 				;---------------------------------------
-				;validate PROC
+ 0000005E			getData	PROC
 
-				;	mov		eax, userNum
-				;	cmp		eax, MAX
-				;	jg		invalid
-				;	cmp		eax, MIN
-				;	jl		invalid
-				;	ret
-				;
-				;	invalid:
-				;	mov		edx, [ebp+4]
-				;	call	writeString
-				;	jmp		getData
-				;
-				;validate ENDP
+ 0000005E  55				push	ebp
+ 0000005F  8B EC			mov		ebp, esp
+
+ 00000061				retrieveNum:
+
+ 00000061  8B 55 0C			mov		edx, [ebp+12]
+ 00000064  E8 00000000 E		call	WriteString
+
+ 00000069  E8 00000000 E		call	ReadInt
+ 0000006E  3D 000000C8			cmp		eax, MAX
+ 00000073  7F 09			jg		invalid
+ 00000075  83 F8 0A			cmp		eax, MIN
+ 00000078  7C 04			jl		invalid
+
+ 0000007A  5D				pop		ebp
+ 0000007B  C2 0010			ret		16
+
+ 0000007E				invalid:
+ 0000007E  8B 55 08			mov		edx, [ebp+8]
+ 00000081  E8 00000000 E		call	writeString
+ 00000086  EB D9			jmp		retrieveNum
+
+ 00000088			getData ENDP
 
 				;----------------------------------------
 				;
@@ -226,14 +201,14 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:00:15
 				;Preconditions:
 				;Registers changed:
 				;---------------------------------------
- 0000007D			showComposites	PROC
+ 00000088			showComposites	PROC
 
- 0000007D  C3				ret
+ 00000088  C3				ret
 
- 0000007E			showComposites	ENDP
+ 00000089			showComposites	ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:00:15
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:19:55
 1Prog05 - Sorting Random Integers     (Prog05.asm	     Symbols 2 - 1
 
 
@@ -328,7 +303,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 0000014A Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000007E Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000089 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -435,14 +410,14 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-getData  . . . . . . . . . . . .	P Near	 00000054 _TEXT	Length= 00000029 Public STDCALL
-  retrieveNum  . . . . . . . . .	L Near	 00000057 _TEXT	
-  invalid  . . . . . . . . . . .	L Near	 00000073 _TEXT	
-introduction . . . . . . . . . .	P Near	 00000035 _TEXT	Length= 0000001F Public STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000035 Public STDCALL
+getData  . . . . . . . . . . . .	P Near	 0000005E _TEXT	Length= 0000002A Public STDCALL
+  retrieveNum  . . . . . . . . .	L Near	 00000061 _TEXT	
+  invalid  . . . . . . . . . . .	L Near	 0000007E _TEXT	
+introduction . . . . . . . . . .	P Near	 0000003F _TEXT	Length= 0000001F Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000003F Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-showComposites . . . . . . . . .	P Near	 0000007D _TEXT	Length= 00000001 Public STDCALL
+showComposites . . . . . . . . .	P Near	 00000088 _TEXT	Length= 00000001 Public STDCALL
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 

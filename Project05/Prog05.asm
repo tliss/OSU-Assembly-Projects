@@ -41,6 +41,9 @@ main PROC
 	push OFFSET prompt01
 	push OFFSET errorMess
 	call getData
+	mov	 userNum, eax
+
+	call WriteInt
 
 	;call showComposites
 	exit
@@ -96,6 +99,7 @@ getData	PROC
 	cmp		eax, MIN
 	jl		invalid
 
+	pop		ebp
 	ret		16
 
 	invalid:

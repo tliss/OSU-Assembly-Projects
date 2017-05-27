@@ -15,9 +15,6 @@ INCLUDE Irvine32.inc
 
 .data
 userNum		DWORD	?	;number as entered by the user
-currentNum	DWORD	?	;number currently being test to see if it is a composite number
-testNum		DWORD	?	;number being tested against
-numCounter	DWORD	0	;used for counting how many numbers have been outputted (for formatting)
 
 titleMess	BYTE	"		Prog05 - Sorting Random Integers		by Taylor Liss", 0dh, 0ah, 0
 intro01		BYTE	"This program generates random numbers in the range [100 .. 999],",0dh,0ah,0
@@ -26,14 +23,18 @@ intro03		BYTE	"median value. Finally, it displays the list sorted in descending 
 prompt01	BYTE	"How many numbers should be generated? [10 .. 200]:", 0
 errorMess	BYTE	"Invalid input", 0dh, 0ah, 0
 
-UPPERLIMIT = 200
-LOWERLIMIT = 10
+MAX = 200
+MIN = 10
+HIGH = 999
+LO = 100
 
 .code
 main PROC
 
+	call Randomize
+
 	call introduction
-	call getUserData
+	call getData
 	call showComposites
 	exit
 
@@ -69,7 +70,7 @@ introduction ENDP
 ;Preconditions:
 ;Registers changed:
 ;---------------------------------------
-getUserData	PROC
+getData	PROC
 
 	mov		edx, OFFSET prompt01
 	call	WriteString
@@ -77,7 +78,7 @@ getUserData	PROC
 	mov		userNum, eax
 	call	validate
 
-getUserData ENDP
+getData ENDP
 
 ;----------------------------------------
 ;
@@ -89,16 +90,16 @@ getUserData ENDP
 validate PROC
 
 	mov		eax, userNum
-	cmp		eax, UPPERLIMIT
+	cmp		eax, MAX
 	jg		invalid
-	cmp		eax, LOWERLIMIT
+	cmp		eax, MIN
 	jl		invalid
 	ret
 
 	invalid:
 	mov		edx, OFFSET errorMess
 	call	writeString
-	jmp		getUserData
+	jmp		getData
 
 validate ENDP
 

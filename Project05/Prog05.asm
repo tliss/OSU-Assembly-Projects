@@ -30,8 +30,9 @@ intro02		BYTE	"displays the original list, sorts the list, and calculates the",0
 intro03		BYTE	"median value. Finally, it displays the list sorted in descending order.",0dh,0ah,0
 prompt01	BYTE	"How many numbers should be generated? [10 .. 200]:", 0
 errorMess	BYTE	"Invalid input", 0dh, 0ah, 0
-display01	BYTE	"Here is the unsorted list:", 0dh, 0ah, 0
+display01	BYTE	"The unsorted random numbers:", 0dh, 0ah, 0
 spaces		BYTE	"   ", 0
+display02	BYTE	"The sorted list:", 0dh, 0ah, 0
 
 .code
 main PROC
@@ -41,7 +42,10 @@ main PROC
 	push OFFSET intro01
 	push OFFSET intro02
 	push OFFSET intro03
+	push OFFSET titleMess
 	call introduction
+
+	call CrLf
 
 	push userNum
 	push OFFSET prompt01
@@ -53,11 +57,30 @@ main PROC
 	push userNum
 	call fillArray
 
+	call CrLf
+
+	mov	 edx, OFFSET display01
+	call WriteString
 	push OFFSET numArray
 	push userNum
-	push OFFSET display01
 	push OFFSET spaces
 	call displayArray
+
+	call CrLf
+	call CrLf
+
+	push OFFSET numArray
+	push userNum
+	call sortList
+
+	mov	 edx, OFFSET display02
+	call WriteString
+	push OFFSET numArray
+	push userNum
+	push OFFSET spaces
+	call displayArray
+
+	call CrLf
 
 	exit
 
@@ -74,18 +97,16 @@ introduction PROC
 
 	push	ebp
 	mov		ebp, esp
-
-	mov		edx, [ebp+16]
-	call	WriteString
-		
-	mov		edx, [ebp+12]
-	call	WriteString
-
 	mov		edx, [ebp+8]
 	call	WriteString
-
+	mov		edx, [ebp+20]
+	call	WriteString
+	mov		edx, [ebp+16]
+	call	WriteString
+	mov		edx, [ebp+12]
+	call	WriteString
 	pop		ebp
-	ret		12		;offset of a word is 4 bits * 3 = 12
+	ret		16		;offset of a word is 4 bits * 4 = 12
 
 introduction ENDP
 
@@ -159,14 +180,12 @@ fillArray	ENDP
 ;Registers changed:
 ;---------------------------------------
 
-displayArray	PROC
+displayArray	PROC ;This coded is modified from the poperpoint slide "Display: version 0.1 (register indirect) in lecture 20
 
 	push	ebp
 	mov		ebp, esp
-	mov		edx, [ebp+12]	;display01
-	call	WriteString
-	mov		esi, [ebp+20]	;numArray
-	mov		ecx, [ebp+16]	;userNum
+	mov		esi, [ebp+16]	;numArray
+	mov		ecx, [ebp+12]	;userNum
 	mov		ebx, 0			;counter for 10 integers on a line
 
 	newLineCheck:
@@ -185,7 +204,36 @@ displayArray	PROC
 		loop	newLineCheck
 		
 	pop		ebp
-	ret		20
+	ret		16
 
 displayArray	ENDP
+
+sortList		PROC		;Bubblesort code taken from textbook page 375
+
+	push	ebp
+	mov		ebp, esp
+	mov		ecx, [ebp+8]		;userNum
+	dec		ecx
+
+	L1:	
+		push	ecx				;save outer loop count
+		mov		esi, [ebp+12]	;numArray
+	L2:
+		mov		eax, [esi]		;get array value
+		cmp		[esi+4], eax	;compare a pair of values
+		jl		L3				;if [ESI] <= [ESI+4], no exchange
+		xchg	eax, [esi+4]	;otherwise exhange the pair
+		mov		[esi], eax
+	L3:
+		add		esi, 4			;move both pointers forward
+		loop	L2				;inner loop
+
+		pop		ecx				;retrieve outer loop count
+		loop	L1				;else repeate outer loop
+	L4:
+		pop		ebp
+		ret		8
+
+sortList		ENDP
+
 END main

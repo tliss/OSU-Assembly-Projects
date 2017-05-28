@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:30:36
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 13:35:16
 1Prog05 - Sorting Random Integers     (Prog05.asm	     Page 1 - 1
 
 
@@ -115,13 +115,18 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:30:36
 	   69 64 20 69 6E
 	   70 75 74 0D 0A
 	   00
- 0000046E 48 65 72 65 20	display01	BYTE	"Here is the unsorted list:", 0dh, 0ah, 0
-	   69 73 20 74 68
-	   65 20 75 6E 73
+ 0000046E 54 68 65 20 75	display01	BYTE	"The unsorted random numbers:", 0dh, 0ah, 0
+	   6E 73 6F 72 74
+	   65 64 20 72 61
+	   6E 64 6F 6D 20
+	   6E 75 6D 62 65
+	   72 73 3A 0D 0A
+	   00
+ 0000048D 20 20 20 00		spaces		BYTE	"   ", 0
+ 00000491 54 68 65 20 73	display02	BYTE	"The sorted list:", 0dh, 0ah, 0
 	   6F 72 74 65 64
 	   20 6C 69 73 74
 	   3A 0D 0A 00
- 0000048B 20 20 20 00		spaces		BYTE	"   ", 0
 
  00000000			.code
  00000000			main PROC
@@ -131,55 +136,51 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:30:36
  00000005  68 0000035D R		push OFFSET intro01
  0000000A  68 000003A0 R		push OFFSET intro02
  0000000F  68 000003E1 R		push OFFSET intro03
- 00000014  E8 0000004B			call introduction
+ 00000014  68 00000328 R		push OFFSET titleMess
+ 00000019  E8 00000098			call introduction
 
- 00000019  FF 35 00000000 R		push userNum
- 0000001F  68 0000042B R		push OFFSET prompt01
- 00000024  68 0000045E R		push OFFSET errorMess
- 00000029  E8 00000055			call getData
- 0000002E  A3 00000000 R		mov	 userNum, eax
+ 0000001E  E8 00000000 E		call CrLf
 
- 00000033  68 00000004 R		push OFFSET numArray
- 00000038  FF 35 00000000 R		push userNum
- 0000003E  E8 0000006A			call fillArray
+ 00000023  FF 35 00000000 R		push userNum
+ 00000029  68 0000042B R		push OFFSET prompt01
+ 0000002E  68 0000045E R		push OFFSET errorMess
+ 00000033  E8 000000A5			call getData
+ 00000038  A3 00000000 R		mov	 userNum, eax
 
- 00000043  68 00000004 R		push OFFSET numArray
- 00000048  FF 35 00000000 R		push userNum
- 0000004E  68 0000046E R		push OFFSET display01
- 00000053  68 0000048B R		push OFFSET spaces
- 00000058  E8 00000075			call displayArray
+ 0000003D  68 00000004 R		push OFFSET numArray
+ 00000042  FF 35 00000000 R		push userNum
+ 00000048  E8 000000BA			call fillArray
+
+ 0000004D  E8 00000000 E		call CrLf
+
+ 00000052  BA 0000046E R		mov	 edx, OFFSET display01
+ 00000057  E8 00000000 E		call WriteString
+ 0000005C  68 00000004 R		push OFFSET numArray
+ 00000061  FF 35 00000000 R		push userNum
+ 00000067  68 0000048D R		push OFFSET spaces
+ 0000006C  E8 000000BB			call displayArray
+
+ 00000071  E8 00000000 E		call CrLf
+ 00000076  E8 00000000 E		call CrLf
+
+ 0000007B  68 00000004 R		push OFFSET numArray
+ 00000080  FF 35 00000000 R		push userNum
+ 00000086  E8 000000D7			call sortList
+
+ 0000008B  BA 00000491 R		mov	 edx, OFFSET display02
+ 00000090  E8 00000000 E		call WriteString
+ 00000095  68 00000004 R		push OFFSET numArray
+ 0000009A  FF 35 00000000 R		push userNum
+ 000000A0  68 0000048D R		push OFFSET spaces
+ 000000A5  E8 00000082			call displayArray
+
+ 000000AA  E8 00000000 E		call CrLf
 
 					exit
- 0000005D  6A 00	   *	    push   +000000000h
- 0000005F  E8 00000000 E   *	    call   ExitProcess
+ 000000AF  6A 00	   *	    push   +000000000h
+ 000000B1  E8 00000000 E   *	    call   ExitProcess
 
- 00000064			main ENDP
-
-				;----------------------------------------
-				;
-				;Receives:
-				;Returns:
-				;Preconditions:
-				;Registers changed:
-				;---------------------------------------
- 00000064			introduction PROC
-
- 00000064  55				push	ebp
- 00000065  8B EC			mov		ebp, esp
-
- 00000067  8B 55 10			mov		edx, [ebp+16]
- 0000006A  E8 00000000 E		call	WriteString
-						
- 0000006F  8B 55 0C			mov		edx, [ebp+12]
- 00000072  E8 00000000 E		call	WriteString
-
- 00000077  8B 55 08			mov		edx, [ebp+8]
- 0000007A  E8 00000000 E		call	WriteString
-
- 0000007F  5D				pop		ebp
- 00000080  C2 000C			ret		12		;offset of a word is 4 bits * 3 = 12
-
- 00000083			introduction ENDP
+ 000000B6			main ENDP
 
 				;----------------------------------------
 				;
@@ -188,31 +189,22 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:30:36
 				;Preconditions:
 				;Registers changed:
 				;---------------------------------------
- 00000083			getData	PROC
+ 000000B6			introduction PROC
 
- 00000083  55				push	ebp
- 00000084  8B EC			mov		ebp, esp
+ 000000B6  55				push	ebp
+ 000000B7  8B EC			mov		ebp, esp
+ 000000B9  8B 55 08			mov		edx, [ebp+8]
+ 000000BC  E8 00000000 E		call	WriteString
+ 000000C1  8B 55 14			mov		edx, [ebp+20]
+ 000000C4  E8 00000000 E		call	WriteString
+ 000000C9  8B 55 10			mov		edx, [ebp+16]
+ 000000CC  E8 00000000 E		call	WriteString
+ 000000D1  8B 55 0C			mov		edx, [ebp+12]
+ 000000D4  E8 00000000 E		call	WriteString
+ 000000D9  5D				pop		ebp
+ 000000DA  C2 0010			ret		16		;offset of a word is 4 bits * 4 = 12
 
- 00000086				retrieveNum:
-
- 00000086  8B 55 0C			mov		edx, [ebp+12]
- 00000089  E8 00000000 E		call	WriteString
-
- 0000008E  E8 00000000 E		call	ReadInt
- 00000093  3D 000000C8			cmp		eax, MAX
- 00000098  7F 09			jg		invalid
- 0000009A  83 F8 0A			cmp		eax, MIN
- 0000009D  7C 04			jl		invalid
-
- 0000009F  5D				pop		ebp
- 000000A0  C2 0010			ret		16
-
- 000000A3				invalid:
- 000000A3  8B 55 08			mov		edx, [ebp+8]
- 000000A6  E8 00000000 E		call	writeString
- 000000AB  EB D9			jmp		retrieveNum
-
- 000000AD			getData ENDP
+ 000000DD			introduction ENDP
 
 				;----------------------------------------
 				;
@@ -221,27 +213,60 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:30:36
 				;Preconditions:
 				;Registers changed:
 				;---------------------------------------
- 000000AD			fillArray	PROC
+ 000000DD			getData	PROC
 
- 000000AD  55				push	ebp
- 000000AE  8B EC			mov		ebp, esp
- 000000B0  8B 4D 08			mov		ecx, [ebp+8]	;userNum
- 000000B3  8B 7D 0C			mov		edi, [ebp+12]	;numArray
+ 000000DD  55				push	ebp
+ 000000DE  8B EC			mov		ebp, esp
 
- 000000B6				generator:				;fills array with nubmers between 100 and 999
- 000000B6  B8 000003E7				mov		eax, HI
- 000000BB  83 E8 64				sub		eax, LO
- 000000BE  40					inc		eax
- 000000BF  E8 00000000 E			call	RandomRange	;returns random integer in [0...N-1] where N is value in eax
- 000000C4  83 C0 64				add		eax, LO
- 000000C7  89 07				mov		[edi], eax	;put the number in the array
- 000000C9  83 C7 04				add		edi, 4		;set the next array slot
- 000000CC  E2 E8				loop	generator
+ 000000E0				retrieveNum:
+
+ 000000E0  8B 55 0C			mov		edx, [ebp+12]
+ 000000E3  E8 00000000 E		call	WriteString
+
+ 000000E8  E8 00000000 E		call	ReadInt
+ 000000ED  3D 000000C8			cmp		eax, MAX
+ 000000F2  7F 09			jg		invalid
+ 000000F4  83 F8 0A			cmp		eax, MIN
+ 000000F7  7C 04			jl		invalid
+
+ 000000F9  5D				pop		ebp
+ 000000FA  C2 0010			ret		16
+
+ 000000FD				invalid:
+ 000000FD  8B 55 08			mov		edx, [ebp+8]
+ 00000100  E8 00000000 E		call	writeString
+ 00000105  EB D9			jmp		retrieveNum
+
+ 00000107			getData ENDP
+
+				;----------------------------------------
+				;
+				;Receives:
+				;Returns:
+				;Preconditions:
+				;Registers changed:
+				;---------------------------------------
+ 00000107			fillArray	PROC
+
+ 00000107  55				push	ebp
+ 00000108  8B EC			mov		ebp, esp
+ 0000010A  8B 4D 08			mov		ecx, [ebp+8]	;userNum
+ 0000010D  8B 7D 0C			mov		edi, [ebp+12]	;numArray
+
+ 00000110				generator:				;fills array with nubmers between 100 and 999
+ 00000110  B8 000003E7				mov		eax, HI
+ 00000115  83 E8 64				sub		eax, LO
+ 00000118  40					inc		eax
+ 00000119  E8 00000000 E			call	RandomRange	;returns random integer in [0...N-1] where N is value in eax
+ 0000011E  83 C0 64				add		eax, LO
+ 00000121  89 07				mov		[edi], eax	;put the number in the array
+ 00000123  83 C7 04				add		edi, 4		;set the next array slot
+ 00000126  E2 E8				loop	generator
 					
- 000000CE  5D				pop		ebp
- 000000CF  C2 0008			ret		8
+ 00000128  5D				pop		ebp
+ 00000129  C2 0008			ret		8
 
- 000000D2			fillArray	ENDP
+ 0000012C			fillArray	ENDP
 
 				;----------------------------------------
 				;
@@ -251,40 +276,64 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:30:36
 				;Registers changed:
 				;---------------------------------------
 
- 000000D2			displayArray	PROC
+ 0000012C			displayArray	PROC ;This coded is modified from the poperpoint slide "Display: version 0.1 (register indirect) in lecture 20
 
- 000000D2  55				push	ebp
- 000000D3  8B EC			mov		ebp, esp
- 000000D5  8B 55 0C			mov		edx, [ebp+12]	;display01
- 000000D8  E8 00000000 E		call	WriteString
- 000000DD  8B 75 14			mov		esi, [ebp+20]	;numArray
- 000000E0  8B 4D 10			mov		ecx, [ebp+16]	;userNum
- 000000E3  BB 00000000			mov		ebx, 0			;counter for 10 integers on a line
+ 0000012C  55				push	ebp
+ 0000012D  8B EC			mov		ebp, esp
+ 0000012F  8B 75 10			mov		esi, [ebp+16]	;numArray
+ 00000132  8B 4D 0C			mov		ecx, [ebp+12]	;userNum
+ 00000135  BB 00000000			mov		ebx, 0			;counter for 10 integers on a line
 
- 000000E8				display:
- 000000E8  43					inc		ebx
- 000000E9  83 FB 0A				cmp		ebx, 10
- 000000EC  7E 0A				jle		print
- 000000EE  BB 00000001				mov		ebx, 1
- 000000F3  E8 00000000 E			call	CrLf
+ 0000013A				newLineCheck:
+ 0000013A  43					inc		ebx
+ 0000013B  83 FB 0A				cmp		ebx, 10
+ 0000013E  7E 0A				jle		print
+ 00000140  BB 00000001				mov		ebx, 1
+ 00000145  E8 00000000 E			call	CrLf
 
- 000000F8				print:
- 000000F8  8B 06				mov		eax, [esi]
- 000000FA  E8 00000000 E			call	WriteDec
- 000000FF  8B 55 08				mov		edx, [ebp+8]	;spaces
- 00000102  E8 00000000 E			call	WriteString
- 00000107  83 C6 04				add		esi, 4
- 0000010A  E2 DC				loop	display
-
- 0000010C				newLine:
+ 0000014A				print:
+ 0000014A  8B 06				mov		eax, [esi]
+ 0000014C  E8 00000000 E			call	WriteDec
+ 00000151  8B 55 08				mov		edx, [ebp+8]	;spaces
+ 00000154  E8 00000000 E			call	WriteString
+ 00000159  83 C6 04				add		esi, 4
+ 0000015C  E2 DC				loop	newLineCheck
 						
+ 0000015E  5D				pop		ebp
+ 0000015F  C2 0010			ret		16
 
- 0000010C  5D				pop		ebp
- 0000010D  C2 0014			ret		20
+ 00000162			displayArray	ENDP
 
- 00000110			displayArray	ENDP
+ 00000162			sortList		PROC		;Bubblesort code taken from textbook page 375
+
+ 00000162  55				push	ebp
+ 00000163  8B EC			mov		ebp, esp
+ 00000165  8B 4D 08			mov		ecx, [ebp+8]		;userNum
+ 00000168  49				dec		ecx
+
+ 00000169				L1:	
+ 00000169  51					push	ecx				;save outer loop count
+ 0000016A  8B 75 0C				mov		esi, [ebp+12]	;numArray
+ 0000016D				L2:
+ 0000016D  8B 06				mov		eax, [esi]		;get array value
+ 0000016F  39 46 04				cmp		[esi+4], eax	;compare a pair of values
+ 00000172  7C 05				jl		L3				;if [ESI] <= [ESI+4], no exchange
+ 00000174  87 46 04				xchg	eax, [esi+4]	;otherwise exhange the pair
+ 00000177  89 06				mov		[esi], eax
+ 00000179				L3:
+ 00000179  83 C6 04				add		esi, 4			;move both pointers forward
+ 0000017C  E2 EF				loop	L2				;inner loop
+
+ 0000017E  59					pop		ecx				;retrieve outer loop count
+ 0000017F  E2 E8				loop	L1				;else repeate outer loop
+ 00000181				L4:
+ 00000181  5D					pop		ebp
+ 00000182  C2 0008				ret		8
+
+ 00000185			sortList		ENDP
+
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:30:36
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 13:35:16
 1Prog05 - Sorting Random Integers     (Prog05.asm	     Symbols 2 - 1
 
 
@@ -378,8 +427,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 0000048F Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000110 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 000004A4 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000185 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -486,19 +535,23 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-displayArray . . . . . . . . . .	P Near	 000000D2 _TEXT	Length= 0000003E Public STDCALL
-  display  . . . . . . . . . . .	L Near	 000000E8 _TEXT	
-  print  . . . . . . . . . . . .	L Near	 000000F8 _TEXT	
-  newLine  . . . . . . . . . . .	L Near	 0000010C _TEXT	
-fillArray  . . . . . . . . . . .	P Near	 000000AD _TEXT	Length= 00000025 Public STDCALL
-  generator  . . . . . . . . . .	L Near	 000000B6 _TEXT	
-getData  . . . . . . . . . . . .	P Near	 00000083 _TEXT	Length= 0000002A Public STDCALL
-  retrieveNum  . . . . . . . . .	L Near	 00000086 _TEXT	
-  invalid  . . . . . . . . . . .	L Near	 000000A3 _TEXT	
-introduction . . . . . . . . . .	P Near	 00000064 _TEXT	Length= 0000001F Public STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000064 Public STDCALL
+displayArray . . . . . . . . . .	P Near	 0000012C _TEXT	Length= 00000036 Public STDCALL
+  newLineCheck . . . . . . . . .	L Near	 0000013A _TEXT	
+  print  . . . . . . . . . . . .	L Near	 0000014A _TEXT	
+fillArray  . . . . . . . . . . .	P Near	 00000107 _TEXT	Length= 00000025 Public STDCALL
+  generator  . . . . . . . . . .	L Near	 00000110 _TEXT	
+getData  . . . . . . . . . . . .	P Near	 000000DD _TEXT	Length= 0000002A Public STDCALL
+  retrieveNum  . . . . . . . . .	L Near	 000000E0 _TEXT	
+  invalid  . . . . . . . . . . .	L Near	 000000FD _TEXT	
+introduction . . . . . . . . . .	P Near	 000000B6 _TEXT	Length= 00000027 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000B6 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
+sortList . . . . . . . . . . . .	P Near	 00000162 _TEXT	Length= 00000023 Public STDCALL
+  L1 . . . . . . . . . . . . . .	L Near	 00000169 _TEXT	
+  L2 . . . . . . . . . . . . . .	L Near	 0000016D _TEXT	
+  L3 . . . . . . . . . . . . . .	L Near	 00000179 _TEXT	
+  L4 . . . . . . . . . . . . . .	L Near	 00000181 _TEXT	
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -725,6 +778,7 @@ brown  . . . . . . . . . . . . .	Number	 00000006h
 count  . . . . . . . . . . . . .	DWord	 00000324 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 display01  . . . . . . . . . . .	Byte	 0000046E _DATA	
+display02  . . . . . . . . . . .	Byte	 00000491 _DATA	
 errorMess  . . . . . . . . . . .	Byte	 0000045E _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
@@ -742,7 +796,7 @@ magenta  . . . . . . . . . . . .	Number	 00000005h
 numArray . . . . . . . . . . . .	DWord	 00000004 _DATA	
 prompt01 . . . . . . . . . . . .	Byte	 0000042B _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
-spaces . . . . . . . . . . . . .	Byte	 0000048B _DATA	
+spaces . . . . . . . . . . . . .	Byte	 0000048D _DATA	
 titleMess  . . . . . . . . . . .	Byte	 00000328 _DATA	
 userNum  . . . . . . . . . . . .	DWord	 00000000 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   

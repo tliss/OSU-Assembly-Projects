@@ -14,7 +14,13 @@ TITLE Prog05 - Sorting Random Integers     (Prog05.asm)
 INCLUDE Irvine32.inc
 
 .data
-userNum		DWORD	?	;number as entered by the user
+
+MAX = 200
+MIN = 10
+
+userNum		DWORD	?				;number as entered by the user
+numArray	DWORD	MAX		DUP(?)	;array of random numbers
+count		DWORD	?				;size of the array
 
 titleMess	BYTE	"		Prog05 - Sorting Random Integers		by Taylor Liss", 0dh, 0ah, 0
 intro01		BYTE	"This program generates random numbers in the range [100 .. 999],",0dh,0ah,0
@@ -22,10 +28,6 @@ intro02		BYTE	"displays the original list, sorts the list, and calculates the",0
 intro03		BYTE	"median value. Finally, it displays the list sorted in descending order.",0dh,0ah,0
 prompt01	BYTE	"How many numbers should be generated? [10 .. 200]:", 0
 errorMess	BYTE	"Invalid input", 0dh, 0ah, 0
-
-MAX = 200
-MIN = 10
-
 
 .code
 main PROC
@@ -43,9 +45,10 @@ main PROC
 	call getData
 	mov	 userNum, eax
 
-	call WriteInt
+	push OFFSET userArray
+	push userNum
+	call fillArray
 
-	;call showComposites
 	exit
 
 main ENDP
@@ -116,10 +119,16 @@ getData ENDP
 ;Preconditions:
 ;Registers changed:
 ;---------------------------------------
-showComposites	PROC
+fillArray	PROC
+
+	push	ebp
+	mov		ebp, esp
+	mov		ecx, [ebp+8]
+	mov		edi, [ebp+12]
+	
 
 	ret
 
-showComposites	ENDP
+fillArray	ENDP
 
 END main

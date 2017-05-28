@@ -17,6 +17,8 @@ INCLUDE Irvine32.inc
 
 MAX = 200
 MIN = 10
+HI = 999
+LO = 100
 
 userNum		DWORD	?				;number as entered by the user
 numArray	DWORD	MAX		DUP(?)	;array of random numbers
@@ -125,6 +127,16 @@ fillArray	PROC
 	mov		ebp, esp
 	mov		ecx, [ebp+8]
 	mov		edi, [ebp+12]
+
+	generator:				;fills array with nubmers between 100 and 999
+		mov		eax, HI
+		sub		eax, LO
+		inc		eax
+		call	RandomRange	;returns random integer in [0...N-1] where N is value in eax
+		add		eax, LO
+		mov		[edi], eax	;put the number in the array
+		add		edi, 4		;set the next array slot
+		loop	generator
 	
 
 	ret

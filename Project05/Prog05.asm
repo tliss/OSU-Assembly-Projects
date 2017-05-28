@@ -30,6 +30,8 @@ intro02		BYTE	"displays the original list, sorts the list, and calculates the",0
 intro03		BYTE	"median value. Finally, it displays the list sorted in descending order.",0dh,0ah,0
 prompt01	BYTE	"How many numbers should be generated? [10 .. 200]:", 0
 errorMess	BYTE	"Invalid input", 0dh, 0ah, 0
+display01	BYTE	"Here is the unsorted list:", 0dh, 0ah, 0
+spaces		BYTE	"   ", 0
 
 .code
 main PROC
@@ -47,9 +49,15 @@ main PROC
 	call getData
 	mov	 userNum, eax
 
-	push OFFSET userArray
+	push OFFSET numArray
 	push userNum
 	call fillArray
+
+	push OFFSET numArray
+	push userNum
+	push OFFSET display01
+	push OFFSET spaces
+	call displayArray
 
 	exit
 
@@ -125,8 +133,8 @@ fillArray	PROC
 
 	push	ebp
 	mov		ebp, esp
-	mov		ecx, [ebp+8]
-	mov		edi, [ebp+12]
+	mov		ecx, [ebp+8]	;userNum
+	mov		edi, [ebp+12]	;numArray
 
 	generator:				;fills array with nubmers between 100 and 999
 		mov		eax, HI
@@ -138,9 +146,40 @@ fillArray	PROC
 		add		edi, 4		;set the next array slot
 		loop	generator
 	
-
-	ret
+	pop		ebp
+	ret		8
 
 fillArray	ENDP
 
+;----------------------------------------
+;
+;Receives:
+;Returns:
+;Preconditions:
+;Registers changed:
+;---------------------------------------
+
+displayArray	PROC
+
+	push	ebp
+	mov		ebp, esp
+
+	mov		edx, [ebp+12]	;display01
+	call	WriteString
+
+	mov		esi, [ebp+20]	;numArray
+	mov		ecx, [ebp+16]	;userNum
+
+	display:
+		mov		eax, [esi]
+		call	WriteDec
+		mov		edx, [ebp+8]	;spaces
+		call	WriteString
+		add		esi, 4
+		loop	display
+
+	pop		ebp
+	ret		20
+
+displayArray	ENDP
 END main

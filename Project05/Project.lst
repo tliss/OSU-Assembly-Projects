@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:19:55
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:21:44
 1Prog05 - Sorting Random Integers     (Prog05.asm	     Page 1 - 1
 
 
@@ -35,9 +35,19 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:19:55
 			      C 
 
  00000000			.data
- 00000000 00000000		userNum		DWORD	?	;number as entered by the user
 
- 00000004 09 09 50 72 6F	titleMess	BYTE	"		Prog05 - Sorting Random Integers		by Taylor Liss", 0dh, 0ah, 0
+ = 000000C8			MAX = 200
+ = 0000000A			MIN = 10
+ = 000003E7			HI = 999
+ = 00000064			LO = 100
+
+ 00000000 00000000		userNum		DWORD	?				;number as entered by the user
+ 00000004  000000C8 [		numArray	DWORD	MAX		DUP(?)	;array of random numbers
+	    00000000
+	   ]
+ 00000324 00000000		count		DWORD	?				;size of the array
+
+ 00000328 09 09 50 72 6F	titleMess	BYTE	"		Prog05 - Sorting Random Integers		by Taylor Liss", 0dh, 0ah, 0
 	   67 30 35 20 2D
 	   20 53 6F 72 74
 	   69 6E 67 20 52
@@ -48,7 +58,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:19:55
 	   61 79 6C 6F 72
 	   20 4C 69 73 73
 	   0D 0A 00
- 00000039 54 68 69 73 20	intro01		BYTE	"This program generates random numbers in the range [100 .. 999],",0dh,0ah,0
+ 0000035D 54 68 69 73 20	intro01		BYTE	"This program generates random numbers in the range [100 .. 999],",0dh,0ah,0
 	   70 72 6F 67 72
 	   61 6D 20 67 65
 	   6E 65 72 61 74
@@ -62,7 +72,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:19:55
 	   20 2E 2E 20 39
 	   39 39 5D 2C 0D
 	   0A 00
- 0000007C 64 69 73 70 6C	intro02		BYTE	"displays the original list, sorts the list, and calculates the",0dh,0ah,0
+ 000003A0 64 69 73 70 6C	intro02		BYTE	"displays the original list, sorts the list, and calculates the",0dh,0ah,0
 	   61 79 73 20 74
 	   68 65 20 6F 72
 	   69 67 69 6E 61
@@ -75,7 +85,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:19:55
 	   6C 63 75 6C 61
 	   74 65 73 20 74
 	   68 65 0D 0A 00
- 000000BD 6D 65 64 69 61	intro03		BYTE	"median value. Finally, it displays the list sorted in descending order.",0dh,0ah,0
+ 000003E1 6D 65 64 69 61	intro03		BYTE	"median value. Finally, it displays the list sorted in descending order.",0dh,0ah,0
 	   6E 20 76 61 6C
 	   75 65 2E 20 46
 	   69 6E 61 6C 6C
@@ -90,7 +100,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:19:55
 	   64 69 6E 67 20
 	   6F 72 64 65 72
 	   2E 0D 0A 00
- 00000107 48 6F 77 20 6D	prompt01	BYTE	"How many numbers should be generated? [10 .. 200]:", 0
+ 0000042B 48 6F 77 20 6D	prompt01	BYTE	"How many numbers should be generated? [10 .. 200]:", 0
 	   61 6E 79 20 6E
 	   75 6D 62 65 72
 	   73 20 73 68 6F
@@ -101,39 +111,49 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:19:55
 	   30 20 2E 2E 20
 	   32 30 30 5D 3A
 	   00
- 0000013A 49 6E 76 61 6C	errorMess	BYTE	"Invalid input", 0dh, 0ah, 0
+ 0000045E 49 6E 76 61 6C	errorMess	BYTE	"Invalid input", 0dh, 0ah, 0
 	   69 64 20 69 6E
 	   70 75 74 0D 0A
 	   00
-
- = 000000C8			MAX = 200
- = 0000000A			MIN = 10
-
+ 0000046E 48 65 72 65 20	display01	BYTE	"Here is the unsorted list:", 0dh, 0ah, 0
+	   69 73 20 74 68
+	   65 20 75 6E 73
+	   6F 72 74 65 64
+	   20 6C 69 73 74
+	   3A 0D 0A 00
+ 0000048B 20 20 20 00		spaces		BYTE	"   ", 0
 
  00000000			.code
  00000000			main PROC
 
  00000000  E8 00000000 E		call Randomize
 
- 00000005  68 00000039 R		push OFFSET intro01
- 0000000A  68 0000007C R		push OFFSET intro02
- 0000000F  68 000000BD R		push OFFSET intro03
- 00000014  E8 00000026			call introduction
+ 00000005  68 0000035D R		push OFFSET intro01
+ 0000000A  68 000003A0 R		push OFFSET intro02
+ 0000000F  68 000003E1 R		push OFFSET intro03
+ 00000014  E8 0000004B			call introduction
 
  00000019  FF 35 00000000 R		push userNum
- 0000001F  68 00000107 R		push OFFSET prompt01
- 00000024  68 0000013A R		push OFFSET errorMess
- 00000029  E8 00000030			call getData
-
+ 0000001F  68 0000042B R		push OFFSET prompt01
+ 00000024  68 0000045E R		push OFFSET errorMess
+ 00000029  E8 00000055			call getData
  0000002E  A3 00000000 R		mov	 userNum, eax
- 00000033  E8 00000000 E		call WriteInt
 
-					;call showComposites
+ 00000033  68 00000004 R		push OFFSET numArray
+ 00000038  FF 35 00000000 R		push userNum
+ 0000003E  E8 0000006A			call fillArray
+
+ 00000043  68 00000004 R		push OFFSET numArray
+ 00000048  FF 35 00000000 R		push userNum
+ 0000004E  68 0000046E R		push OFFSET display01
+ 00000053  68 0000048B R		push OFFSET spaces
+ 00000058  E8 00000075			call displayArray
+
 					exit
- 00000038  6A 00	   *	    push   +000000000h
- 0000003A  E8 00000000 E   *	    call   ExitProcess
+ 0000005D  6A 00	   *	    push   +000000000h
+ 0000005F  E8 00000000 E   *	    call   ExitProcess
 
- 0000003F			main ENDP
+ 00000064			main ENDP
 
 				;----------------------------------------
 				;
@@ -142,57 +162,24 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:19:55
 				;Preconditions:
 				;Registers changed:
 				;---------------------------------------
- 0000003F			introduction PROC
+ 00000064			introduction PROC
 
- 0000003F  55				push	ebp
- 00000040  8B EC			mov		ebp, esp
+ 00000064  55				push	ebp
+ 00000065  8B EC			mov		ebp, esp
 
- 00000042  8B 55 10			mov		edx, [ebp+16]
- 00000045  E8 00000000 E		call	WriteString
+ 00000067  8B 55 10			mov		edx, [ebp+16]
+ 0000006A  E8 00000000 E		call	WriteString
 						
- 0000004A  8B 55 0C			mov		edx, [ebp+12]
- 0000004D  E8 00000000 E		call	WriteString
+ 0000006F  8B 55 0C			mov		edx, [ebp+12]
+ 00000072  E8 00000000 E		call	WriteString
 
- 00000052  8B 55 08			mov		edx, [ebp+8]
- 00000055  E8 00000000 E		call	WriteString
+ 00000077  8B 55 08			mov		edx, [ebp+8]
+ 0000007A  E8 00000000 E		call	WriteString
 
- 0000005A  5D				pop		ebp
- 0000005B  C2 000C			ret		12		;offset of a word is 4 bits * 3 = 12
+ 0000007F  5D				pop		ebp
+ 00000080  C2 000C			ret		12		;offset of a word is 4 bits * 3 = 12
 
- 0000005E			introduction ENDP
-
-				;----------------------------------------
-				;
-				;Receives:
-				;Returns:
-				;Preconditions:
-				;Registers changed:
-				;---------------------------------------
- 0000005E			getData	PROC
-
- 0000005E  55				push	ebp
- 0000005F  8B EC			mov		ebp, esp
-
- 00000061				retrieveNum:
-
- 00000061  8B 55 0C			mov		edx, [ebp+12]
- 00000064  E8 00000000 E		call	WriteString
-
- 00000069  E8 00000000 E		call	ReadInt
- 0000006E  3D 000000C8			cmp		eax, MAX
- 00000073  7F 09			jg		invalid
- 00000075  83 F8 0A			cmp		eax, MIN
- 00000078  7C 04			jl		invalid
-
- 0000007A  5D				pop		ebp
- 0000007B  C2 0010			ret		16
-
- 0000007E				invalid:
- 0000007E  8B 55 08			mov		edx, [ebp+8]
- 00000081  E8 00000000 E		call	writeString
- 00000086  EB D9			jmp		retrieveNum
-
- 00000088			getData ENDP
+ 00000083			introduction ENDP
 
 				;----------------------------------------
 				;
@@ -201,14 +188,94 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:19:55
 				;Preconditions:
 				;Registers changed:
 				;---------------------------------------
- 00000088			showComposites	PROC
+ 00000083			getData	PROC
 
- 00000088  C3				ret
+ 00000083  55				push	ebp
+ 00000084  8B EC			mov		ebp, esp
 
- 00000089			showComposites	ENDP
+ 00000086				retrieveNum:
 
+ 00000086  8B 55 0C			mov		edx, [ebp+12]
+ 00000089  E8 00000000 E		call	WriteString
+
+ 0000008E  E8 00000000 E		call	ReadInt
+ 00000093  3D 000000C8			cmp		eax, MAX
+ 00000098  7F 09			jg		invalid
+ 0000009A  83 F8 0A			cmp		eax, MIN
+ 0000009D  7C 04			jl		invalid
+
+ 0000009F  5D				pop		ebp
+ 000000A0  C2 0010			ret		16
+
+ 000000A3				invalid:
+ 000000A3  8B 55 08			mov		edx, [ebp+8]
+ 000000A6  E8 00000000 E		call	writeString
+ 000000AB  EB D9			jmp		retrieveNum
+
+ 000000AD			getData ENDP
+
+				;----------------------------------------
+				;
+				;Receives:
+				;Returns:
+				;Preconditions:
+				;Registers changed:
+				;---------------------------------------
+ 000000AD			fillArray	PROC
+
+ 000000AD  55				push	ebp
+ 000000AE  8B EC			mov		ebp, esp
+ 000000B0  8B 4D 08			mov		ecx, [ebp+8]	;userNum
+ 000000B3  8B 7D 0C			mov		edi, [ebp+12]	;numArray
+
+ 000000B6				generator:				;fills array with nubmers between 100 and 999
+ 000000B6  B8 000003E7				mov		eax, HI
+ 000000BB  83 E8 64				sub		eax, LO
+ 000000BE  40					inc		eax
+ 000000BF  E8 00000000 E			call	RandomRange	;returns random integer in [0...N-1] where N is value in eax
+ 000000C4  83 C0 64				add		eax, LO
+ 000000C7  89 07				mov		[edi], eax	;put the number in the array
+ 000000C9  83 C7 04				add		edi, 4		;set the next array slot
+ 000000CC  E2 E8				loop	generator
+					
+ 000000CE  5D				pop		ebp
+ 000000CF  C2 0008			ret		8
+
+ 000000D2			fillArray	ENDP
+
+				;----------------------------------------
+				;
+				;Receives:
+				;Returns:
+				;Preconditions:
+				;Registers changed:
+				;---------------------------------------
+
+ 000000D2			displayArray	PROC
+
+ 000000D2  55				push	ebp
+ 000000D3  8B EC			mov		ebp, esp
+
+ 000000D5  8B 55 0C			mov		edx, [ebp+12]	;display01
+ 000000D8  E8 00000000 E		call	WriteString
+
+ 000000DD  8B 75 14			mov		esi, [ebp+20]	;numArray
+ 000000E0  8B 4D 10			mov		ecx, [ebp+16]	;userNum
+
+ 000000E3				display:
+ 000000E3  8B 06				mov		eax, [esi]
+ 000000E5  E8 00000000 E			call	WriteDec
+ 000000EA  8B 55 08				mov		edx, [ebp+8]	;spaces
+ 000000ED  E8 00000000 E			call	WriteString
+ 000000F2  83 C6 04				add		esi, 4
+ 000000F5  E2 EC				loop	display
+
+ 000000F7  5D				pop		ebp
+ 000000F8  C2 0014			ret		20
+
+ 000000FB			displayArray	ENDP
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/27/17 15:19:55
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:21:44
 1Prog05 - Sorting Random Integers     (Prog05.asm	     Symbols 2 - 1
 
 
@@ -302,8 +369,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 0000014A Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000089 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000048F Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000FB Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -410,14 +477,17 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-getData  . . . . . . . . . . . .	P Near	 0000005E _TEXT	Length= 0000002A Public STDCALL
-  retrieveNum  . . . . . . . . .	L Near	 00000061 _TEXT	
-  invalid  . . . . . . . . . . .	L Near	 0000007E _TEXT	
-introduction . . . . . . . . . .	P Near	 0000003F _TEXT	Length= 0000001F Public STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000003F Public STDCALL
+displayArray . . . . . . . . . .	P Near	 000000D2 _TEXT	Length= 00000029 Public STDCALL
+  display  . . . . . . . . . . .	L Near	 000000E3 _TEXT	
+fillArray  . . . . . . . . . . .	P Near	 000000AD _TEXT	Length= 00000025 Public STDCALL
+  generator  . . . . . . . . . .	L Near	 000000B6 _TEXT	
+getData  . . . . . . . . . . . .	P Near	 00000083 _TEXT	Length= 0000002A Public STDCALL
+  retrieveNum  . . . . . . . . .	L Near	 00000086 _TEXT	
+  invalid  . . . . . . . . . . .	L Near	 000000A3 _TEXT	
+introduction . . . . . . . . . .	P Near	 00000064 _TEXT	Length= 0000001F Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000064 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-showComposites . . . . . . . . .	P Near	 00000088 _TEXT	Length= 00000001 Public STDCALL
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -489,6 +559,7 @@ HEAP_GROWABLE  . . . . . . . . .	Number	 00000002h
 HEAP_NO_SERIALIZE  . . . . . . .	Number	 00000001h   
 HEAP_REALLOC_IN_PLACE_ONLY . . .	Number	 00000010h   
 HEAP_ZERO_MEMORY . . . . . . . .	Number	 00000008h   
+HI . . . . . . . . . . . . . . .	Number	 000003E7h   
 IDABORT  . . . . . . . . . . . .	Number	 00000003h   
 IDCANCEL . . . . . . . . . . . .	Number	 00000002h   
 IDCLOSE  . . . . . . . . . . . .	Number	 00000008h   
@@ -507,6 +578,7 @@ KEY_EVENT  . . . . . . . . . . .	Number	 00000001h
 KEY_MASKS  . . . . . . . . . . .	Number	 0000001Fh   
 LEFT_ALT_PRESSED . . . . . . . .	Number	 00000002h   
 LEFT_CTRL_PRESSED  . . . . . . .	Number	 00000008h   
+LO . . . . . . . . . . . . . . .	Number	 00000064h   
 MAX  . . . . . . . . . . . . . .	Number	 000000C8h   
 MB_ABORTRETRYIGNORE  . . . . . .	Number	 00000002h   
 MB_APPLMODAL . . . . . . . . . .	Number	 00000000h   
@@ -639,14 +711,16 @@ WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
+count  . . . . . . . . . . . . .	DWord	 00000324 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
-errorMess  . . . . . . . . . . .	Byte	 0000013A _DATA	
+display01  . . . . . . . . . . .	Byte	 0000046E _DATA	
+errorMess  . . . . . . . . . . .	Byte	 0000045E _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
-intro01  . . . . . . . . . . . .	Byte	 00000039 _DATA	
-intro02  . . . . . . . . . . . .	Byte	 0000007C _DATA	
-intro03  . . . . . . . . . . . .	Byte	 000000BD _DATA	
+intro01  . . . . . . . . . . . .	Byte	 0000035D _DATA	
+intro02  . . . . . . . . . . . .	Byte	 000003A0 _DATA	
+intro03  . . . . . . . . . . . .	Byte	 000003E1 _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -654,9 +728,11 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
-prompt01 . . . . . . . . . . . .	Byte	 00000107 _DATA	
+numArray . . . . . . . . . . . .	DWord	 00000004 _DATA	
+prompt01 . . . . . . . . . . . .	Byte	 0000042B _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
-titleMess  . . . . . . . . . . .	Byte	 00000004 _DATA	
+spaces . . . . . . . . . . . . .	Byte	 0000048B _DATA	
+titleMess  . . . . . . . . . . .	Byte	 00000328 _DATA	
 userNum  . . . . . . . . . . . .	DWord	 00000000 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA

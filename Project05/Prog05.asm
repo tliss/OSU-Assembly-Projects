@@ -163,21 +163,27 @@ displayArray	PROC
 
 	push	ebp
 	mov		ebp, esp
-
 	mov		edx, [ebp+12]	;display01
 	call	WriteString
-
 	mov		esi, [ebp+20]	;numArray
 	mov		ecx, [ebp+16]	;userNum
+	mov		ebx, 0			;counter for 10 integers on a line
 
-	display:
+	newLineCheck:
+		inc		ebx
+		cmp		ebx, 10
+		jle		print
+		mov		ebx, 1
+		call	CrLf
+
+	print:
 		mov		eax, [esi]
 		call	WriteDec
 		mov		edx, [ebp+8]	;spaces
 		call	WriteString
 		add		esi, 4
-		loop	display
-
+		loop	newLineCheck
+		
 	pop		ebp
 	ret		20
 

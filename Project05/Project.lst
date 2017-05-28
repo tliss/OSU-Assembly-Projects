@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:21:44
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:30:36
 1Prog05 - Sorting Random Integers     (Prog05.asm	     Page 1 - 1
 
 
@@ -255,27 +255,36 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:21:44
 
  000000D2  55				push	ebp
  000000D3  8B EC			mov		ebp, esp
-
  000000D5  8B 55 0C			mov		edx, [ebp+12]	;display01
  000000D8  E8 00000000 E		call	WriteString
-
  000000DD  8B 75 14			mov		esi, [ebp+20]	;numArray
  000000E0  8B 4D 10			mov		ecx, [ebp+16]	;userNum
+ 000000E3  BB 00000000			mov		ebx, 0			;counter for 10 integers on a line
 
- 000000E3				display:
- 000000E3  8B 06				mov		eax, [esi]
- 000000E5  E8 00000000 E			call	WriteDec
- 000000EA  8B 55 08				mov		edx, [ebp+8]	;spaces
- 000000ED  E8 00000000 E			call	WriteString
- 000000F2  83 C6 04				add		esi, 4
- 000000F5  E2 EC				loop	display
+ 000000E8				display:
+ 000000E8  43					inc		ebx
+ 000000E9  83 FB 0A				cmp		ebx, 10
+ 000000EC  7E 0A				jle		print
+ 000000EE  BB 00000001				mov		ebx, 1
+ 000000F3  E8 00000000 E			call	CrLf
 
- 000000F7  5D				pop		ebp
- 000000F8  C2 0014			ret		20
+ 000000F8				print:
+ 000000F8  8B 06				mov		eax, [esi]
+ 000000FA  E8 00000000 E			call	WriteDec
+ 000000FF  8B 55 08				mov		edx, [ebp+8]	;spaces
+ 00000102  E8 00000000 E			call	WriteString
+ 00000107  83 C6 04				add		esi, 4
+ 0000010A  E2 DC				loop	display
 
- 000000FB			displayArray	ENDP
+ 0000010C				newLine:
+						
+
+ 0000010C  5D				pop		ebp
+ 0000010D  C2 0014			ret		20
+
+ 00000110			displayArray	ENDP
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:21:44
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    05/28/17 11:30:36
 1Prog05 - Sorting Random Integers     (Prog05.asm	     Symbols 2 - 1
 
 
@@ -370,7 +379,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 0000048F Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000FB Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000110 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -477,8 +486,10 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-displayArray . . . . . . . . . .	P Near	 000000D2 _TEXT	Length= 00000029 Public STDCALL
-  display  . . . . . . . . . . .	L Near	 000000E3 _TEXT	
+displayArray . . . . . . . . . .	P Near	 000000D2 _TEXT	Length= 0000003E Public STDCALL
+  display  . . . . . . . . . . .	L Near	 000000E8 _TEXT	
+  print  . . . . . . . . . . . .	L Near	 000000F8 _TEXT	
+  newLine  . . . . . . . . . . .	L Near	 0000010C _TEXT	
 fillArray  . . . . . . . . . . .	P Near	 000000AD _TEXT	Length= 00000025 Public STDCALL
   generator  . . . . . . . . . .	L Near	 000000B6 _TEXT	
 getData  . . . . . . . . . . . .	P Near	 00000083 _TEXT	Length= 0000002A Public STDCALL

@@ -1,5 +1,5 @@
 
-TITLE Prog06A - Designing low-level I/O procedures     (Prog06S.asm)
+TITLE Prog06A - Designing low-level I/O procedures     (Prog06A.asm)
 
 ; Author: Taylor Liss
 ; Email: lisst@oregonstate.edu
@@ -74,6 +74,38 @@ introduction PROC
 	ret		24		;offset of a word is 4 bits * 6 = 24
 
 introduction ENDP
+
+;----------------------------------------
+; Displays a prompt, then gets the user’s keyboard input into a memory location
+; From lecture #26, slide 8.
+;----------------------------------------
+
+getString MACRO varName
+
+     push      ecx
+     push      edx
+     mov       edx, OFFSET varName
+     mov       ecx, (SIZEOF varName) - 1
+     call      ReadString
+     pop       edx
+     pop       ecx 
+
+ENDM
+
+;----------------------------------------
+; Invokes the getString macro to get the user’s string of digits. 
+; It then converts the digit string to numeric, while validating 
+; the user’s input.
+;Receives: 
+;Returns:
+;Preconditions:
+;Registers changed:
+;---------------------------------------
+ReadVal PROC
+
+
+
+ReadVal ENDP
 
 ;----------------------------------------
 ;

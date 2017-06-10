@@ -10,7 +10,10 @@ TITLE Prog06A - Designing low-level I/O procedures     (Prog06A.asm)
 
 INCLUDE Irvine32.inc
 
+MAXSIZE = 10	;Max size of the array
+
 .data
+myArray     DWORD	MAXSIZE DUP(?)
 
 titleMess	BYTE	"		Prog06A - Designing low-level I/O procedures		by Taylor Liss", 0dh, 0ah, 0
 intro01		BYTE	"Please provide 10 unsigned decimal integers",0dh,0ah,0
@@ -27,22 +30,18 @@ thanksMess	BYTE	"Thanks for playing!", 0dh, 0ah, 0
 .code
 main PROC
 
-	;Introduction
+	;Calling ntroduction
 	push OFFSET intro01
 	push OFFSET intro02
 	push OFFSET intro03
 	push OFFSET intro04
 	push OFFSET titleMess
 	call introduction
-
-	call CrLf
-
-	;Get user data
-	push userNum
-	push OFFSET prompt01
-	push OFFSET errorMess
-	call getData
-	mov	 userNum, eax
+	
+	;Calling readVal
+	 push      OFFSET array
+     push      arraySize
+     call      readVal
 
 	exit
 
@@ -70,6 +69,7 @@ introduction PROC
 	call	WriteString
 	mov		edx, [ebp+12]	;prompt03
 	call	WriteString
+	call	CrLf
 	pop		ebp
 	ret		24		;offset of a word is 4 bits * 6 = 24
 
@@ -93,6 +93,16 @@ getString MACRO varName
 ENDM
 
 ;----------------------------------------
+; Displays the string stored in a specified memory location
+;----------------------------------------
+
+displayString MACRO
+
+
+
+ENDM
+
+;----------------------------------------
 ; Invokes the getString macro to get the user’s string of digits. 
 ; It then converts the digit string to numeric, while validating 
 ; the user’s input.
@@ -101,43 +111,20 @@ ENDM
 ;Preconditions:
 ;Registers changed:
 ;---------------------------------------
-ReadVal PROC
+readVal PROC
 
-
-
-ReadVal ENDP
+readVal ENDP
 
 ;----------------------------------------
-;
+; Converts a numeric value to a string of digits, and invokes the 
+; displayString macro to produce the output.
 ;Receives:
 ;Returns:
 ;Preconditions:
 ;Registers changed:
 ;---------------------------------------
-getData	PROC
+writeVal PROC
 
-	push	ebp
-	mov		ebp, esp
-
-	retrieveNum:
-
-	mov		edx, [ebp+12]
-	call	WriteString
-
-	call	ReadInt
-	cmp		eax, MAX
-	jg		invalid
-	cmp		eax, MIN
-	jl		invalid
-
-	pop		ebp
-	ret		16
-
-	invalid:
-	mov		edx, [ebp+8]
-	call	writeString
-	jmp		retrieveNum
-
-getData ENDP
+writeVal ENDP
 
 END main

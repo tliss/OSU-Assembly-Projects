@@ -13,8 +13,9 @@ INCLUDE Irvine32.inc
 MAXSIZE = 10	;Max size of the array
 
 .data
-myArray     DWORD	MAXSIZE DUP(?)
-value		DWORD	10 DUP(0)
+myArray			DWORD	MAXSIZE DUP(?)
+passedValue		DWORD	10 DUP(0)
+holdingSpot		BYTE	255 DUP(0)
 
 titleMess	BYTE	"Prog06A - Designing low-level I/O procedures		by Taylor Liss", 0dh, 0ah, 0
 intro01		BYTE	"Please provide 10 unsigned decimal integers",0dh,0ah,0
@@ -41,8 +42,10 @@ main PROC
 	
 	;Calling readVal
 	;mov	ecx, MAXSIZE
-	push	OFFSET myArray
-	push	OFFSET value
+	;push	OFFSET myArray
+	;push	OFFSET passedValue
+	push	OFFSET holdingSpot
+	push	SIZEOF holdingSpot
 	call	readVal
 
 	exit
@@ -63,7 +66,7 @@ introduction PROC
 	mov		ebp, esp
 	mov		edx, [ebp+8]	;titleMess
 	call	WriteString
-	call		CrLf
+	call	CrLf
 	mov		edx, [ebp+24]	;prompt01
 	call	WriteString
 	mov		edx, [ebp+20]	;prompt02
@@ -84,15 +87,15 @@ introduction ENDP
 ; For ReadSring, EDX contains the start point, ECX is the maximum # of characters
 ;----------------------------------------
 
-getString MACRO value
+getString MACRO value, value2
 
      push      ecx
      push      edx
-     mov       edx, OFFSET value
-     mov       ecx, (SIZEOF value) - 1
+     mov       edx, value
+     mov       ecx, value2
      call      ReadString
      pop       edx
-     pop       ecx 
+     pop       ecx
 
 ENDM
 
@@ -120,7 +123,9 @@ readVal PROC
 	push		ebp
 	mov			ebp, esp
 
-	getString	value
+	mov			edx, [ebp+12]
+	mov			ecx, [ebp+8]
+	getString	edx, ecx
 
 	pop			ebp
 	ret			4

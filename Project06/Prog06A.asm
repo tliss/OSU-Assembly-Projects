@@ -125,6 +125,7 @@ readVal PROC
 	push		ebp
 	mov			ebp, esp
 
+	retrieveValue:
 	mov			edx, [ebp+8]		;prompt01
 	call		WriteString
 
@@ -132,9 +133,27 @@ readVal PROC
 	mov			usersNum, edx		;edx will contain the value
 	mov			usersLength, eax	;eax will contain the number of digits
 
+	mov			ecx, usersLength		;set the length of the checkValidity loop
+	mov			esi, OFFSET usersNum	;set the starting point of the loop
+
+	checkValidity:
+	lodsb
+	mov			eax, al
+	call		WriteDec
+	cmp			al, 57
+	jg			error
+	cmp			al, 48
+	jl			error
+	loop		checkValidity
+
 
 	pop			ebp
 	ret			12
+
+	error:
+	mov			edx, OFFSET errorMess
+	call		WriteString
+	jmp			retrieveValue
 
 
 readVal ENDP

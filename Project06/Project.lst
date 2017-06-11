@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 22:53:13
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 23:09:41
 <Prog06A - Designing low-level I/O procedures     (Prog06A.a  Page 1 - 1
 
 
@@ -249,8 +249,9 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 22:53:13
  00000072				push		ebp
 					mov			ebp, esp
  00000072  55
- 00000073  8B EC			mov			edx, [ebp+8]		;prompt01
-					call		WriteString
+ 00000073  8B EC			retrieveValue:
+					mov			edx, [ebp+8]		;prompt01
+ 00000075				call		WriteString
  00000075  8B 55 08
  00000078  E8 00000000 E		getString	[ebp+16], [ebp+12]	;passing in OFFSET and SIZEOF holdingSpot
 					mov			usersNum, edx		;edx will contain the value
@@ -263,14 +264,33 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 22:53:13
  0000008A  5A		     1		pop     edx
  0000008B  59		     1	    pop     ecx
  0000008C  89 15 00000127 R
- 00000092  A3 0000012B R
+ 00000092  A3 0000012B R		mov			ecx, usersLength		;set the length of the checkValidity loop
+					mov			esi, OFFSET usersNum	;set the starting point of the loop
+ 00000097  8B 0D 0000012B R
+ 0000009D  BE 00000127 R		checkValidity:
+					lodsb
+ 000000A2				mov			eax, al
+ 000000A2  AC				call		WriteDec
+					cmp			al, 57
+Prog06A.asm(141) : error A2070:invalid instruction operands
+ 000000A3  E8 00000000 E		jg			error
+ 000000A8  3C 39			cmp			al, 48
+ 000000AA  7F 0A			jl			error
+ 000000AC  3C 30			loop		checkValidity
+ 000000AE  7C 06
+ 000000B0  E2 F0
 					pop			ebp
 					ret			12
- 00000097  5D
- 00000098  C2 000C
+ 000000B2  5D
+ 000000B3  C2 000C			error:
+					mov			edx, OFFSET errorMess
+ 000000B6				call		WriteString
+ 000000B6  BA 00000287 R		jmp			retrieveValue
+ 000000BB  E8 00000000 E
+ 000000C0  EB B3
 				readVal ENDP
 
- 0000009B			;----------------------------------------
+ 000000C2			;----------------------------------------
 				; Converts a numeric value to a string of digits, and invokes the 
 				; displayString macro to produce the output.
 				;Receives:
@@ -280,10 +300,10 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 22:53:13
 				;---------------------------------------
 				writeVal PROC
 
- 0000009B			writeVal ENDP
+ 000000C2			writeVal ENDP
 
- 0000009B			END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 22:53:13
+ 000000C2			END main
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 23:09:41
 <Prog06A - Designing low-level I/O procedures     (Prog06A.a  Symbols 2 - 1
 
 
@@ -386,7 +406,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 0000033D Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000009B Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000C2 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -496,9 +516,12 @@ WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 introduction . . . . . . . . . .	P Near	 00000039 _TEXT	Length= 00000039 Public STDCALL
 main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000039 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-readVal  . . . . . . . . . . . .	P Near	 00000072 _TEXT	Length= 00000029 Public STDCALL
+readVal  . . . . . . . . . . . .	P Near	 00000072 _TEXT	Length= 00000050 Public STDCALL
+  retrieveValue  . . . . . . . .	L Near	 00000075 _TEXT	
+  checkValidity  . . . . . . . .	L Near	 000000A2 _TEXT	
+  error  . . . . . . . . . . . .	L Near	 000000B6 _TEXT	
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-writeVal . . . . . . . . . . . .	P Near	 0000009B _TEXT	Length= 00000000 Public STDCALL
+writeVal . . . . . . . . . . . .	P Near	 000000C2 _TEXT	Length= 00000000 Public STDCALL
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -751,4 +774,4 @@ wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
 
 	   0 Warnings
-	   0 Errors
+	   1 Errors

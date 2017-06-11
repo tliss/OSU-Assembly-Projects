@@ -13,10 +13,8 @@ INCLUDE Irvine32.inc
 MAXSIZE = 10	;Max size of the array
 
 .data
-myArray			DWORD	MAXSIZE DUP(?)
-holdingSpot		BYTE	255 DUP(0)
-usersNum		DWORD	?
-usersLength		DWORD	?
+buffer			BYTE	21 DUP(0)
+byteCount		DWORD	?
 
 titleMess	BYTE	"Prog06A - Designing low-level I/O procedures		by Taylor Liss", 0dh, 0ah, 0
 intro01		BYTE	"Please provide 10 unsigned decimal integers",0dh,0ah,0
@@ -42,8 +40,6 @@ main PROC
 	call	introduction
 	
 	;Calling readVal
-	push	OFFSET holdingSpot
-	push	SIZEOF holdingSpot
 	push	OFFSET prompt01
 	call	readVal
 
@@ -86,13 +82,13 @@ introduction ENDP
 ; For ReadSring, EDX contains the start point, ECX is the maximum # of characters
 ;----------------------------------------
 
-getString MACRO value, value2
+getString MACRO pBuffer
 
     push    ecx
     push    edx
-    mov     edx, value
-    mov     ecx, value2
-	call    ReadString   
+    mov     edx, OFFSET pBuffer			;pass the offset of a buffer
+    mov     ecx, (SIZEOF pBuffer) -1	;set ECX to the maximum number of characters the user can enter
+	call    ReadString					;puts the string in pBuffer and the number of characters typed in eax
 	pop     edx
     pop     ecx
 
@@ -126,20 +122,20 @@ readVal PROC
 	mov			ebp, esp
 
 	retrieveValue:
-	mov			edx, [ebp+8]		;prompt01
+	mov			edx, [ebp+8]			;prompt01
 	call		WriteString
 
-	getString	[ebp+16], [ebp+12]	;passing in OFFSET and SIZEOF holdingSpot
-	mov			usersNum, edx		;edx will contain the value
-	mov			usersLength, eax	;eax will contain the number of digits
+	getString	buffer
+	mov			byteCount, eax
 
-	mov			ecx, usersLength		;set the length of the checkValidity loop
-	mov			esi, OFFSET usersNum	;set the starting point of the loop
+	;At this point, byteCount should contain the number of digits in the string
+	;buffer should contain the string itself
+
+	mov			ecx, byteCount			;set the length of the checkValidity loop
+	mov			esi, OFFSET buffer	;set the starting point of the loop
 
 	checkValidity:
 	lodsb
-	mov			eax, al
-	call		WriteDec
 	cmp			al, 57
 	jg			error
 	cmp			al, 48

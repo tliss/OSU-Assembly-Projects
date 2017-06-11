@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 21:08:03
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 21:10:50
 <Prog06A - Designing low-level I/O procedures     (Prog06A.a  Page 1 - 1
 
 
@@ -201,7 +201,7 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 21:08:03
  0000004F  E8 00000000 E		call	WriteString
  00000054  8B 55 10			mov		edx, [ebp+16]	;prompt03
  00000057  E8 00000000 E		call	WriteString
- 0000005C  8B 55 0C			mov		edx, [ebp+12]	;prompt03
+ 0000005C  8B 55 0C			mov		edx, [ebp+12]	;prompt04
  0000005F  E8 00000000 E		call	WriteString
  00000064  E8 00000000 E		call	CrLf
  00000069  5D				pop		ebp
@@ -251,22 +251,21 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 21:08:03
  0000006D  55				push		ebp
  0000006E  8B EC			mov			ebp, esp
 
- 00000070  8B 55 0C			mov			edx, [ebp+12]
- 00000073  8B 4D 08			mov			ecx, [ebp+8]
-					getString	edx, ecx
- 00000076  51		     1	     push      ecx
- 00000077  52		     1	     push      edx
- 00000078  8B D2	     1	     mov       edx, edx
- 0000007A  8B C9	     1	     mov       ecx, ecx
- 0000007C  E8 00000000 E     1	     call      ReadString
- 00000081  5A		     1	     pop       edx
- 00000082  59		     1	     pop       ecx
 
- 00000083  5D				pop			ebp
- 00000084  C2 0004			ret			4
+					getString	[ebp+12], [ebp+8]
+ 00000070  51		     1	     push      ecx
+ 00000071  52		     1	     push      edx
+ 00000072  8B 55 0C	     1	     mov       edx, [ebp+12]
+ 00000075  8B 4D 08	     1	     mov       ecx, [ebp+8]
+ 00000078  E8 00000000 E     1	     call      ReadString
+ 0000007D  5A		     1	     pop       edx
+ 0000007E  59		     1	     pop       ecx
+
+ 0000007F  5D				pop			ebp
+ 00000080  C2 0008			ret			8
 
 
- 00000087			readVal ENDP
+ 00000083			readVal ENDP
 
 				;----------------------------------------
 				; Converts a numeric value to a string of digits, and invokes the 
@@ -276,12 +275,12 @@ Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 21:08:03
 				;Preconditions:
 				;Registers changed:
 				;---------------------------------------
- 00000087			writeVal PROC
+ 00000083			writeVal PROC
 
- 00000087			writeVal ENDP
+ 00000083			writeVal ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 21:08:03
+Microsoft (R) Macro Assembler Version 14.00.24210.0	    06/10/17 21:10:50
 <Prog06A - Designing low-level I/O procedures     (Prog06A.a  Symbols 2 - 1
 
 
@@ -384,7 +383,7 @@ Segments and Groups:
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
 _DATA  . . . . . . . . . . . . .	32 Bit	 0000035D Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000087 Para	  Public  'CODE'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000083 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -494,9 +493,9 @@ WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 introduction . . . . . . . . . .	P Near	 00000034 _TEXT	Length= 00000039 Public STDCALL
 main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000034 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-readVal  . . . . . . . . . . . .	P Near	 0000006D _TEXT	Length= 0000001A Public STDCALL
+readVal  . . . . . . . . . . . .	P Near	 0000006D _TEXT	Length= 00000016 Public STDCALL
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-writeVal . . . . . . . . . . . .	P Near	 00000087 _TEXT	Length= 00000000 Public STDCALL
+writeVal . . . . . . . . . . . .	P Near	 00000083 _TEXT	Length= 00000000 Public STDCALL
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 

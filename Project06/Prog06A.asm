@@ -123,12 +123,10 @@ readVal PROC
 	push		ebp
 	mov			ebp, esp
 
-	mov			edx, [ebp+12]
-	mov			ecx, [ebp+8]
-	getString	edx, ecx
+	getString	[ebp+12], [ebp+8]	;passing in OFFSET and SIZEOF holdingSpot
 
 	pop			ebp
-	ret			4
+	ret			8
 
 
 readVal ENDP

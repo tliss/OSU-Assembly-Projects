@@ -14,8 +14,9 @@ MAXSIZE = 10	;Max size of the array
 
 .data
 myArray			DWORD	MAXSIZE DUP(?)
-passedValue		DWORD	10 DUP(0)
 holdingSpot		BYTE	255 DUP(0)
+usersNum		DWORD	?
+usersLength		DWORD	?
 
 titleMess	BYTE	"Prog06A - Designing low-level I/O procedures		by Taylor Liss", 0dh, 0ah, 0
 intro01		BYTE	"Please provide 10 unsigned decimal integers",0dh,0ah,0
@@ -41,11 +42,9 @@ main PROC
 	call	introduction
 	
 	;Calling readVal
-	;mov	ecx, MAXSIZE
-	;push	OFFSET myArray
-	;push	OFFSET passedValue
 	push	OFFSET holdingSpot
 	push	SIZEOF holdingSpot
+	push	OFFSET prompt01
 	call	readVal
 
 	exit
@@ -89,13 +88,13 @@ introduction ENDP
 
 getString MACRO value, value2
 
-     push      ecx
-     push      edx
-     mov       edx, value
-     mov       ecx, value2
-     call      ReadString
-     pop       edx
-     pop       ecx
+    push    ecx
+    push    edx
+    mov     edx, value
+    mov     ecx, value2
+	call    ReadString   
+	pop     edx
+    pop     ecx
 
 ENDM
 
@@ -103,9 +102,12 @@ ENDM
 ; Displays the string stored in a specified memory location
 ;----------------------------------------
 
-displayString MACRO
+displayString MACRO value
 
-
+	push	edx
+	mov		edx, OFFSET value
+	call	WriteString
+	pop		edx
 
 ENDM
 
@@ -123,10 +125,16 @@ readVal PROC
 	push		ebp
 	mov			ebp, esp
 
-	getString	[ebp+12], [ebp+8]	;passing in OFFSET and SIZEOF holdingSpot
+	mov			edx, [ebp+8]		;prompt01
+	call		WriteString
+
+	getString	[ebp+16], [ebp+12]	;passing in OFFSET and SIZEOF holdingSpot
+	mov			usersNum, edx		;edx will contain the value
+	mov			usersLength, eax	;eax will contain the number of digits
+
 
 	pop			ebp
-	ret			8
+	ret			12
 
 
 readVal ENDP

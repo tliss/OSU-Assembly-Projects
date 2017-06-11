@@ -73,7 +73,7 @@ introduction PROC
 	call	WriteString
 	mov		edx, [ebp+16]	;prompt03
 	call	WriteString
-	mov		edx, [ebp+12]	;prompt03
+	mov		edx, [ebp+12]	;prompt04
 	call	WriteString
 	call	CrLf
 	pop		ebp

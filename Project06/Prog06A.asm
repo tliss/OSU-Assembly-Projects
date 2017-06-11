@@ -63,6 +63,7 @@ introduction PROC
 	mov		ebp, esp
 	mov		edx, [ebp+8]	;titleMess
 	call	WriteString
+	call		CrLf
 	mov		edx, [ebp+24]	;prompt01
 	call	WriteString
 	mov		edx, [ebp+20]	;prompt02

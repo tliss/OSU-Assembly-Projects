@@ -14,8 +14,9 @@ MAXSIZE = 10	;Max size of the array
 
 .data
 myArray     DWORD	MAXSIZE DUP(?)
+value		DWORD	10 DUP(0)
 
-titleMess	BYTE	"		Prog06A - Designing low-level I/O procedures		by Taylor Liss", 0dh, 0ah, 0
+titleMess	BYTE	"Prog06A - Designing low-level I/O procedures		by Taylor Liss", 0dh, 0ah, 0
 intro01		BYTE	"Please provide 10 unsigned decimal integers",0dh,0ah,0
 intro02		BYTE	"Each number needs to be small enough to fit inside a 32 bit register.",0dh,0ah,0
 intro03		BYTE	"After you have finished inputting the raw numbers I will display a list",0dh,0ah,0
@@ -31,17 +32,18 @@ thanksMess	BYTE	"Thanks for playing!", 0dh, 0ah, 0
 main PROC
 
 	;Calling ntroduction
-	push OFFSET intro01
-	push OFFSET intro02
-	push OFFSET intro03
-	push OFFSET intro04
-	push OFFSET titleMess
-	call introduction
+	push	OFFSET intro01
+	push	OFFSET intro02
+	push	OFFSET intro03
+	push	OFFSET intro04
+	push	OFFSET titleMess
+	call	introduction
 	
 	;Calling readVal
-	 push      OFFSET array
-     push      arraySize
-     call      readVal
+	;mov	ecx, MAXSIZE
+	push	OFFSET myArray
+	push	OFFSET value
+	call	readVal
 
 	exit
 
@@ -78,14 +80,15 @@ introduction ENDP
 ;----------------------------------------
 ; Displays a prompt, then gets the user’s keyboard input into a memory location
 ; From lecture #26, slide 8.
+; For ReadSring, EDX contains the start point, ECX is the maximum # of characters
 ;----------------------------------------
 
-getString MACRO varName
+getString MACRO value
 
      push      ecx
      push      edx
-     mov       edx, OFFSET varName
-     mov       ecx, (SIZEOF varName) - 1
+     mov       edx, OFFSET value
+     mov       ecx, (SIZEOF value) - 1
      call      ReadString
      pop       edx
      pop       ecx 
@@ -112,6 +115,15 @@ ENDM
 ;Registers changed:
 ;---------------------------------------
 readVal PROC
+
+	push		ebp
+	mov			ebp, esp
+
+	getString	value
+
+	pop			ebp
+	ret			4
+
 
 readVal ENDP
 

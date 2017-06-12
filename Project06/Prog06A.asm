@@ -6,7 +6,8 @@ TITLE Prog06A - Designing low-level I/O procedures     (Prog06A.asm)
 ; Course: CS271_400_S2017
 ; Project ID: Prog06A
 ; Date: 6/9/2017
-; Description: 
+; Description: This program doesn't work. I could not figure out how to procede. All
+; it does currently is ask for and validates an integer.
 
 INCLUDE Irvine32.inc
 
@@ -15,6 +16,7 @@ MAXSIZE = 10	;Max size of the array
 .data
 buffer			BYTE	21 DUP(0)
 byteCount		DWORD	?
+myArray			DWORD   MAXSIZE DUP(?)
 
 titleMess	BYTE	"Prog06A - Designing low-level I/O procedures		by Taylor Liss", 0dh, 0ah, 0
 intro01		BYTE	"Please provide 10 unsigned decimal integers",0dh,0ah,0
@@ -40,6 +42,7 @@ main PROC
 	call	introduction
 	
 	;Calling readVal
+	push	OFFSET myArray	
 	push	OFFSET prompt01
 	call	readVal
 
@@ -108,7 +111,7 @@ displayString MACRO value
 ENDM
 
 ;----------------------------------------
-; Invokes the getString macro to get the user’s string of digits. 
+; NONFUNCCTIONAL - Invokes the getString macro to get the user’s string of digits. 
 ; It then converts the digit string to numeric, while validating 
 ; the user’s input.
 ;Receives: 
@@ -128,11 +131,13 @@ readVal PROC
 	getString	buffer
 	mov			byteCount, eax
 
-	;At this point, byteCount should contain the number of digits in the string
+	;At this point:
+	;byteCount should contain the number of digits in the string
 	;buffer should contain the string itself
+	;eax should contain the number of digits in the string
 
 	mov			ecx, byteCount			;set the length of the checkValidity loop
-	mov			esi, OFFSET buffer	;set the starting point of the loop
+	mov			esi, OFFSET buffer		;set the starting point of the loop
 
 	checkValidity:
 	lodsb
@@ -140,11 +145,13 @@ readVal PROC
 	jg			error
 	cmp			al, 48
 	jl			error
-	loop		checkValidity
+	;loop		checkValidity
 
+	;Here the code is supposed to check if the number is too large for 
+	;a 32-bit register. I could not figure out how to do this.
 
 	pop			ebp
-	ret			12
+	ret			8
 
 	error:
 	mov			edx, OFFSET errorMess
@@ -152,15 +159,16 @@ readVal PROC
 	jmp			retrieveValue
 
 
+
 readVal ENDP
 
 ;----------------------------------------
-; Converts a numeric value to a string of digits, and invokes the 
+; NONFUNCTIONAL - Converts a numeric value to a string of digits, and invokes the 
 ; displayString macro to produce the output.
-;Receives:
-;Returns:
-;Preconditions:
-;Registers changed:
+;Receives: n/a
+;Returns: n/a
+;Preconditions: n/a
+;Registers changed: n/a
 ;---------------------------------------
 writeVal PROC
 
